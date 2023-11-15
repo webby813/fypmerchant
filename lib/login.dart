@@ -3,7 +3,6 @@ import 'package:fypmerchant/Components/button_widget.dart';
 import 'package:fypmerchant/Components/title_widget.dart';
 import 'package:fypmerchant/Components/inputField_widget.dart';
 import 'package:fypmerchant/Firebase/retrieve_data.dart';
-import 'package:fypmerchant/home.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -38,31 +37,31 @@ class _LoginState extends State<Login> {
                   children:[
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                      child: inputWidget.inputField('Username', Icons.person_outline, username),
+                      child: InputWidget.inputField('Username', Icons.person_outline, username),
                     ),
 
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                      child: inputWidget.inputField('Password', Icons.lock, password),
+                      child: InputWidget.inputField('Password', Icons.lock, password),
                     ),
 
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 15),
                       child: ButtonWidget.buttonWidget('LOG IN', (){
                         if(username.text.isNotEmpty && password.text.isNotEmpty){
-                          Identify().Login(context, username.text, password.text);
+                          Identify().login(context, username.text, password.text);
                         }
                         else if(username.text.isEmpty || password.text.isEmpty){
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return AlertDialogWidget(Title: 'Error', content: 'Ensure credential is valid');
+                              return const AlertDialogWidget(Title: 'Error', content: 'Ensure credential is valid');
                             },
                           );
                         }
                         else{
                           showDialog(context: context, builder: (BuildContext context){
-                            return AlertDialogWidget(Title: 'Error', content: 'Unknown error');
+                            return const AlertDialogWidget(Title: 'Error', content: 'Unknown error');
                           });
                         }
                       }),

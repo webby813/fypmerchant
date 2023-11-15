@@ -11,10 +11,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-      MyApp());
+      const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   Future<bool> isLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
@@ -31,14 +33,14 @@ class MyApp extends StatelessWidget {
         future: isLoggedIn(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else {
             if (snapshot.data == true) {
               // User is logged in, navigate to the home screen
-              return Home();
+              return const Home();
             } else {
               // User is not logged in, navigate to the login screen
-              return Login();
+              return const Login();
             }
           }
         },
