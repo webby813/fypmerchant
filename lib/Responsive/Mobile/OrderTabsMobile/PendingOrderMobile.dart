@@ -5,14 +5,14 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-class Pending extends StatefulWidget {
-  const Pending({Key? key}) : super(key: key);
+class PendingOrderMobile extends StatefulWidget {
+  const PendingOrderMobile({Key? key}) : super(key: key);
 
   @override
-  State<Pending> createState() => _PendingState();
+  State<PendingOrderMobile> createState() => _PendingOrderMobileState();
 }
 
-class _PendingState extends State<Pending> {
+class _PendingOrderMobileState extends State<PendingOrderMobile> {
   final DatabaseReference query = FirebaseDatabase.instance.ref().child('Pending');
 
   String? username;
@@ -26,9 +26,6 @@ class _PendingState extends State<Pending> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pending Order'),
-      ),
 
       body: Column(
         children: <Widget>[

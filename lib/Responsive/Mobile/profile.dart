@@ -2,7 +2,7 @@
 import 'package:fypmerchant/Components/button_widget.dart';
 import 'package:fypmerchant/Components/container_widget.dart';
 import 'package:fypmerchant/Components/divider_widget.dart';
-import 'package:fypmerchant/Pages/history.dart';
+import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/HistoryOrderMobile.dart';
 import 'package:fypmerchant/login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +29,7 @@ class _ProfileState extends State<Profile> {
               title: "History",
               icon: Icons.history,
               onPress: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const History()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const HistoryOrderMobile()));
               }
           ),
 

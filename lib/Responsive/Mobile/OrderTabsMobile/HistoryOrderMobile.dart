@@ -4,18 +4,17 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-class History extends StatefulWidget {
-  const History({Key? key}) : super(key: key);
+class HistoryOrderMobile extends StatefulWidget {
+  const HistoryOrderMobile({Key? key}) : super(key: key);
 
   @override
-  State<History> createState() => _HistoryState();
+  State<HistoryOrderMobile> createState() => _HistoryOrderMobileState();
 }
 
-class _HistoryState extends State<History> {
+class _HistoryOrderMobileState extends State<HistoryOrderMobile> {
   final DatabaseReference query = FirebaseDatabase.instance.ref().child('History');
 
   String? uniqueKey;
-
 
   @override
   void initState() {
@@ -26,88 +25,64 @@ class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('History'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            FirebaseAnimatedList(
-              shrinkWrap: true,
-              query: query,
-              itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
-                Map data = snapshot.value as Map;
-                data['key'] = snapshot.key;
-                uniqueKey = data['key'].toString();
-                // print(uniqueKey);
-
-                return FutureBuilder<String?>(
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-
-                    return Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShowHistoryPage(uniqueKey: data['key'].toString(),
-                            ),
-                            )
-                          );
-                        },
-
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Padding(padding: EdgeInsets.only(left: 10)),
-                              SizedBox(
-                                width: 130,
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(10, 15, 0, 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        uniqueKey.toString(),
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
-                                      // Padding of 30 seems excessive, you might want to adjust this value.
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: 55, // Set a fixed height for the content container
-                                // Your content here
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }, future: null,
+      body: FirebaseAnimatedList(
+        query: query,
+        itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
+          Map data = snapshot.value as Map;
+          data['key'] = snapshot.key;
+          uniqueKey = data['key'].toString();
+          return Padding(
+            padding: const EdgeInsets.all(6),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShowHistoryPage(uniqueKey: data['key'].toString()),
+                  ),
                 );
               },
-            )
-          ],
-        ),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(padding: EdgeInsets.only(left: 10)),
+                    SizedBox(
+                      width: 130,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 15, 0, 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              uniqueKey.toString(),
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            // Padding of 30 seems excessive, you might want to adjust this value.
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 55, // Set a fixed height for the content container
+                      // Your content here
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
-
-// Function to show the AlertDialog
 }
 
 
