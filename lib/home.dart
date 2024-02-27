@@ -1,7 +1,8 @@
-import 'package:fypmerchant/Pages/Pending.dart';
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Pages/order.dart';
-import 'package:fypmerchant/Pages/profile.dart';
+import 'package:fypmerchant/Responsive/mobileScaffold.dart';
+import 'package:fypmerchant/Responsive/tabletScaffold.dart';
+
+import 'Responsive/responsive_layout.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,45 +12,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    const Order(),
-    const Pending(),
-    const Profile(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: _pages[_selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'Order',
-            ),
-
-            BottomNavigationBarItem(
-              icon: Icon(Icons.play_circle_filled),
-              label: 'Pending',
-            ),
-
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Account',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ),
+      home: ResponsiveLayout(
+        mobileScaffold: const MobileScaffold(),
+        tabletScaffold: const TabletScaffold()
       ),
     );
   }
