@@ -11,7 +11,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-      const MyApp());
+      const MyApp()
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     return isLoggedIn;
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

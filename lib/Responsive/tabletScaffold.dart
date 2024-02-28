@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/ReceiveOrderTablet.dart';
 
 //temp import
+import '../Color/color.dart';
+import '../Components/barTitle_widget.dart';
 import '../Responsive/Mobile/OrderTabsMobile/PendingOrderMobile.dart';
 import '../Responsive/Mobile/OrderTabsMobile/ReceiveOrderMobile.dart';
 import '../Responsive/Mobile/profile.dart';
@@ -16,7 +19,7 @@ class _TabletScaffoldState extends State<TabletScaffold> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const ReceiveOrderMobile(),
+    const ReceiveOrderTablet(),
     const PendingOrderMobile(),
     const Profile(),
   ];
@@ -39,13 +42,13 @@ class _TabletScaffoldState extends State<TabletScaffold> {
           ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.play_circle_filled),
-            label: 'Pending',
+            icon: Icon(Icons.insights),
+            label: 'Dashboard',
           ),
 
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Account',
+            label: 'Manage',
           ),
         ],
         currentIndex: _selectedIndex,
