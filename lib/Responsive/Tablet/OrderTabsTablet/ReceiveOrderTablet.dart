@@ -1,12 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import '../../../Color/color.dart';
-import '../../../Components/barTitle_widget.dart';
-import '../../Mobile/OrderTabsMobile/HistoryOrderMobile.dart';
-import '../../Mobile/OrderTabsMobile/PendingOrderMobile.dart';
-import '../../Mobile/OrderTabsMobile/ReceiveOrderMobile.dart';
+
+import '../../../Components/cart_widget.dart';
 
 class ReceiveOrderTablet extends StatefulWidget {
-  const ReceiveOrderTablet({Key? key}) : super(key: key);
+  const ReceiveOrderTablet({super.key});
 
   @override
   State<ReceiveOrderTablet> createState() => _ReceiveOrderTabletState();
@@ -15,73 +14,16 @@ class ReceiveOrderTablet extends StatefulWidget {
 class _ReceiveOrderTabletState extends State<ReceiveOrderTablet> {
   @override
   Widget build(BuildContext context) {
-    final List<Widget> tabViews = [
-      const ReceiveOrderMobile(),
-      const PendingOrderMobile(),
-      const HistoryOrderMobile(),
-    ];
-
-    final List<Tab> tabs = [
-      const Tab(
-        text: 'Order',
-      ),
-      const Tab(
-        text: 'Pending',
-      ),
-      const Tab(
-        text: 'History',
-      )
-    ];
+    final maxWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: CustomColors.defaultWhite,
-        title: BarTitle.appBarText('Check Orders'),
-        elevation: 0,
-      ),
-      body: Row(
-        children: [
-          Expanded(
-            child: FractionallySizedBox(
-              alignment: Alignment.topLeft,
-              widthFactor: 0.6,
-              child: Container(
-                color: Colors.blue, // Background color of the column
-                child: Scaffold(
-                  body: SafeArea(
-                    child: DefaultTabController(
-                      length: tabs.length,
-                      child: Column(
-                        children: [
-                          TabBar(
-                            tabs: tabs,
-                            labelColor: CustomColors.primaryColor,
-                          ),
-                          Expanded(
-                            child: TabBarView(
-                              children: tabViews,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          //Orders shown in this Expanded
-          Expanded(
-              child: FractionallySizedBox(
-                widthFactor: 1.8,
-                child: Container(
-                  color: CustomColors.lightGrey,
-                ),
-              )
-          )
-        ],
-      ),
+        body: SingleChildScrollView(
+            child: Column(
+              children: [
+                ViewOrder(maxWidth: maxWidth),
+              ],
+            )
+        )
     );
   }
 }

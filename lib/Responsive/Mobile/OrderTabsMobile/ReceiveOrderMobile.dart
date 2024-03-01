@@ -11,11 +11,13 @@ class ReceiveOrderMobile extends StatefulWidget {
 class _ReceiveOrderMobileState extends State<ReceiveOrderMobile> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final maxWidth = MediaQuery.of(context).size.width * 0.8;
+
+    return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ViewOrder(),
+            ViewOrder(maxWidth: maxWidth),
           ],
         )
       )

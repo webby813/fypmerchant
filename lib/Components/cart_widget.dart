@@ -6,7 +6,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class ViewOrder extends StatefulWidget {
-  const ViewOrder({Key? key}) : super(key: key);
+  final double? maxWidth; // Declare maxWidth parameter
+
+  const ViewOrder({Key? key, this.maxWidth}) : super(key: key);
 
   @override
   State<ViewOrder> createState() => _ViewOrderState();
@@ -17,20 +19,9 @@ class _ViewOrderState extends State<ViewOrder> {
 
   String? username;
 
-  Future<void> getUserData() async {
-    setState(() {
-      // print('This is $query');
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getUserData();
-  }
-
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: <Widget>[
         FirebaseAnimatedList(

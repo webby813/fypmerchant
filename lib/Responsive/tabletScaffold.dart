@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/ReceiveOrderTablet.dart';
+import 'package:fypmerchant/Responsive/Tablet/DashboardTablet.dart';
+import 'package:fypmerchant/Responsive/Tablet/OrderTablet.dart';
 
 //temp import
 import '../Color/color.dart';
@@ -19,8 +20,8 @@ class _TabletScaffoldState extends State<TabletScaffold> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const ReceiveOrderTablet(),
-    const PendingOrderMobile(),
+    const OrderTablet(),
+    const DashboardTablet(),
     const Profile(),
   ];
 
