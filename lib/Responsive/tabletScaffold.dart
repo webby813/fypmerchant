@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Responsive/Tablet/DashboardTablet.dart';
+import 'package:fypmerchant/Responsive/Tablet/ManageTablet.dart';
 import 'package:fypmerchant/Responsive/Tablet/OrderTablet.dart';
 
 //temp import
@@ -22,7 +23,7 @@ class _TabletScaffoldState extends State<TabletScaffold> {
   final List<Widget> _pages = [
     const OrderTablet(),
     const DashboardTablet(),
-    const Profile(),
+    const ManageTablet(),
   ];
 
   void _onItemTapped(int index) {
