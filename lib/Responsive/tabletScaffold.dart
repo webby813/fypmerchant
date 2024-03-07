@@ -2,13 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fypmerchant/Responsive/Tablet/DashboardTablet.dart';
 import 'package:fypmerchant/Responsive/Tablet/ManageTablet.dart';
 import 'package:fypmerchant/Responsive/Tablet/OrderTablet.dart';
-
-//temp import
-import '../Color/color.dart';
-import '../Components/barTitle_widget.dart';
-import '../Responsive/Mobile/OrderTabsMobile/PendingOrderMobile.dart';
-import '../Responsive/Mobile/OrderTabsMobile/ReceiveOrderMobile.dart';
-import '../Responsive/Mobile/profile.dart';
+import 'package:flutter/services.dart';
 
 class TabletScaffold extends StatefulWidget {
   const TabletScaffold({super.key});
@@ -34,6 +28,11 @@ class _TabletScaffoldState extends State<TabletScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
