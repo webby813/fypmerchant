@@ -24,17 +24,20 @@ class _ManageTabletState extends State<ManageTablet> {
           title: BarTitle.appBarText('Manage'),
           elevation: 0,
           actions: <Widget>[
-            IconButton(onPressed: ()
-            async{
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.clear(); // Clear shared preferences
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const Login()),
-                    (
-                    Route<dynamic> route) => false, // Remove all existing routes from the stack
-              );
-            }, icon: const Icon(Icons.exit_to_app_rounded))
+            IconButton(
+                onPressed: ()
+                  async{
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.clear(); // Clear shared preferences
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => const Login()),
+                          (Route<dynamic> route) => false, // Remove all existing routes from the stack
+                    );
+                  },
+                color: Colors.blue,
+                icon: const Icon(Icons.exit_to_app_rounded)
+            )
           ],
         ),
 
