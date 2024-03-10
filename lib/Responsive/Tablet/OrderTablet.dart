@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/ReceiveOrderTablet.dart';
 import '../../Color/color.dart';
 import '../../Components/barTitle_widget.dart';
+import '../../Components/cart_widget.dart';
 import '../Mobile/OrderTabsMobile/HistoryOrderMobile.dart';
 import '../Mobile/OrderTabsMobile/PendingOrderMobile.dart';
-import '../Mobile/OrderTabsMobile/ReceiveOrderMobile.dart';
+import 'OrderTabsTablet/ReceiveOrderTablet.dart';
 
 class OrderTablet extends StatefulWidget {
   const OrderTablet({Key? key}) : super(key: key);
@@ -14,10 +14,18 @@ class OrderTablet extends StatefulWidget {
 }
 
 class _OrderTabletState extends State<OrderTablet> {
+  String? selectedUsername;
+
+  void setSelectedUsername(String? username) {
+    setState(() {
+      selectedUsername = username;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> tabViews = [
-      const ReceiveOrderTablet(),
+      ReceiveOrderTablet(onCardTap: setSelectedUsername),
       const PendingOrderMobile(),
       const HistoryOrderMobile(),
     ];
@@ -44,46 +52,43 @@ class _OrderTabletState extends State<OrderTablet> {
       body: Row(
         children: [
           Expanded(
-            child: FractionallySizedBox(
-              alignment: Alignment.topLeft,
-              widthFactor: 0.6,
-              child: Container(
-                color: Colors.blue, // Background color of the column
-                child: Scaffold(
-                  body: SafeArea(
-                    child: DefaultTabController(
-                      length: tabs.length,
-                      child: Column(
-                        children: [
-                          TabBar(
-                            tabs: tabs,
-                            labelColor: CustomColors.primaryColor,
+            flex: 6, // Adjusted flex value
+            child: Container(
+              color: CustomColors.indigo,
+              child: Scaffold(
+                body: SafeArea(
+                  child: DefaultTabController(
+                    length: tabs.length,
+                    child: Column(
+                      children: [
+                        TabBar(
+                          tabs: tabs,
+                          labelColor: CustomColors.primaryColor,
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: tabViews,
                           ),
-                          Expanded(
-                            child: TabBarView(
-                              children: tabViews,
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
                 ),
               ),
             ),
           ),
-
-          //Orders shown in this Expanded
           Expanded(
-              child: FractionallySizedBox(
-                widthFactor: 1.8,
-                child: Container(
-                  color: CustomColors.lightGrey,
-                ),
-              )
-          )
+            flex: 12, // Adjusted flex value
+            child: Container(
+              child: selectedUsername != null
+                  // ? ShowOrderPage(username: selectedUsername!)
+                  ? ShowOrderPageTablet(username: selectedUsername!)
+                  : Container(),
+            ),
+          ),
         ],
       ),
     );
+
   }
 }

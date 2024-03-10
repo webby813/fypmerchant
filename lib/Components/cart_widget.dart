@@ -1,4 +1,5 @@
 import 'package:fypmerchant/Color/color.dart';
+import 'package:fypmerchant/Components/button_widget.dart';
 import 'package:fypmerchant/Firebase/update_data.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -95,7 +96,6 @@ class _ViewOrderState extends State<ViewOrder> {
       ],
     );
   }
-
   // Function to show the AlertDialog
 }
 
@@ -282,9 +282,208 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
   }
 }
 
+class ShowOrderPageTablet extends StatefulWidget {
+  final String username;
 
+  const ShowOrderPageTablet({Key? key, required this.username}) : super(key: key);
 
+  @override
+  State<ShowOrderPageTablet> createState() => _ShowOrderPageTabletState();
+}
 
+class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
+  late DatabaseReference query;
+  String? username;
+  String? imageUrl;
+  String? userShared;
+  List<Map<dynamic, dynamic>> orders = [];
+  bool showOrder = true;
 
+  @override
+  void initState() {
+    super.initState();
+    String username = widget.username;
+    query = FirebaseDatabase.instance.ref().child('Order/${widget.username}');
+  }
 
+  Future<String?> getImageUrl(String imageName) async {
+    try {
+      Reference imageRef = FirebaseStorage.instance.ref().child(
+          'Item/$imageName');
+      String imageUrl = await imageRef.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      // print("Error retrieving image URL: $e");
+      return null;
+    }
+  }
+
+  // Method to handle accepting all orders
+  void acceptAllOrders() {
+    for (final order in orders) {
+      AcceptOrder().readCartData(widget.username);
+    }
+    setState(() {
+      showOrder = false;
+    });
+  }
+
+  // Method to handle rejecting all orders
+  void rejectAllOrders() {
+    for (final order in orders) {
+      RejectOrder().rejectUserOrder(widget.username);
+    }
+    setState(() {
+      showOrder = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Visibility(
+        visible: showOrder,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  Column(
+                    children: <Widget>[
+                      FirebaseAnimatedList(
+                        shrinkWrap: true,
+                        query: query,
+                        itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                            Animation<double> animation, int index) {
+                          dynamic data = snapshot.value;
+
+                          if (data is Map) {
+                            data['key'] = snapshot.key;
+                            orders.add(data); // Store each order in the list
+                            return FutureBuilder<String?>(
+                              future: getImageUrl(data['itemImage']),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  // Show a placeholder while waiting for the image URL
+                                  return const CircularProgressIndicator();
+                                }
+                                imageUrl = snapshot.data ??
+                                    'https://fastly.picsum.photos/id/237/536/354.jpg?hmac=i0yVXW1ORpyCZpQ-CknuyV-jbtU7_x9EBQVhvT5aRr0';
+                                String itemName = data['itemName']?.toString() ??
+                                    '';
+                                double price = data['price']?.toDouble() ?? 0.0;
+                                int qty = data['qty'] as int? ?? 0;
+
+                                return Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 10, 0, 10),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                5),
+                                            child: Image.network(
+                                              imageUrl!,
+                                              width: 130,
+                                              height: 130,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                            padding: EdgeInsets.only(left: 10)),
+                                        SizedBox(
+                                          width: 130,
+                                          child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                10, 10, 0, 10),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .start,
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: <Widget>[
+                                                Text(
+                                                  itemName,
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w800,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  price.toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.normal,
+                                                    color: CustomColors
+                                                        .primaryColor,
+                                                  ),
+                                                ),
+                                                const Padding(
+                                                    padding: EdgeInsets.all(10)),
+                                                Text(
+                                                  qty.toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.normal,
+                                                    color: CustomColors.lightGrey,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          } else {
+                            // Handle other cases, for example, if the data is not a Map
+                            return Container();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: ButtonWidget.buttonWidget("Accept", () => acceptAllOrders()),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: ButtonWidget.buttonWidget("Reject", () => rejectAllOrders()),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomSheet: Visibility(
+        visible: !showOrder,
+        child: Container(),
+      ),
+    );
+  }
+}
 
