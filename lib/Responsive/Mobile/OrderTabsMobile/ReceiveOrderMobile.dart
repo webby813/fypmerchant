@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../Firebase/view_order.dart';
 
 class ReceiveOrderMobile extends StatefulWidget {
