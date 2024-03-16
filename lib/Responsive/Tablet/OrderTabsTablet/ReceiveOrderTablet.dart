@@ -1,11 +1,7 @@
-import 'dart:math';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
-import '../../../Components/cart_widget.dart';
 
 class ReceiveOrderTablet extends StatefulWidget {
   final Function(String?) onCardTap;
@@ -21,25 +17,29 @@ class _ReceiveOrderTabletState extends State<ReceiveOrderTablet> {
 
   @override
   Widget build(BuildContext context) {
-    final maxWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ViewOrderTablet(maxWidth: maxWidth, onCardTap: widget.onCardTap),
+            ViewOrderTablet(onCardTap: widget.onCardTap),
           ],
         ),
       ),
     );
+
+  }
+  @override
+  void dispose() {
+    widget.onCardTap(null);
+    super.dispose();
   }
 }
 
 class ViewOrderTablet extends StatefulWidget {
-  final double? maxWidth;
   final Function(String?) onCardTap;
 
-  const ViewOrderTablet({Key? key, this.maxWidth, required this.onCardTap}) : super(key: key);
+  const ViewOrderTablet({Key? key,required this.onCardTap}) : super(key: key);
 
   @override
   State<ViewOrderTablet> createState() => _ViewOrderTabletState();
@@ -70,7 +70,6 @@ class _ViewOrderTabletState extends State<ViewOrderTablet> {
                   padding: const EdgeInsets.all(6),
                   child: GestureDetector(
                     onTap: () {
-                      print('Card tapped! Username: $username');
                       widget.onCardTap(null);
                       widget.onCardTap(username);
                     },
@@ -103,8 +102,7 @@ class _ViewOrderTabletState extends State<ViewOrderTablet> {
                             ),
                           ),
                           Container(
-                            height: 55, // Set a fixed height for the content container
-                            // Your content here
+                            height: 55,
                           ),
                         ],
                       ),
@@ -119,5 +117,9 @@ class _ViewOrderTabletState extends State<ViewOrderTablet> {
       ],
     );
   }
+  @override
+  void dispose() {
+    widget.onCardTap(null);
+    super.dispose();
+  }
 }
-

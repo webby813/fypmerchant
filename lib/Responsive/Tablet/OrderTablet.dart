@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/mainArea.dart';
 import '../../Color/color.dart';
 import '../../Components/barTitle_widget.dart';
-import '../../Components/cart_widget.dart';
 import '../Mobile/OrderTabsMobile/HistoryOrderMobile.dart';
 import '../Mobile/OrderTabsMobile/PendingOrderMobile.dart';
 import 'OrderTabsTablet/ReceiveOrderTablet.dart';
@@ -49,6 +49,7 @@ class _OrderTabletState extends State<OrderTablet> {
         title: BarTitle.appBarText('Orders'),
         elevation: 0,
       ),
+
       body: Row(
         children: [
           Expanded(
@@ -77,13 +78,11 @@ class _OrderTabletState extends State<OrderTablet> {
               ),
             ),
           ),
+
           Expanded(
-            flex: 12, // Adjusted flex value
+            flex: 12,
             child: Container(
-              child: selectedUsername != null
-                  // ? ShowOrderPage(username: selectedUsername!)
-                  ? ShowOrderPageTablet(username: selectedUsername!)
-                  : Container(),
+              child: selectedUsername != null ? MainAreaOrder(selectedUsername: selectedUsername!) : Container()
             ),
           ),
         ],
