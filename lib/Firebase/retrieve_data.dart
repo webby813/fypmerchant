@@ -24,7 +24,6 @@ class Identify{
         try{
           for(var i=0; i!= dataList.length;i++){
             if(username != dataList[i]["Username"] || password != dataList[i]['Password']){
-              // print('Unsuccessful');
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -36,10 +35,8 @@ class Identify{
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const Home()));
               setSharedPref(username, password);
               saveLoggedInFlag();
-              ///implement shared preferences here
               dataKeyList.clear();
               dataList.clear();
-              // print("Successful");
               break;
             }
             else{
@@ -47,7 +44,6 @@ class Identify{
             }
           }
         }catch(error){
-          // print(error);
         }
       }
     }

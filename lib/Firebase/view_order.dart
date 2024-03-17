@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
 import 'package:fypmerchant/Components/button_widget.dart';
 import 'package:fypmerchant/Firebase/update_data.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ViewOrder extends StatefulWidget {
-  final double? maxWidth; // Declare maxWidth parameter
+  final double? maxWidth;
 
   const ViewOrder({Key? key, this.maxWidth}) : super(key: key);
 
@@ -43,7 +42,6 @@ class _ViewOrderState extends State<ViewOrder> {
                   padding: const EdgeInsets.all(6),
                   child: GestureDetector(
                     onTap: () {
-                      print('Card tapped! Username: $username');
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -75,14 +73,12 @@ class _ViewOrderState extends State<ViewOrder> {
                                       fontWeight: FontWeight.w800,
                                     ),
                                   ),
-                                  // Padding of 30 seems excessive, you might want to adjust this value.
                                 ],
                               ),
                             ),
                           ),
                           Container(
-                            height: 55, // Set a fixed height for the content container
-                            // Your content here
+                            height: 55,
                           ),
                         ],
                       ),
@@ -96,12 +92,10 @@ class _ViewOrderState extends State<ViewOrder> {
       ],
     );
   }
-// Function to show the AlertDialog
 }
 
 class ShowOrderPage extends StatefulWidget {
   final String username;
-
   const ShowOrderPage({Key? key, required this.username}) : super(key: key);
 
   @override
@@ -130,19 +124,16 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
       String imageUrl = await imageRef.getDownloadURL();
       return imageUrl;
     } catch (e) {
-      // print("Error retrieving image URL: $e");
       return null;
     }
   }
 
-  // Method to handle accepting all orders
   void acceptAllOrders() {
     for(final order in orders){
       AcceptOrder().readCartData(widget.username);
     }
   }
 
-  // Method to handle rejecting all orders
   void rejectAllOrders() {
     for (final order in orders) {
       RejectOrder().rejectUserOrder(widget.username);
@@ -177,7 +168,6 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
         children: [
           Column(
             children: <Widget>[
-              // Add this check to avoid null errors
               FirebaseAnimatedList(
                 shrinkWrap: true,
                 query: query,
@@ -187,12 +177,11 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
                   if (data is Map) {
 
                     data['key'] = snapshot.key;
-                    orders.add(data); // Store each order in the list
+                    orders.add(data);
                     return FutureBuilder<String?>(
                       future: getImageUrl(data['itemImage']),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
-                          // Show a placeholder while waiting for the image URL
                           return const CircularProgressIndicator();
                         }
                         imageUrl = snapshot.data ?? 'https://fastly.picsum.photos/id/237/536/354.jpg?hmac=i0yVXW1ORpyCZpQ-CknuyV-jbtU7_x9EBQVhvT5aRr0';
@@ -246,7 +235,6 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
                                             color: CustomColors.primaryColor,
                                           ),
                                         ),
-                                        // Padding of 30 seems excessive, you might want to adjust this value.
                                         const Padding(padding: EdgeInsets.all(10)),
                                         Text(
                                           qty.toString(),
@@ -267,7 +255,6 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
                       },
                     );
                   } else {
-                    // Handle other cases, for example, if the data is not a Map
                     return Container();
                   }
                 },
@@ -279,6 +266,94 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
     );
   }
 }
+
+class ViewOrderTablet extends StatefulWidget {
+  final Function(String?) onCardTap;
+
+  const ViewOrderTablet({Key? key,required this.onCardTap}) : super(key: key);
+
+  @override
+  State<ViewOrderTablet> createState() => _ViewOrderTabletState();
+}
+
+class _ViewOrderTabletState extends State<ViewOrderTablet> {
+  final DatabaseReference query = FirebaseDatabase.instance.ref().child('Order');
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        FirebaseAnimatedList(
+          shrinkWrap: true,
+          query: query,
+          itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
+            Map data = snapshot.value as Map;
+            data['key'] = snapshot.key;
+            String username = data['key'].toString();
+
+            return FutureBuilder<String?>(
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: GestureDetector(
+                    onTap: () {
+                      widget.onCardTap(null);
+                      widget.onCardTap(username);
+                    },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(padding: EdgeInsets.only(left: 10)),
+                          SizedBox(
+                            width: 130,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 15, 0, 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    username.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 55,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              future: null,
+            );
+          },
+        )
+      ],
+    );
+  }
+  @override
+  void dispose() {
+    widget.onCardTap(null);
+    super.dispose();
+  }
+}
+
 
 class ShowOrderPageTablet extends StatefulWidget {
   final String username;
@@ -299,7 +374,7 @@ class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
   @override
   void initState() {
     super.initState();
-    username = widget.username; // Assigning widget's username to local username
+    username = widget.username;
     query = FirebaseDatabase.instance.ref().child('Order/$username');
   }
 
@@ -309,12 +384,10 @@ class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
       String imageUrl = await imageRef.getDownloadURL();
       return imageUrl;
     } catch (e) {
-      // Handle error
       return null;
     }
   }
 
-  // Method to handle accepting all orders
   void acceptAllOrders() {
     for (final order in orders) {
       AcceptOrder().readCartData(username!);
@@ -324,7 +397,6 @@ class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
     });
   }
 
-  // Method to handle rejecting all orders
   void rejectAllOrders() {
     for (final order in orders) {
       RejectOrder().rejectUserOrder(username);
@@ -355,12 +427,11 @@ class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
 
                           if (data is Map) {
                             data['key'] = snapshot.key;
-                            orders.add(data); // Store each order in the list
+                            orders.add(data);
                             return FutureBuilder<String?>(
                               future: getImageUrl(data['itemImage']),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState == ConnectionState.waiting) {
-                                  // Show a placeholder while waiting for the image URL
                                   return const CircularProgressIndicator();
                                 }
                                 imageUrl = snapshot.data ??
@@ -444,16 +515,16 @@ class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: ButtonWidget.buttonWidget("Accept", () => acceptAllOrders()),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: ButtonWidget.buttonWidget("Reject", () => rejectAllOrders()),
                   ),
                 ],

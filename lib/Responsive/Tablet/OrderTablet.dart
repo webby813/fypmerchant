@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/PendingOrderTablet.dart';
 import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/mainArea.dart';
 import '../../Color/color.dart';
 import '../../Components/barTitle_widget.dart';
 import '../Mobile/OrderTabsMobile/HistoryOrderMobile.dart';
-import '../Mobile/OrderTabsMobile/PendingOrderMobile.dart';
 import 'OrderTabsTablet/ReceiveOrderTablet.dart';
 
 class OrderTablet extends StatefulWidget {
@@ -15,6 +15,7 @@ class OrderTablet extends StatefulWidget {
 
 class _OrderTabletState extends State<OrderTablet> {
   String? selectedUsername;
+  int selectedIndex = 0; // Index of the selected tab
 
   void setSelectedUsername(String? username) {
     setState(() {
@@ -26,7 +27,7 @@ class _OrderTabletState extends State<OrderTablet> {
   Widget build(BuildContext context) {
     final List<Widget> tabViews = [
       ReceiveOrderTablet(onCardTap: setSelectedUsername),
-      const PendingOrderMobile(),
+      PendingOrderTablet(onCardTap: setSelectedUsername),
       const HistoryOrderMobile(),
     ];
 
@@ -49,11 +50,10 @@ class _OrderTabletState extends State<OrderTablet> {
         title: BarTitle.appBarText('Orders'),
         elevation: 0,
       ),
-
       body: Row(
         children: [
           Expanded(
-            flex: 6, // Adjusted flex value
+            flex: 6,
             child: Container(
               color: CustomColors.indigo,
               child: Scaffold(
@@ -65,6 +65,11 @@ class _OrderTabletState extends State<OrderTablet> {
                         TabBar(
                           tabs: tabs,
                           labelColor: CustomColors.primaryColor,
+                          onTap: (index) {
+                            setState(() {
+                              selectedIndex = index; // Update selected index
+                            });
+                          },
                         ),
                         Expanded(
                           child: TabBarView(
@@ -78,16 +83,19 @@ class _OrderTabletState extends State<OrderTablet> {
               ),
             ),
           ),
-
           Expanded(
             flex: 12,
             child: Container(
-              child: selectedUsername != null ? MainAreaOrder(selectedUsername: selectedUsername!) : Container()
+              child: selectedUsername != null
+                  ? MainArea(
+                selectedUsername: selectedUsername!,
+                areaType: selectedIndex + 1, // Dynamic areaType based on selected tab
+              )
+                  : Container(),
             ),
           ),
         ],
       ),
     );
-
   }
 }
