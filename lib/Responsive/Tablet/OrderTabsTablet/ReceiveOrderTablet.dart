@@ -16,13 +16,7 @@ class _ReceiveOrderTabletState extends State<ReceiveOrderTablet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ViewOrderTablet(onCardTap: widget.onCardTap),
-          ],
-        ),
-      ),
+      body: ViewOrderTablet(onCardTap: widget.onCardTap),
     );
   }
   @override

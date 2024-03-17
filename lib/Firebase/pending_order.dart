@@ -263,60 +263,56 @@ class _ViewPendingOrderTabletState extends State<ViewPendingOrderTablet> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        FirebaseAnimatedList(
-          shrinkWrap: true,
-          query: query,
-          itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
-            Map data = snapshot.value as Map;
-            String username = snapshot.key.toString();
+    return FirebaseAnimatedList(
+      shrinkWrap: true,
+      query: query,
+      itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
+        Map data = snapshot.value as Map;
+        String username = snapshot.key.toString();
 
-            return Padding(
-              padding: const EdgeInsets.all(6),
-              child: GestureDetector(
-                onTap: () {
-                  widget.onCardTap(null);
-                  widget.onCardTap(username);
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(padding: EdgeInsets.only(left: 10)),
-                      SizedBox(
-                        width: 130,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 15, 0, 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                username,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 55,
-                      ),
-                    ],
-                  ),
-                ),
+        return Padding(
+          padding: const EdgeInsets.all(6),
+          child: GestureDetector(
+            onTap: () {
+              widget.onCardTap(null);
+              widget.onCardTap(username);
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
-            );
-          },
-        )
-      ],
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(padding: EdgeInsets.only(left: 10)),
+                  SizedBox(
+                    width: 130,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 15, 0, 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            username,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 55,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -382,9 +378,7 @@ class _ShowPendingPageTabletState extends State<ShowPendingPageTablet> {
                           query: query,
                           itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
                             dynamic data = snapshot.value;
-
                             if (data is Map) {
-
                               data['key'] = snapshot.key;
                               orders.add(data);
                               return FutureBuilder<String?>(

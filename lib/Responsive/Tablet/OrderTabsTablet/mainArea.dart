@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Firebase/pending_order.dart';
+import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/HistoryOrderMobile.dart';
+import '../../../Firebase/history_order.dart';
 import '../../../Firebase/view_order.dart';
 
-class MainArea extends StatefulWidget {
+class MainArea extends StatelessWidget {
   final String selectedUsername;
   final int areaType;
 
@@ -13,65 +15,54 @@ class MainArea extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<MainArea> createState() => _MainAreaState();
-}
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: areaWidget(),
+    );
+  }
 
-class _MainAreaState extends State<MainArea> {
   Widget areaWidget() {
-    switch (widget.areaType) {
+    switch (areaType) {
       case 1:
-        return MainAreaOrder(selectedUsername: widget.selectedUsername);
+        return MainAreaOrder(selectedUsername: selectedUsername);
       case 2:
-      // Handle case 2
-        return MainAreaPending(selectedUsername: widget.selectedUsername);
+        return MainAreaPending(selectedUsername: selectedUsername);
       case 3:
-      // Handle case 3
-        return Container(); // Placeholder container
+        return MainAreaHistory(selectedUsername: selectedUsername,); // Placeholder container
       default:
-      // Handle default case
         return Container(); // Placeholder container
     }
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: areaWidget(),
-      ),
-    );
-  }
 }
 
-
-
-class MainAreaOrder extends StatefulWidget {
+class MainAreaOrder extends StatelessWidget {
   final String selectedUsername;
-  const MainAreaOrder({super.key, required this.selectedUsername});
+  const MainAreaOrder({Key? key, required this.selectedUsername}) : super(key: key);
 
-  @override
-  State<MainAreaOrder> createState() => _MainAreaOrderState();
-}
-
-class _MainAreaOrderState extends State<MainAreaOrder> {
   @override
   Widget build(BuildContext context) {
-    return ShowOrderPageTablet(username: widget.selectedUsername);
+    return ShowOrderPageTablet(username: selectedUsername);
   }
 }
 
-class MainAreaPending extends StatefulWidget {
+class MainAreaPending extends StatelessWidget {
   final String selectedUsername;
-  const MainAreaPending({super.key, required this.selectedUsername});
+  const MainAreaPending({Key? key, required this.selectedUsername}) : super(key: key);
 
-  @override
-  State<MainAreaPending> createState() => _MainAreaPendingState();
-}
-
-class _MainAreaPendingState extends State<MainAreaPending> {
   @override
   Widget build(BuildContext context) {
-    return ShowPendingPageTablet(username: widget.selectedUsername);
+    return ShowPendingPageTablet(username: selectedUsername);
   }
 }
+
+class MainAreaHistory extends StatelessWidget {
+  final String selectedUsername;
+  const MainAreaHistory({Key? key, required this.selectedUsername}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ShowHistoryPageTablet(username: selectedUsername);
+  }
+}
+
 

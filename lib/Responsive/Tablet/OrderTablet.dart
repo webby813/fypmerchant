@@ -3,7 +3,7 @@ import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/PendingOrderTablet
 import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/mainArea.dart';
 import '../../Color/color.dart';
 import '../../Components/barTitle_widget.dart';
-import '../Mobile/OrderTabsMobile/HistoryOrderMobile.dart';
+import 'OrderTabsTablet/HistoryOrderTablet.dart';
 import 'OrderTabsTablet/ReceiveOrderTablet.dart';
 
 class OrderTablet extends StatefulWidget {
@@ -15,7 +15,7 @@ class OrderTablet extends StatefulWidget {
 
 class _OrderTabletState extends State<OrderTablet> {
   String? selectedUsername;
-  int selectedIndex = 0; // Index of the selected tab
+  int selectedIndex = 0;
 
   void setSelectedUsername(String? username) {
     setState(() {
@@ -28,7 +28,7 @@ class _OrderTabletState extends State<OrderTablet> {
     final List<Widget> tabViews = [
       ReceiveOrderTablet(onCardTap: setSelectedUsername),
       PendingOrderTablet(onCardTap: setSelectedUsername),
-      const HistoryOrderMobile(),
+      HistoryOrderTablet(onCardTap: setSelectedUsername),
     ];
 
     final List<Tab> tabs = [
@@ -40,7 +40,7 @@ class _OrderTabletState extends State<OrderTablet> {
       ),
       const Tab(
         text: 'History',
-      )
+      ),
     ];
 
     return Scaffold(
@@ -60,6 +60,7 @@ class _OrderTabletState extends State<OrderTablet> {
                 body: SafeArea(
                   child: DefaultTabController(
                     length: tabs.length,
+                    initialIndex: selectedIndex,
                     child: Column(
                       children: [
                         TabBar(
@@ -67,7 +68,7 @@ class _OrderTabletState extends State<OrderTablet> {
                           labelColor: CustomColors.primaryColor,
                           onTap: (index) {
                             setState(() {
-                              selectedIndex = index; // Update selected index
+                              selectedIndex = index;
                             });
                           },
                         ),
@@ -89,7 +90,7 @@ class _OrderTabletState extends State<OrderTablet> {
               child: selectedUsername != null
                   ? MainArea(
                 selectedUsername: selectedUsername!,
-                areaType: selectedIndex + 1, // Dynamic areaType based on selected tab
+                areaType: selectedIndex + 1,
               )
                   : Container(),
             ),
@@ -99,3 +100,4 @@ class _OrderTabletState extends State<OrderTablet> {
     );
   }
 }
+
