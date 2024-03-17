@@ -18,13 +18,7 @@ class _PendingOrderTabletState extends State<PendingOrderTablet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              ViewPendingOrderTablet(onCardTap: widget.onCardTap)
-            ],
-          ),
-        )
+        body: ViewPendingOrderTablet(onCardTap: widget.onCardTap)
     );
   }
 }
