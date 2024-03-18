@@ -19,35 +19,35 @@ class _DashboardTabletState extends State<DashboardTablet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: CustomColors.defaultWhite,
-        title: BarTitle.appBarText('Dashboard'),
-        elevation: 0,
-      ),
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: CustomColors.defaultWhite,
+          title: BarTitle.appBarText('Dashboard'),
+          elevation: 0,
+        ),
 
-      body: Row(
-        children: [
-          Expanded(
-              child: FractionallySizedBox(
-                alignment: Alignment.topLeft,
-                widthFactor: 0.6,
-                child: Container(
-                  color: Colors.white,
-                ),
-          )
-          ),
+        body: Row(
+          children: [
+            Expanded(
+                child: FractionallySizedBox(
+                  alignment: Alignment.topLeft,
+                  widthFactor: 0.6,
+                  child: Container(
+                    color: Colors.white,
+                  ),
+                )
+            ),
 
-          Expanded(
-              child: FractionallySizedBox(
-                widthFactor: 1.8,
-                child: Container(
-                  color: CustomColors.lightGrey,
-                ),
-              )
-          )
-        ],
-      )
+            Expanded(
+                child: FractionallySizedBox(
+                  widthFactor: 1.8,
+                  child: Container(
+                    color: CustomColors.lightGrey,
+                  ),
+                )
+            )
+          ],
+        )
     );
   }
 }
