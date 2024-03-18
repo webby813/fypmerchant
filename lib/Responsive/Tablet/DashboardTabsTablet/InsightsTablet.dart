@@ -10,8 +10,8 @@ class InsightsTablet extends StatefulWidget {
 class _InsightsTabletState extends State<InsightsTablet> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
+    return const Scaffold(
+      backgroundColor: Colors.grey,
     );
   }
 }

@@ -11,7 +11,7 @@ class _PayoutTabletState extends State<PayoutTablet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      backgroundColor: Colors.green,
     );
   }
 }
