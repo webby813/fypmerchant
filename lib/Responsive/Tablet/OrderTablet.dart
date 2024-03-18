@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/PendingOrderTablet.dart';
-import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/mainArea.dart';
+import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/mainAreaOrder.dart';
 import '../../Color/color.dart';
 import '../../Components/barTitle_widget.dart';
 import 'OrderTabsTablet/HistoryOrderTablet.dart';

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Tablet/DashboardTabsTablet/PayoutTablet.dart';
-
+import 'package:fypmerchant/Components/listTile_widget.dart';
+import 'package:fypmerchant/Responsive/Tablet/DashboardTabsTablet/mainAreaDash.dart';
 import '../../Color/color.dart';
 import '../../Components/barTitle_widget.dart';
-import '../../Components/tabbar_widget.dart';
-import '../Mobile/DashboardTabsMobile/InsightsMobile.dart';
-import '../Mobile/DashboardTabsMobile/PayoutMobile.dart';
 
 class DashboardTablet extends StatefulWidget {
   const DashboardTablet({super.key});
@@ -15,6 +12,7 @@ class DashboardTablet extends StatefulWidget {
 }
 
 class _DashboardTabletState extends State<DashboardTablet> {
+  late int typeNum = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +32,32 @@ class _DashboardTabletState extends State<DashboardTablet> {
                   widthFactor: 0.6,
                   child: Container(
                     color: Colors.white,
+                    child: Column(
+                      children: [
+                        Wrap(
+                          runSpacing: 16,
+                          children: [
+                            CustomListTile.tile(
+                                title: "Insights",
+                                onTap: (){
+                                  setState(() {
+                                    typeNum = 1;
+                                  });
+                              }
+                            ),
+
+                            CustomListTile.tile(
+                                title: "Payout",
+                                onTap: (){
+                                  setState(() {
+                                    typeNum = 2;
+                                  });
+                                }
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 )
             ),
@@ -41,9 +65,7 @@ class _DashboardTabletState extends State<DashboardTablet> {
             Expanded(
                 child: FractionallySizedBox(
                   widthFactor: 1.8,
-                  child: Container(
-                    color: CustomColors.lightGrey,
-                  ),
+                  child: MainAreaDashboard(type: typeNum),
                 )
             )
           ],
