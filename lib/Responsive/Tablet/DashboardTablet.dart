@@ -27,9 +27,9 @@ class _DashboardTabletState extends State<DashboardTablet> {
         body: Row(
           children: [
             Expanded(
-                child: FractionallySizedBox(
+              flex: 6,
+                child: Container(
                   alignment: Alignment.topLeft,
-                  widthFactor: 0.6,
                   child: Container(
                     color: Colors.white,
                     child: Column(
@@ -63,8 +63,8 @@ class _DashboardTabletState extends State<DashboardTablet> {
             ),
 
             Expanded(
-                child: FractionallySizedBox(
-                  widthFactor: 1.8,
+              flex: 12,
+                child: Container(
                   child: MainAreaDashboard(type: typeNum),
                 )
             )
