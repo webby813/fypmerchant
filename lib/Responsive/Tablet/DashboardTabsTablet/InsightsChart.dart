@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class TestChart extends StatefulWidget {
-  const TestChart({Key? key}) : super(key: key);
+class InsightsChart extends StatefulWidget {
+  const InsightsChart({Key? key}) : super(key: key);
 
   @override
-  _TestChartState createState() => _TestChartState();
+  _InsightsChartState createState() => _InsightsChartState();
 }
 
-class _TestChartState extends State<TestChart> {
+class _InsightsChartState extends State<InsightsChart> {
   List<_SalesData> data = [
     _SalesData('Week 1', 35),
     _SalesData('Week 2', 28),
@@ -19,17 +19,13 @@ class _TestChartState extends State<TestChart> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 300, // Set a specific height for the chart
+      height: 300,
       child: Column(
         children: [
-          //Initialize the chart widget
           SfCartesianChart(
             primaryXAxis: const CategoryAxis(),
-            // Chart title
             title: const ChartTitle(text: 'February'),
-            // Enable legend
             legend: const Legend(isVisible: true),
-            // Enable tooltip
             tooltipBehavior: TooltipBehavior(enable: true),
             series: <CartesianSeries<_SalesData, String>>[
               LineSeries<_SalesData, String>(
