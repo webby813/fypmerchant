@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
-import 'package:fypmerchant/Responsive/Tablet/DashboardTabsTablet/TestChart.dart';
+import 'package:fypmerchant/Responsive/Tablet/DashboardTabsTablet/InsightsChart.dart';
 
 class InsightsTablet extends StatefulWidget {
   const InsightsTablet({Key? key}) : super(key: key);
@@ -78,7 +78,7 @@ class _InsightsTabletState extends State<InsightsTablet> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Expanded(
-                            child: TestChart(),
+                            child: InsightsChart(),
                           ),
                         ],
                       ),
