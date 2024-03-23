@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../Color/color.dart';
+import '../../Components/dropDownList.dart';
 
 class Settlement extends StatefulWidget {
   const Settlement({Key? key}) : super(key: key);
@@ -9,10 +10,21 @@ class Settlement extends StatefulWidget {
 }
 
 class _SettlementState extends State<Settlement> {
+  List<String> options = ['January', 'February', 'March'];
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 10, bottom: 5),
+          child: Row(
+            children: [
+              CustomDropdown(items: options),
+            ],
+          ),
+        ),
+
         Expanded(
           child: ListView.builder(
             itemCount: 10,
@@ -74,5 +86,3 @@ class SettlementItems extends StatelessWidget {
     );
   }
 }
-
-

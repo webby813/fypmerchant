@@ -34,64 +34,68 @@ class _PayoutTabletState extends State<PayoutTablet> {
                             borderRadius: BorderRadius.circular(14),
                           ),
                           color: CustomColors.defaultWhite,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Available Balance",
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Available Balance",
+                                        style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.start,
                                       ),
-                                      textAlign: TextAlign.start,
-                                    ),
 
-                                    const SizedBox(height: 16),
+                                      const SizedBox(height: 16),
 
-                                    Center(
-                                      child: RichText(
-                                        textAlign: TextAlign.center,
-                                        text: const TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: 'RM ',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: CustomColors.defaultBlack,
-                                                fontSize: 24,
+                                      Center(
+                                        child: RichText(
+                                          textAlign: TextAlign.center,
+                                          text: const TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: 'RM ',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: CustomColors.defaultBlack,
+                                                  fontSize: 24,
+                                                ),
                                               ),
-                                            ),
-                                            TextSpan(
-                                              text: '23,980.78',
-                                              style: TextStyle(
-                                                fontSize: 22,
-                                                color: CustomColors.indigo,
+                                              TextSpan(
+                                                text: '23,980.78',
+                                                style: TextStyle(
+                                                  fontSize: 22,
+                                                  color: CustomColors.indigo,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 20), // Adjust the width here to increase or decrease space
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.exit_to_app_outlined),
-                                iconSize: 35, // Set the size of the icon
-                              ),
-                            ],
+                                const SizedBox(width: 20),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.exit_to_app_outlined),
+                                  iconSize: 35, // Set the size of the icon
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+
                       )
                   ),
-                  const SizedBox(height: 6),
                 ],
               ),
+
               // Second Container for Transactions and Settlement
               Expanded(
                 child: Container(
@@ -103,14 +107,16 @@ class _PayoutTabletState extends State<PayoutTablet> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              "Transactions",
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w400,
+                            Padding(
+                              padding: EdgeInsets.only(top: 10,bottom: 5),
+                              child: Text(
+                                "Transactions",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
-                            DivideWidget(),
                             Expanded(
                               child: Transaction(),
                             ),
@@ -121,18 +127,18 @@ class _PayoutTabletState extends State<PayoutTablet> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              "Settlement",
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w400,                              ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 10,bottom: 5),
+                              child: Text(
+                                "Settlement",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w400,),
+                              ),
                             ),
-                            DivideWidget(),
-
                             Expanded(
                               child: Settlement(),
                             ),
-
                           ],
                         ),
                       ),
@@ -147,4 +153,3 @@ class _PayoutTabletState extends State<PayoutTablet> {
     );
   }
 }
-

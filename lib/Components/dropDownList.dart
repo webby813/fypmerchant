@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Color/color.dart';
 
 class CustomDropdown extends StatefulWidget {
   final List<String> items;
@@ -27,15 +28,21 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      value: _selectedItem,
-      items: widget.items.map((item) {
-        return DropdownMenuItem<String>(
-          value: item,
-          child: Text(item),
-        );
-      }).toList(),
-      onChanged: (value) {
+    return PopupMenuButton<String>(
+      initialValue: _selectedItem,
+      itemBuilder: (BuildContext context) {
+        return widget.items.map((item) {
+          return PopupMenuItem<String>(
+            value: item,
+            textStyle: const TextStyle(
+                color: Colors.blue
+            ),
+            height: 40,
+            child: Text(item),
+          );
+        }).toList();
+      },
+      onSelected: (String value) {
         setState(() {
           _selectedItem = value;
         });
@@ -43,6 +50,29 @@ class _CustomDropdownState extends State<CustomDropdown> {
           widget.onChanged!(value);
         }
       },
+      child: SizedBox(
+        width: 150,
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: CustomColors.lightGrey),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                _selectedItem ?? widget.items.first,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
