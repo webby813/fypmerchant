@@ -55,7 +55,7 @@ class _OrderTabletState extends State<OrderTablet> {
           Expanded(
             flex: 6,
             child: Container(
-              color: CustomColors.indigo,
+              color: CustomColors.primaryColor,
               child: Scaffold(
                 body: SafeArea(
                   child: DefaultTabController(
