@@ -7,7 +7,7 @@ class CustomColors {
   static const Color defaultWhite = Color(0xFFFFFFFF);
   static const Color defaultBlack = Color(0xFF0a0a0a);
   static const Color darkBlue = Color(0xFF043482);
-  static const Color lightGrey = Color(0xFFb8c1cf);
+  static const Color lightGrey = Color(0xffcedeea);
   static const Color brightGreen = Color(0xFF00FF00);
   static const Color lightGreen = Color(0xFF9CCC65);
   static const Color indigo = Color(0xFF4b0082);
