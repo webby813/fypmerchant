@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
+import 'package:fypmerchant/Components/dropDownList.dart';
 
 class Transaction extends StatefulWidget {
   const Transaction({Key? key}) : super(key: key);
@@ -9,12 +10,21 @@ class Transaction extends StatefulWidget {
 }
 
 class _TransactionState extends State<Transaction> {
-  List<String> options = ['Today', 'Yesterday', 'Weekly']; // 更短的变量名
+  List<String> options = ['Today', 'Yesterday', 'Weekly'];
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 10, bottom: 5),
+          child: Row(
+            children: [
+              CustomDropdown(items: options),
+            ],
+          ),
+        ),
+
         Expanded(
           child: ListView.builder(
             itemCount: 10,
