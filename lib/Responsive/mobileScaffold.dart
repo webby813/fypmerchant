@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Responsive/Mobile/DashboardMobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/ManageMobile.dart';
 import 'package:fypmerchant/Responsive/Mobile/OrderMobile.dart';
 import 'Mobile/profile.dart';
 
@@ -16,7 +17,7 @@ class _MobileScaffoldState extends State<MobileScaffold> {
   final List<Widget> _pages = [
     const OrderMobile(),
     const DashboardMobile(),
-    const Profile(),
+    const ManageMobile(),
   ];
 
   void _onItemTapped(int index) {

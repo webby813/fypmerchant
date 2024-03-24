@@ -30,7 +30,7 @@ class _ShopStatusManageState extends State<ShopStatusManage> {
               Expanded(child: Container()),
 
               Container(
-                margin: const EdgeInsets.only(right: 60),
+                margin: const EdgeInsets.only(right: 20),
                 width: 100,
                 height: 40,
                 child: const ShopStatusButton(initialShopState: ShopState.Opening),
@@ -53,7 +53,7 @@ class _ShopStatusManageState extends State<ShopStatusManage> {
               Expanded(child: Container()),
 
               Container(
-                margin: const EdgeInsets.only(right: 60),
+                margin: const EdgeInsets.only(right: 20),
                 width: 100,
                 height: 40,
                 child: SimpleButton.buttonWidget("Modify", (){}),
