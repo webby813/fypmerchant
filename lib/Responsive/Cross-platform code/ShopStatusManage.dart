@@ -38,7 +38,7 @@ class _ShopStatusManageState extends State<ShopStatusManage> {
             ],
           ),
 
-          const SizedBox(height: 15,),
+          const SizedBox(height: 15),
 
           Row(
             children: [
