@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../Color/color.dart';
 import '../../Components/barTitle_widget.dart';
+import '../../Components/listTile_widget.dart';
 import '../../login.dart';
+import 'ManageTabsTablet/mainAreaManage.dart';
 
 class ManageTablet extends StatefulWidget {
   const ManageTablet({super.key});
@@ -15,6 +14,7 @@ class ManageTablet extends StatefulWidget {
 }
 
 class _ManageTabletState extends State<ManageTablet> {
+  late int typeNum = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,21 +44,75 @@ class _ManageTabletState extends State<ManageTablet> {
         body: Row(
           children: [
             Expanded(
-                child: FractionallySizedBox(
+                flex: 6,
+                child: Container(
                   alignment: Alignment.topLeft,
-                  widthFactor: 0.6,
                   child: Container(
                     color: Colors.white,
+                    child: Column(
+                      children: [
+                        Wrap(
+                          runSpacing: 12,
+                          children: [
+                            //Manage Stock and Shop
+                            ListTileTitle.tileTitle(title: "Shop and Stock Manage"),
+                            CustomListTile.tile(
+                                title: "Shop Status",
+                                onTap: (){
+                                  setState(() {
+                                    typeNum = 1;
+                                  });
+                                }
+                            ),
+                            CustomListTile.tile(
+                                title: "Manage Stock",
+                                onTap: (){
+                                  setState(() {
+                                    typeNum = 2;
+                                  });
+                                }
+                            ),
+
+                            ListTileTitle.tileTitle(title: "Need help?"),
+                            CustomListTile.tile(
+                                title: "Help Centre",
+                                onTap: (){
+                                  setState(() {
+
+                                  });
+                                }
+                            ),
+                            CustomListTile.tile(
+                                title: "Feedback",
+                                onTap: (){
+                                  setState(() {
+
+                                  });
+                                }
+                            ),
+
+                            ListTileTitle.tileTitle(title: "About me"),
+                            CustomListTile.tile(
+                                title: "About me",
+                                onTap: (){
+                                  setState(() {
+
+                                  });
+                                }
+                            ),
+
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 )
             ),
 
             Expanded(
-                child: FractionallySizedBox(
-                  widthFactor: 1.8,
-                  child: Container(
-                    color: CustomColors.lightGrey,
-                  ),
+                flex: 12,
+                child: Container(
+                  child: MainAreaManage(type: typeNum),
                 )
             )
           ],

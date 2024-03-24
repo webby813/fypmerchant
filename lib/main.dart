@@ -27,9 +27,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       home: FutureBuilder<bool>(
         future: isLoggedIn(),
         builder: (context, snapshot) {
@@ -45,7 +42,7 @@ class MyApp extends StatelessWidget {
             }
           }
         },
-      ), // Use uppercase 'L' for the class name
+      ),
     );
   }
 }
