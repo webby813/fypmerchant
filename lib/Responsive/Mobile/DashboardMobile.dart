@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Responsive/Mobile/DashboardTabsMobile/InsightsMobile.dart';
 import 'package:fypmerchant/Responsive/Mobile/DashboardTabsMobile/PayoutMobile.dart';
-
 import '../../Color/color.dart';
 import '../../Components/barTitle_widget.dart';
 import '../../Components/tabbar_widget.dart';
