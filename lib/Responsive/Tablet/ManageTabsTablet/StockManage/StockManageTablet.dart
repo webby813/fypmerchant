@@ -23,6 +23,19 @@ class _ManageStockPageState extends State<ManageStockPage> {
         centerTitle: true,
         title: TitleWidget.titleWhite("Manage Stock"),
         backgroundColor: CustomColors.primaryColor,
+        actions: [
+          Row(
+            children: [
+              IconButton(
+                  onPressed: (){},
+                  icon: Icon(
+                    Icons.add,
+                    size:40,
+                  )
+              ),
+            ],
+          )
+        ],
       ),
       body: Row(
         children: [

@@ -43,19 +43,19 @@ class StockItemCard extends StatelessWidget {
 
               InputWidget.StockInput(name, price, description),
 
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 55, bottom: 250),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.cancel_outlined),
-                      color: CustomColors.warningRed,
-                      iconSize: 30,
-                    ),
-                  ),
-                ],
-              ),
+              // Column(
+              //   children: [
+              //     Padding(
+              //       padding: const EdgeInsets.only(left: 55, bottom: 250),
+              //       child: IconButton(
+              //         onPressed: () {},
+              //         icon: const Icon(Icons.cancel_outlined),
+              //         color: CustomColors.warningRed,
+              //         iconSize: 30,
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),
