@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class TitleWidget {
   ///Title Widget
-  static Widget title(String text) {
+  static Widget titleBlue(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
       child: Text(
@@ -23,8 +23,28 @@ class TitleWidget {
       ),
     );
   }
-}
 
+  static Widget titleWhite(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
+      child: Text(
+        text,
+        style: TextStyle(
+          shadows: <Shadow>[
+            Shadow(
+              offset: const Offset(3.0, 3.0),
+              blurRadius: 10.0,
+              color: Colors.greenAccent.withOpacity(0.2),
+            ),
+          ],
+          fontSize: 40,
+          fontWeight: FontWeight.bold,
+          color: CustomColors.defaultWhite,
+        ),
+      ),
+    );
+  }
+}
 
 class SubTitle{
   static subTitle(String text){
@@ -54,6 +74,17 @@ class OrderTitle{
         fontSize: 18
       ),
     ),
+    );
+  }
+}
+
+class TextWidget{
+  static Widget textWidget(String text){
+    return Text(
+      text,
+      style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold, color: Color(0xFFD7BFA6)),
     );
   }
 }

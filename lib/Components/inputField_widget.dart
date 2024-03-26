@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../Color/color.dart';
 
 TextEditingController password = TextEditingController();
 
@@ -24,6 +27,72 @@ class InputWidget{
             fillColor: Colors.white,
             hintText: hint,
             prefixIcon: Icon(iconData),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Widget StockInput(String name, String Price, String Description){
+    return SizedBox(
+      width: 500,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InputWidget.manageInput("Product name"),
+          InputWidget.manageInput("Price"),
+          InputWidget.Description("Description")
+        ],
+      ),
+    );
+  }
+
+  static Widget manageInput(String text){
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: CustomColors.lightGrey,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: SizedBox(
+            height: 50,
+            width: 200,
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: text,
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Widget Description(String text){
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: CustomColors.lightGrey,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: SizedBox(
+            height: 140,
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: text,
+                border: InputBorder.none,
+              ),
+            ),
           ),
         ),
       ),

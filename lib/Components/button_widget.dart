@@ -168,3 +168,4 @@ class _ShopStatusButtonState extends State<ShopStatusButton> {
     }
   }
 }
+

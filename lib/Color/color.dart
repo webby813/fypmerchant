@@ -11,4 +11,5 @@ class CustomColors {
   static const Color brightGreen = Color(0xFF00FF00);
   static const Color lightGreen = Color(0xFF9CCC65);
   static const Color indigo = Color(0xFF4b0082);
+  static const Color deepGreen = Color(0xFF416D19);
 }
