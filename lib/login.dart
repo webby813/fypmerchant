@@ -25,7 +25,7 @@ class _LoginState extends State<Login> {
           Positioned(
             top: 90,
             left: -90,
-            child: TitleWidget.title('SIGN IN'),
+            child: TitleWidget.titleBlue('SIGN IN'),
           ),
 
           Container(

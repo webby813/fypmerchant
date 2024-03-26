@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Cross-platform%20code/ShopStatusManage.dart';
-import 'package:fypmerchant/Responsive/Tablet/ManageTabsTablet/StockManageTablet.dart';
+import 'package:fypmerchant/Responsive/Cross-platform%20code/ManageTab/ShopStatus.dart';
+import 'package:fypmerchant/Responsive/Tablet/ManageTabsTablet/StockManage/StockManageTablet.dart';
 
 class MainAreaManage extends StatelessWidget {
   final int type;

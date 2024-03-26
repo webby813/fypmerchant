@@ -4,6 +4,8 @@ import 'package:fypmerchant/Responsive/Tablet/ManageTablet.dart';
 import 'package:fypmerchant/Responsive/Tablet/OrderTablet.dart';
 import 'package:flutter/services.dart';
 
+import 'Tablet/ManageTabsTablet/StockManage/StockManageTablet.dart';
+
 class TabletScaffold extends StatefulWidget {
   const TabletScaffold({super.key});
 

@@ -4,6 +4,7 @@ import '../../Color/color.dart';
 import '../../Components/barTitle_widget.dart';
 import '../../Components/listTile_widget.dart';
 import '../../login.dart';
+import 'ManageTabsTablet/StockManage/StockManageTablet.dart';
 import 'ManageTabsTablet/mainAreaManage.dart';
 
 class ManageTablet extends StatefulWidget {
@@ -68,7 +69,7 @@ class _ManageTabletState extends State<ManageTablet> {
                                 title: "Manage Stock",
                                 onTap: (){
                                   setState(() {
-                                    typeNum = 2;
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ManageStockPage()));
                                   });
                                 }
                             ),

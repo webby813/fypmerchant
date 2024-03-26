@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Cross-platform%20code/ShopStatusManage.dart';
+import 'package:fypmerchant/Responsive/Cross-platform%20code/ManageTab/ShopStatus.dart';
 
 import '../../../Color/color.dart';
 import '../../../Components/barTitle_widget.dart';

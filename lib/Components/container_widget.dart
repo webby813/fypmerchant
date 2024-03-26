@@ -2,6 +2,70 @@ import 'package:fypmerchant/Components/BottomSheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
 
+import 'inputField_widget.dart';
+
+class StockItemCard extends StatelessWidget {
+  final name;
+  final price;
+  final description;
+  const StockItemCard({super.key, required this.name, required this.price, required this.description});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, top: 15),
+      child: Card(
+        elevation: 3,
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: CustomColors.defaultWhite,
+            borderRadius: BorderRadius.circular(15),
+          ),
+
+          child: Row(
+            children: [
+              ///Product Photo
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Card(
+                  child: Container(
+                    width: 180,
+                    height: 170,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(12),
+                      color: CustomColors.lightGrey,
+                    ),
+                  ),
+                ),
+              ),
+
+              InputWidget.StockInput(name, price, description),
+
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 55, bottom: 250),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.cancel_outlined),
+                      color: CustomColors.warningRed,
+                      iconSize: 30,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
 class CustomContainer extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
