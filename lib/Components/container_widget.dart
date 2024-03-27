@@ -1,69 +1,113 @@
 import 'package:fypmerchant/Components/BottomSheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
-
 import 'inputField_widget.dart';
 
-class StockItemCard extends StatelessWidget {
-  final name;
-  final price;
-  final description;
-  const StockItemCard({super.key, required this.name, required this.price, required this.description});
+class StockItemCard extends StatefulWidget {
+  final String name;
+  final double price;
+  final String description;
+
+  const StockItemCard({
+    Key? key,
+    required this.name,
+    required this.price,
+    required this.description,
+  }) : super(key: key);
+
+  @override
+  _StockItemCardState createState() => _StockItemCardState();
+}
+
+class _StockItemCardState extends State<StockItemCard> {
+  String? _dropdownValue;
 
   @override
   Widget build(BuildContext context) {
+    List<String> itemStatus = ['Available', 'Unavailable'];
+
     return Padding(
       padding: const EdgeInsets.only(left: 10, top: 15),
-      child: Card(
-        elevation: 3,
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: CustomColors.defaultWhite,
-            borderRadius: BorderRadius.circular(15),
+      child: Dismissible(
+        key: UniqueKey(),
+        direction: DismissDirection.endToStart,
+        background: Container(
+          color: Colors.red,
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: 20.0),
+          child: const Icon(
+            Icons.delete,
+            color: Colors.white,
           ),
-
-          child: Row(
-            children: [
-              ///Product Photo
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Card(
-                  child: Container(
-                    width: 180,
-                    height: 170,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(12),
-                      color: CustomColors.lightGrey,
+        ),
+        onDismissed: (direction) {
+          // Implement delete functionality here
+        },
+        child: Card(
+          elevation: 3,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Row(
+              children: [
+                // Product Photo
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Card(
+                    child: Container(
+                      width: 180,
+                      height: 170,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey[200],
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              InputWidget.StockInput(name, price, description),
+                // Product Details
+                InputWidget.StockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
 
-              // Column(
-              //   children: [
-              //     Padding(
-              //       padding: const EdgeInsets.only(left: 55, bottom: 250),
-              //       child: IconButton(
-              //         onPressed: () {},
-              //         icon: const Icon(Icons.cancel_outlined),
-              //         color: CustomColors.warningRed,
-              //         iconSize: 30,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-            ],
+                // Change status of product
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 70),
+                  child: SizedBox(
+                    width: 105,
+                    child: DropdownButton<String>(
+                      value: _dropdownValue,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      isExpanded: true,
+                      items: itemStatus.map((String dropdownValue) {
+                        return DropdownMenuItem(
+                          value: dropdownValue,
+                          child: Text(dropdownValue,
+                          style: const TextStyle(
+                            fontSize: 13
+                          ),
+                          ),
+                        );
+                      }).toList(),
+                      hint: const Text("Status"),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _dropdownValue = newValue;
+                        });
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
 
 
 class CustomContainer extends StatelessWidget {

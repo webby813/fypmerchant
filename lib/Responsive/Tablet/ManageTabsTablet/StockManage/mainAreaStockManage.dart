@@ -23,9 +23,9 @@ class _MainAreaStockManageState extends State<MainAreaStockManage> {
         child: Column(
           children: [
             ///Widget in container_widget.dart, StockItemCard
-            StockItemCard(name: "name", price: "price", description: "description"),
-            StockItemCard(name: "name", price: "price", description: "description"),
-            StockItemCard(name: "name", price: "price", description: "description"),
+            StockItemCard(name: "name", price: 4.90, description: "description"),
+            StockItemCard(name: "name", price: 4.90, description: "description"),
+            StockItemCard(name: "name", price: 4.90, description: "description"),
           ],
         )
       ),
