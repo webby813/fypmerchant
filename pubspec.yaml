@@ -42,6 +42,7 @@ dependencies:
   shared_preferences: ^2.2.2
   image_picker: ^1.0.4
   syncfusion_flutter_charts: ^25.1.35
+  flutter_slidable: ^3.1.0
 
 dev_dependencies:
   flutter_test:

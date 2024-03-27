@@ -28,7 +28,7 @@ class _ManageStockPageState extends State<ManageStockPage> {
             children: [
               IconButton(
                   onPressed: (){},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.add,
                     size:40,
                   )

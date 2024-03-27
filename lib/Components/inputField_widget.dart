@@ -40,9 +40,9 @@ class InputWidget{
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InputWidget.manageInput("Product name"),
-          InputWidget.manageInput("Price"),
-          InputWidget.Description("Description")
+          InputWidget.manageInput(name),
+          InputWidget.manageInput(Price),
+          InputWidget.Description(Description)
         ],
       ),
     );
