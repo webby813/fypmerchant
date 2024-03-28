@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../Color/color.dart';
+import '../../../Components/alertDialog_widget.dart';
 import '../../../Components/barTitle_widget.dart';
+import '../../../Components/dashedRect.dart';
 
 class ManageStockMobile extends StatefulWidget {
   const ManageStockMobile({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class ManageStockMobile extends StatefulWidget {
 class _ManageStockMobileState extends State<ManageStockMobile> {
   List<String> list = <String>["Hot Coffee", "ColdCoffee", "Pastries"];
   String dropdownValue = "Hot Coffee";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,23 +25,22 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             Row(
               children: [
                 const Expanded(
                   flex: 2,
                   child: Padding(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Text(
-                    "Categories",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
+                    padding: EdgeInsets.only(left: 15),
+                    child: Text(
+                      "Categories",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                  ),
                 ),
-
                 Expanded(
                   flex: 2,
                   child: Container(
@@ -49,7 +51,6 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                       iconSize: 24,
                       elevation: 16,
                       onChanged: (String? value) {
-                        // This is called when the user selects an item.
                         if (value != null) {
                           setState(() {
                             dropdownValue = value;
@@ -65,22 +66,49 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                     ),
                   ),
                 ),
-
                 Expanded(
                   flex: 0,
-                    child: IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: (){
-
-                      },
-                    )
+                  child: IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {},
+                  ),
                 )
               ],
             ),
+            const StockItemCardOnMobile(name: "name", price: 4.90, description: "description"),
+            const StockItemCardOnMobile(name: "name", price: 4.90, description: "description"),
+            const StockItemCardOnMobile(name: "name", price: 4.90, description: "description"),
 
-            const StockItemCardOnMobile(name: "name", price: 4.90, description: "description"),
-            const StockItemCardOnMobile(name: "name", price: 4.90, description: "description"),
-            const StockItemCardOnMobile(name: "name", price: 4.90, description: "description"),
+            Container(
+              width: 370,
+              height: 150,
+              color: Colors.transparent,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AddUpdateDialog(
+                        type: "Add",
+                        onPressed: () {
+                          print('Add');
+                        },
+                      );
+                    },
+                  );
+                },
+                child: DashedBorder(
+                  strokeWidth: 2,
+                  color: Colors.blue,
+                  child: const Center(
+                    child: Text(
+                      'Tap here to add item',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -104,10 +132,10 @@ class StockItemCardOnMobile extends StatefulWidget {
 }
 
 class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
-  String? _dropdownValue;
+
   @override
   Widget build(BuildContext context) {
-    List<String> itemStatus = ['Available', 'Unavailable'];
+
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Dismissible(
@@ -123,95 +151,14 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
         ),
         onDismissed: (direction) {},
         child: GestureDetector(
-          onTap: () {
+          onLongPress: () {
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
-                backgroundColor: CustomColors.defaultWhite,
-                scrollable: true,
-                title: const Text("Product", textAlign: TextAlign.center),
-                content: SizedBox(
-                  width: 800,
-                  child: Form(
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Card(
-                                  child: Container(
-                                    width: 130,
-                                    height: 125,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: Colors.grey[200],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 105,
-                              child: DropdownButton<String>(
-                                value: _dropdownValue,
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                isExpanded: true,
-                                items: itemStatus.map((String dropdownValue) {
-                                  return DropdownMenuItem(
-                                    value: dropdownValue,
-                                    child: Text(dropdownValue,
-                                      style: const TextStyle(
-                                          fontSize: 13
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                hint: const Text("Status"),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    _dropdownValue = newValue;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: "Latte",
-                            border: InputBorder.none,
-                          ),
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: "4.90",
-                            border: InputBorder.none,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 140,
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: "text",
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                actions: [
-                  ElevatedButton(
-                    child: const Text("Save"),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
+              builder: (context) => AddUpdateDialog(
+                type: "Update",
+                onPressed: (){
+
+                },)
             );
           },
           child: Card(
