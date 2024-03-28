@@ -20,7 +20,10 @@ class _TransactionState extends State<Transaction> {
           padding: const EdgeInsets.only(left: 10, bottom: 5),
           child: Row(
             children: [
-              CustomDropdown(items: options),
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: CustomDropdown(items: options),
+              )
             ],
           ),
         ),

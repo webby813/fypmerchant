@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Responsive/Cross-platform%20code/supportingPage.dart';
 import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/ManageStockMobile.dart';
 import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/ShopStatusMobile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,7 +81,7 @@ class _ManageMobileState extends State<ManageMobile> {
                               title: "Help Centre",
                               onTap: (){
                                 setState(() {
-
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => HelpCentre()));
                                 });
                               }
                           ),
@@ -88,7 +89,7 @@ class _ManageMobileState extends State<ManageMobile> {
                               title: "Feedback",
                               onTap: (){
                                 setState(() {
-
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => FeedbackPage()));
                                 });
                               }
                           ),

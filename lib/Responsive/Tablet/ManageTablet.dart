@@ -79,7 +79,7 @@ class _ManageTabletState extends State<ManageTablet> {
                                 title: "Help Centre",
                                 onTap: (){
                                   setState(() {
-
+                                    typeNum = 3;
                                   });
                                 }
                             ),
@@ -87,7 +87,7 @@ class _ManageTabletState extends State<ManageTablet> {
                                 title: "Feedback",
                                 onTap: (){
                                   setState(() {
-
+                                    typeNum = 4;
                                   });
                                 }
                             ),

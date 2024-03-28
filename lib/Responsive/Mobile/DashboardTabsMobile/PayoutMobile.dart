@@ -22,7 +22,6 @@ class _PayoutMobileState extends State<PayoutMobile> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.lightGrey,
       body: Column(
         children: [
           Padding(
