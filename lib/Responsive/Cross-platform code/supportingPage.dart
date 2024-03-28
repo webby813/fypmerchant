@@ -7,11 +7,8 @@ class HelpCentre extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final bool showAppBar = screenWidth < 500 || screenWidth >= 1100;
 
     return Scaffold(
-      appBar: showAppBar ? AppBar(title: BarTitle.appBarText("Help Centre")) : null,
       body: ListView(
         children: const [
           Center(
@@ -37,11 +34,7 @@ class FeedbackPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final bool showAppBar = screenWidth < 500 || screenWidth >= 1100;
-
     return Scaffold(
-      appBar: showAppBar ? AppBar(title: BarTitle.appBarText("Feedback"),) : null,
       backgroundColor: Colors.white,
       body: ListView(
         children: [
