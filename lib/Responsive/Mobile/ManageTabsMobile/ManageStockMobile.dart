@@ -104,8 +104,10 @@ class StockItemCardOnMobile extends StatefulWidget {
 }
 
 class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
+  String? _dropdownValue;
   @override
   Widget build(BuildContext context) {
+    List<String> itemStatus = ['Available', 'Unavailable'];
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Dismissible(
@@ -133,22 +135,50 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
                   child: Form(
                     child: Column(
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Card(
-                              child: Container(
-                                width: 130,
-                                height: 125,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.grey[200],
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Card(
+                                  child: Container(
+                                    width: 130,
+                                    height: 125,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.grey[200],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                            SizedBox(
+                              width: 105,
+                              child: DropdownButton<String>(
+                                value: _dropdownValue,
+                                icon: const Icon(Icons.keyboard_arrow_down),
+                                isExpanded: true,
+                                items: itemStatus.map((String dropdownValue) {
+                                  return DropdownMenuItem(
+                                    value: dropdownValue,
+                                    child: Text(dropdownValue,
+                                      style: const TextStyle(
+                                          fontSize: 13
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                hint: const Text("Status"),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    _dropdownValue = newValue;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                         TextFormField(
                           decoration: const InputDecoration(
