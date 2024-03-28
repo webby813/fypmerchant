@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/ManageStockMobile.dart';
 import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/ShopStatusMobile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,7 +70,7 @@ class _ManageMobileState extends State<ManageMobile> {
                               title: "Manage Stock",
                               onTap: (){
                                 setState(() {
-                                  typeNum = 2;
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ManageStockMobile()));
                                 });
                               }
                           ),
