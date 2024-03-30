@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Components/alertDialog_widget.dart';
 import 'package:fypmerchant/Components/title_widget.dart';
 import 'package:fypmerchant/Responsive/Tablet/ManageTabsTablet/StockManage/mainAreaStockManage.dart';
 import '../../../../Color/color.dart';
@@ -24,17 +25,25 @@ class _ManageStockPageState extends State<ManageStockPage> {
         title: TitleWidget.titleWhite("Manage Stock"),
         backgroundColor: CustomColors.primaryColor,
         actions: [
-          Row(
-            children: [
-              IconButton(
-                  onPressed: (){},
-                  icon: const Icon(
-                    Icons.add,
-                    size:40,
-                  )
-              ),
-            ],
-          )
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AddUpdateDialog(
+                    type: "Add",
+                    onPressed: () {
+                      print("add item");
+                    },
+                  );
+                },
+              );
+            },
+            icon: const Icon(
+              Icons.add,
+              size: 40,
+            ),
+          ),
         ],
       ),
       body: Row(
@@ -42,83 +51,95 @@ class _ManageStockPageState extends State<ManageStockPage> {
           Expanded(
             flex: 6,
             child: Container(
+              padding: const EdgeInsets.only(top: 10),
               alignment: Alignment.topLeft,
-              child: Container(
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Wrap(
-                      runSpacing: 12,
-                      children: [
-                        ListTile(
-                          title: const Text(
-                            "Categories",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          trailing: GestureDetector(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  ListTile(
+                    title: const Text(
+                      "Categories",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    trailing: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('New Category'),
+                              content: Form(
+                                child: TextFormField(),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text("Add"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Icon(Icons.add),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: categories.length,
+                      itemBuilder: (context, index) {
+                        final category = categories[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: GestureDetector(
                             onTap: () {
-                              //Pop up add categories dialog
+                              setState(() {
+                                selectedCategory = category;
+                              });
                             },
-                            child: const Icon(Icons.add),
-                          ),
-                        ),
-
-                        SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Center(
-                            child: Column(
-                              children: categories.map((category) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        selectedCategory = category;
-                                      });
-                                    },
-                                    child: Card(
-                                      color: selectedCategory == category ? CustomColors.deepGreen : CustomColors.defaultWhite,
-                                      child: SizedBox(
-                                        width: 400,
-                                        height: 70,
-                                        child: Align(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            category,
-                                            style: TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.w600,
-                                              color: selectedCategory == category ? CustomColors.defaultWhite : CustomColors.defaultBlack,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                            child: Card(
+                              color: selectedCategory == category
+                                  ? CustomColors.deepGreen
+                                  : CustomColors.defaultWhite,
+                              child: SizedBox(
+                                width: 400,
+                                height: 70,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    category,
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w600,
+                                      color: selectedCategory == category
+                                          ? CustomColors.defaultWhite
+                                          : CustomColors.defaultBlack,
                                     ),
                                   ),
-                                );
-                              }).toList(),
+                                ),
+                              ),
                             ),
                           ),
-                        )
-                      ],
+                        );
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-
           Expanded(
             flex: 12,
             child: MainAreaStockManage(
-                category: selectedCategory
+              category: selectedCategory,
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
+
