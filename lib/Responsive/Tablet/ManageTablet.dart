@@ -26,16 +26,42 @@ class _ManageTabletState extends State<ManageTablet> {
           elevation: 0,
           actions: <Widget>[
             IconButton(
-                onPressed: ()
-                  async{
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    await prefs.clear(); // Clear shared preferences
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const Login()),
-                          (Route<dynamic> route) => false, // Remove all existing routes from the stack
-                    );
-                  },
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        title: const Text("Exit"),
+                        content: const Text("Exit and store will be closed"),
+                        actions: [
+                          TextButton(
+                            child: const Text('Cancel'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('OK'),
+                            onPressed: () async {
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              await prefs.clear(); // Clear shared preferences
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (_) => const Login()),
+                                    (Route<dynamic> route) => false, // Remove all existing routes from the stack
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+
+
                 color: Colors.blue,
                 icon: const Icon(Icons.exit_to_app_rounded)
             )
@@ -69,7 +95,7 @@ class _ManageTabletState extends State<ManageTablet> {
                                 title: "Manage Stock",
                                 onTap: (){
                                   setState(() {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ManageStockPage()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ManageStockPage()));
                                   });
                                 }
                             ),
@@ -112,9 +138,7 @@ class _ManageTabletState extends State<ManageTablet> {
 
             Expanded(
                 flex: 12,
-                child: Container(
-                  child: MainAreaManage(type: typeNum),
-                )
+                child: MainAreaManage(type: typeNum)
             )
           ],
         )
