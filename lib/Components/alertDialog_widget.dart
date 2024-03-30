@@ -89,6 +89,7 @@ class AlertToChangeDialog extends StatelessWidget {
 class AddUpdateDialog extends StatefulWidget {
   final String type;
   final onPressed;
+
   const AddUpdateDialog({Key? key, required this.type, required this.onPressed});
 
   @override
@@ -109,48 +110,52 @@ class _AddUpdateDialogState extends State<AddUpdateDialog> {
         child: Form(
           child: Column(
             children: <Widget>[
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Card(
-                      child: Container(
-                        width: 130,
-                        height: 125,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey[200],
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Card(
+                        child: Container(
+                          width: 130,
+                          height: 125,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey[200],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 105,
-                    child: DropdownButton<String>(
-                      value: _dropdownValue,
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      isExpanded: true,
-                      items: itemStatus.map((String dropdownValue) {
-                        return DropdownMenuItem(
-                          value: dropdownValue,
-                          child: Text(dropdownValue,
-                            style: const TextStyle(
-                                fontSize: 13
+                    SizedBox(
+                      width: 105,
+                      child: DropdownButton<String>(
+                        value: _dropdownValue,
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        isExpanded: true,
+                        items: itemStatus.map((String dropdownValue) {
+                          return DropdownMenuItem(
+                            value: dropdownValue,
+                            child: Text(dropdownValue,
+                              style: const TextStyle(
+                                  fontSize: 13
+                              ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                      hint: const Text("Status"),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _dropdownValue = newValue;
-                        });
-                      },
+                          );
+                        }).toList(),
+                        hint: const Text("Status"),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _dropdownValue = newValue;
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+
               TextFormField(
                 decoration: const InputDecoration(
                   hintText: "Latte",
