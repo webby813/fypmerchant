@@ -1,208 +1,78 @@
-import 'package:fypmerchant/Components/BottomSheet_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Color/color.dart';
-import 'inputField_widget.dart';
 
-
-
-
-
-class CustomContainer extends StatelessWidget {
+class DashedBorder extends StatelessWidget {
+  final double strokeWidth;
+  final Color color;
   final Widget child;
-  final EdgeInsets padding;
 
-  const CustomContainer({super.key, required this.child, required this.padding});
+  DashedBorder({
+    super.key,
+    required this.child,
+    this.strokeWidth = 1.0,
+    this.color = Colors.black,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: padding,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          ),
-        ],
+    return CustomPaint(
+      painter: DashedBorderPainter(
+        strokeWidth: strokeWidth,
+        color: color,
       ),
       child: child,
     );
   }
 }
 
-///Custome Card use for Recommend list in homePage.dart
-class CustomCard extends StatelessWidget {
-  const CustomCard({super.key, required this.imageName, required this.title, required this.price});
+class DashedBorderPainter extends CustomPainter {
+  final double strokeWidth;
+  final Color color;
 
-  final String imageName;
-  final String title;
-  final String price;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Column(
-        children: [
-          GestureDetector(
-          onTap: (){
-            // print('test');
-          },
-            child: Column(
-              children: [
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      imageName,
-                      width: 180,
-                      height: 170,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Column(
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                      fontSize: 18
-                    ),
-                    ),
-
-                    Text(
-                        'RM $price',
-                      style: const TextStyle(
-                        fontSize: 14
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-
-///CustomMenuCard use to review products in Menu
-class CustomMenuCard extends StatelessWidget {
-  const CustomMenuCard({super.key, required this.imageName, required this.title, required this.price});
-
-  final String imageName;
-  final String title;
-  final String price;
+  DashedBorderPainter({
+    required this.strokeWidth,
+    required this.color,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        showModalBottomSheet(context: context,
-            isScrollControlled: true,
-            builder: (BuildContext context){
-          return ProductBottomSheet(
-            imageName: imageName,
-            title: title,
-            price: price,
-          );
-            }
-            );
-      },
-      child: Card(
-        shadowColor: CustomColors.defaultWhite,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          children: [
-            const Padding(padding: EdgeInsets.all(5)),
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.asset(
-                  imageName,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                'RM $price',
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+
+    const double dashWidth = 5;
+    const double dashSpace = 5;
+    double startY = 0;
+    while (startY < size.height) {
+      canvas.drawLine(
+          Offset(0, startY), Offset(0 + dashWidth, startY), paint);
+      startY += dashSpace + dashWidth;
+    }
+
+    double startX = 0;
+    while (startX < size.width) {
+      canvas.drawLine(
+          Offset(startX, 0), Offset(startX, 0 + dashWidth), paint);
+      startX += dashSpace + dashWidth;
+    }
+
+    double endY = size.height;
+    while (endY > 0) {
+      canvas.drawLine(Offset(size.width, endY),
+          Offset(size.width - dashWidth, endY), paint);
+      endY -= dashSpace + dashWidth;
+    }
+
+    double endX = size.width;
+    while (endX > 0) {
+      canvas.drawLine(Offset(endX, size.height),
+          Offset(endX, size.height - dashWidth), paint);
+      endX -= dashSpace + dashWidth;
+    }
   }
-}
-
-class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({Key? key, required this.title, required this.icon, required this.onPress, this.endIcon = true, this.textColor,}) : super(key: key);
-
-  final String title;
-  final IconData icon;
-  final VoidCallback onPress;
-  final bool endIcon;
-  final Color? textColor;
 
   @override
-  Widget build(BuildContext context) {
-
-
-    return ListTile(
-      onTap: onPress,
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: CustomColors.lightGrey.withOpacity(0.1),
-        ),
-        child: Icon(icon, color: CustomColors.primaryColor),
-      ),
-      title: Text(
-          title,
-          style: Theme.of(context).textTheme.bodyLarge?.apply(color: textColor)
-      ),
-      trailing: endIcon?
-      Container(
-          width: 30,
-          height: 30,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color: Colors.grey.withOpacity(0.1),
-          ),
-        child: const Icon(Icons.keyboard_double_arrow_right),
-      ) : null,
-    );
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
-
-
-
-
-

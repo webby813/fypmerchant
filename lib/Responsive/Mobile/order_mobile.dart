@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Components/barTitle_widget.dart';
 import 'package:fypmerchant/Components/tabbar_widget.dart';
 import 'package:fypmerchant/Color/color.dart';
-import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/HistoryOrderMobile.dart';
-import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/PendingOrderMobile.dart';
-import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/ReceiveOrderMobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/history_order_mobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/pending_order_mobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/receive_order_mobile.dart';
+
+import '../../Components/textTitle_widget.dart';
 
 class OrderMobile extends StatefulWidget {
   const OrderMobile({super.key});
@@ -41,7 +42,7 @@ class _OrderMobileState extends State<OrderMobile> {
       appBar: AppBar(
 
         backgroundColor: CustomColors.defaultWhite,
-        title: BarTitle.appBarText('Check Orders'),
+        title: AppBarWidget.bartext('Check Orders'),
         elevation: 0,
       ),
       body: SafeArea(

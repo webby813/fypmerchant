@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Color/color.dart';
-import '../../Components/barTitle_widget.dart';
 import '../../Components/listTile_widget.dart';
+import '../../Components/textTitle_widget.dart';
 import '../../login.dart';
-import 'ManageTabsTablet/StockManage/StockManageTablet.dart';
-import 'ManageTabsTablet/mainAreaManage.dart';
+import 'ManageTabsTablet/ManageStock/stock_manage_tablet.dart';
+import 'ManageTabsTablet/mainArea_converter.dart';
 
 class ManageTablet extends StatefulWidget {
   const ManageTablet({super.key});
@@ -22,7 +22,7 @@ class _ManageTabletState extends State<ManageTablet> {
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: CustomColors.defaultWhite,
-          title: BarTitle.appBarText('Manage'),
+          title: AppBarWidget.bartext('Manage'),
           elevation: 0,
           actions: <Widget>[
             IconButton(

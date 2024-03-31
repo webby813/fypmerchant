@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../Color/color.dart';
 import '../../../Components/alertDialog_widget.dart';
-import '../../../Components/barTitle_widget.dart';
-import '../../../Components/dashedRect.dart';
+import '../../../Components/container_widget.dart';
+import '../../../Components/textTitle_widget.dart';
 
 class ManageStockMobile extends StatefulWidget {
   const ManageStockMobile({Key? key}) : super(key: key);
@@ -21,7 +21,7 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: CustomColors.defaultWhite,
-        title: BarTitle.appBarText("Manage Stock"),
+        title: AppBarWidget.bartext("Manage Stock"),
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -7,7 +7,7 @@ import '../SharedPref/pref.dart';
 import '../home.dart';
 
 class Identify{
-  final dbRef = FirebaseDatabase.instance.reference().child('Merchant');
+  final dbRef = FirebaseDatabase.instance.ref().child('Merchant');
 
   List dataList = [];
   List dataKeyList = [];
@@ -27,7 +27,7 @@ class Identify{
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return const AlertDialogWidget(Title: 'Error', content: 'Ensure credential is valid');
+                  return const AlertDialogWidget(title: 'Error', content: 'Ensure credential is valid');
                 },
               );
             }
@@ -44,6 +44,7 @@ class Identify{
             }
           }
         }catch(error){
+          // print(error);
         }
       }
     }

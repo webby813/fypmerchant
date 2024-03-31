@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Tablet/DashboardTabsTablet/InsightsTablet.dart';
-import 'package:fypmerchant/Responsive/Tablet/DashboardTabsTablet/PayoutTablet.dart';
+import 'package:fypmerchant/Responsive/Tablet/DashboardTabsTablet/insights_tablet.dart';
+import 'package:fypmerchant/Responsive/Tablet/DashboardTabsTablet/payout_tablet.dart';
 
 class MainAreaDashboard extends StatelessWidget {
   final int type;

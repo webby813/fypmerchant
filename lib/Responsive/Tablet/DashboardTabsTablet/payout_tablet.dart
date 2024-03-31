@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
-import 'package:fypmerchant/Components/divider_widget.dart';
-import 'package:fypmerchant/Responsive/Cross-platform%20code/Payout_Settlement.dart';
-import 'package:fypmerchant/Responsive/Cross-platform%20code/Payout_Transaction.dart';
+import 'package:fypmerchant/Responsive/Cross-platform%20code/DashboardTab/payout_settlement.dart';
+
+import '../../Cross-platform code/DashboardTab/payout_transaction.dart';
+
 
 class PayoutTablet extends StatefulWidget {
   const PayoutTablet({Key? key}) : super(key: key);

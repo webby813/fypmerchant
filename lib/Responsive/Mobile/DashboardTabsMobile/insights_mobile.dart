@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../Color/color.dart';
-import '../../Cross-platform code/InsightsChart.dart';
+import '../../Cross-platform code/DashboardTab/insights_chart.dart';
 
 class InsightsMobile extends StatefulWidget {
   const InsightsMobile({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Components/listTile_widget.dart';
-import 'package:fypmerchant/Responsive/Tablet/DashboardTabsTablet/mainAreaDash.dart';
+import 'package:fypmerchant/Responsive/Tablet/DashboardTabsTablet/mainArea_converter.dart';
 import '../../Color/color.dart';
-import '../../Components/barTitle_widget.dart';
+import '../../Components/textTitle_widget.dart';
 
 class DashboardTablet extends StatefulWidget {
   const DashboardTablet({super.key});
@@ -20,7 +20,7 @@ class _DashboardTabletState extends State<DashboardTablet> {
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: CustomColors.defaultWhite,
-          title: BarTitle.appBarText('Dashboard'),
+          title: AppBarWidget.bartext('Dashboard'),
           elevation: 0,
         ),
 

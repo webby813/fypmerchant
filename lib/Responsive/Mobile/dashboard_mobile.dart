@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Mobile/DashboardTabsMobile/InsightsMobile.dart';
-import 'package:fypmerchant/Responsive/Mobile/DashboardTabsMobile/PayoutMobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/DashboardTabsMobile/insights_mobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/DashboardTabsMobile/payout_mobile.dart';
 import '../../Color/color.dart';
-import '../../Components/barTitle_widget.dart';
 import '../../Components/tabbar_widget.dart';
+import '../../Components/textTitle_widget.dart';
 
 class DashboardMobile extends StatefulWidget {
   const DashboardMobile({super.key});
@@ -33,7 +33,7 @@ class _InsightsMobileState extends State<DashboardMobile> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColors.defaultWhite,
-        title: BarTitle.appBarText('Dashboard'),
+        title: AppBarWidget.bartext('Dashboard'),
         elevation: 0,
       ),
 
