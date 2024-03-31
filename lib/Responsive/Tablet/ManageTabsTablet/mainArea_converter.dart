@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Cross-platform%20code/ManageTab/ShopStatus.dart';
-import 'package:fypmerchant/Responsive/Cross-platform%20code/supportingPage.dart';
+import 'package:fypmerchant/Responsive/Cross-platform%20code/ManageTab/shop_status.dart';
+import 'package:fypmerchant/Responsive/Cross-platform%20code/ManageTab/support_pages.dart';
 
 class MainAreaManage extends StatelessWidget {
   final int type;
@@ -20,8 +20,10 @@ class MainAreaManage extends StatelessWidget {
       case 2:
         // return const ManageStockPage();
       case 3:
+        ///Page stored in Cross-platform code
         return const HelpCentre();
       case 4:
+      ///Page stored in Cross-platform code
         return const FeedbackPage();
       default:
         return const ShopStatusManage();

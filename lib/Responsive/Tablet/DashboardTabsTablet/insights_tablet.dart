@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
-import 'package:fypmerchant/Responsive/Cross-platform%20code/InsightsChart.dart';
+import 'package:fypmerchant/Responsive/Cross-platform%20code/DashboardTab/insights_chart.dart';
 
 class InsightsTablet extends StatefulWidget {
   const InsightsTablet({Key? key}) : super(key: key);

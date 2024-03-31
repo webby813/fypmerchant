@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Mobile/DashboardMobile.dart';
-import 'package:fypmerchant/Responsive/Mobile/ManageMobile.dart';
-import 'package:fypmerchant/Responsive/Mobile/OrderMobile.dart';
-import 'Mobile/profile.dart';
+import 'package:fypmerchant/Responsive/Mobile/dashboard_mobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/manage_mobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/order_mobile.dart';
 
 class MobileScaffold extends StatefulWidget {
   const MobileScaffold({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../Color/color.dart';
-import '../../Cross-platform code/Payout_Settlement.dart';
-import '../../Cross-platform code/Payout_Transaction.dart';
+import '../../Cross-platform code/DashboardTab/payout_settlement.dart';
+import '../../Cross-platform code/DashboardTab/payout_transaction.dart';
 
 class PayoutMobile extends StatefulWidget {
   const PayoutMobile({Key? key}) : super(key: key);

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Cross-platform%20code/supportingPage.dart';
-import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/ManageStockMobile.dart';
-import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/ShopStatusMobile.dart';
+import 'package:fypmerchant/Responsive/Cross-platform%20code/ManageTab/support_pages.dart';
+import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/stock_manage_mobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/shop_status_mobile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../Color/color.dart';
-import '../../Components/barTitle_widget.dart';
 import '../../Components/listTile_widget.dart';
+import '../../Components/textTitle_widget.dart';
 import '../../login.dart';
 
 class ManageMobile extends StatefulWidget {
@@ -24,7 +23,7 @@ class _ManageMobileState extends State<ManageMobile> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: CustomColors.defaultWhite,
-        title: BarTitle.appBarText('Manage'),
+        title: AppBarWidget.bartext('Manage'),
         elevation: 0,
         actions: <Widget>[
           IconButton(

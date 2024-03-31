@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/PendingOrderTablet.dart';
-import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/mainAreaOrder.dart';
+import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/pending_order_tablet.dart';
+import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/mainArea_Order.dart';
 import '../../Color/color.dart';
-import '../../Components/barTitle_widget.dart';
-import 'OrderTabsTablet/HistoryOrderTablet.dart';
-import 'OrderTabsTablet/ReceiveOrderTablet.dart';
+import '../../Components/textTitle_widget.dart';
+import 'OrderTabsTablet/history_order.dart';
+import 'OrderTabsTablet/receive_order_tablet.dart';
 
 class OrderTablet extends StatefulWidget {
   const OrderTablet({Key? key}) : super(key: key);
@@ -47,7 +47,7 @@ class _OrderTabletState extends State<OrderTablet> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: CustomColors.defaultWhite,
-        title: BarTitle.appBarText('Orders'),
+        title: AppBarWidget.bartext('Orders'),
         elevation: 0,
       ),
       body: Row(

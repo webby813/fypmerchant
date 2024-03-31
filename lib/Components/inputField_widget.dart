@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../Color/color.dart';
+import 'package:fypmerchant/Color/color.dart';
 
 TextEditingController password = TextEditingController();
 
@@ -33,7 +31,7 @@ class InputWidget{
     );
   }
 
-  static Widget StockInput(String name, String Price, String Description){
+  static Widget stockInput(String name, String price, String description){
     return SizedBox(
       width: 500,
       child: Column(
@@ -41,13 +39,14 @@ class InputWidget{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InputWidget.manageInput(name),
-          InputWidget.manageInput(Price),
-          InputWidget.Description(Description)
+          InputWidget.manageInput(price),
+          InputWidget.description(description)
         ],
       ),
     );
   }
 
+  ///product name and price
   static Widget manageInput(String text){
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -74,7 +73,8 @@ class InputWidget{
     );
   }
 
-  static Widget Description(String text){
+  ///Description
+  static Widget description(String text){
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Container(

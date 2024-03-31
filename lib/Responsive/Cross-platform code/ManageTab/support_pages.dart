@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
-import 'package:fypmerchant/Components/barTitle_widget.dart';
 
 class HelpCentre extends StatelessWidget {
   const HelpCentre({Key? key}) : super(key: key);

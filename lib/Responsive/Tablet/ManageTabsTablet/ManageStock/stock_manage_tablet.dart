@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Components/alertDialog_widget.dart';
-import 'package:fypmerchant/Components/title_widget.dart';
-import 'package:fypmerchant/Responsive/Tablet/ManageTabsTablet/StockManage/mainAreaStockManage.dart';
+import 'package:fypmerchant/Components/textTitle_widget.dart';
 import '../../../../Color/color.dart';
+import '../../../../Components/inputField_widget.dart';
 
 class ManageStockPage extends StatefulWidget {
   const ManageStockPage({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _ManageStockPageState extends State<ManageStockPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: TitleWidget.titleWhite("Manage Stock"),
+        title: TitleWidget.whiteTitle("Manage Stock"),
         backgroundColor: CustomColors.primaryColor,
         actions: [
           IconButton(
@@ -143,3 +143,143 @@ class _ManageStockPageState extends State<ManageStockPage> {
   }
 }
 
+///*****************************  MAIN AREA *****************************///
+class MainAreaStockManage extends StatefulWidget {
+  final String category;
+
+  const MainAreaStockManage({Key? key, required this.category})
+      : super(key: key);
+
+  @override
+  _MainAreaStockManageState createState() => _MainAreaStockManageState();
+}
+
+class _MainAreaStockManageState extends State<MainAreaStockManage> {
+  bool isSwitched = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      backgroundColor: CustomColors.defaultWhite,
+      body: SingleChildScrollView(
+          child: Column(
+            children: [
+              ///Widget in container_widget.dart, StockItemCard
+              StockItemCardOnTablet(name: "name", price: 4.90, description: "description"),
+              StockItemCardOnTablet(name: "name", price: 4.90, description: "description"),
+              StockItemCardOnTablet(name: "name", price: 4.90, description: "description"),
+            ],
+          )
+      ),
+    );
+  }
+}
+
+
+///*****************************  StockItem Card  *****************************///
+class StockItemCardOnTablet extends StatefulWidget {
+  final String name;
+  final double price;
+  final String description;
+
+  const StockItemCardOnTablet({
+    Key? key,
+    required this.name,
+    required this.price,
+    required this.description,
+  }) : super(key: key);
+
+  @override
+  _StockItemCardOnTabletState createState() => _StockItemCardOnTabletState();
+}
+
+class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
+  String? _dropdownValue;
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> itemStatus = ['Available', 'Unavailable'];
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, top: 15),
+      child: Dismissible(
+        key: UniqueKey(),
+        direction: DismissDirection.endToStart,
+        background: Container(
+          color: CustomColors.warningRed,
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: 20.0),
+          child: const Icon(
+            Icons.delete,
+            color: CustomColors.defaultWhite,
+          ),
+        ),
+        onDismissed: (direction) {
+          // Implement delete functionality here
+        },
+        child: Card(
+          elevation: 3,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+
+            child: Row(
+              children: [
+                // Product Photo
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Card(
+                    child: Container(
+                      width: 180,
+                      height: 170,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey[200],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Product Details
+                InputWidget.stockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
+
+                // Change status of product
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 70),
+                  child: SizedBox(
+                    width: 105,
+                    child: DropdownButton<String>(
+                      value: _dropdownValue,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      isExpanded: true,
+                      items: itemStatus.map((String dropdownValue) {
+                        return DropdownMenuItem(
+                          value: dropdownValue,
+                          child: Text(dropdownValue,
+                            style: const TextStyle(
+                                fontSize: 13
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      hint: const Text("Status"),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _dropdownValue = newValue;
+                        });
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

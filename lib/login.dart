@@ -1,6 +1,6 @@
 import 'package:fypmerchant/Components/alertDialog_widget.dart';
 import 'package:fypmerchant/Components/button_widget.dart';
-import 'package:fypmerchant/Components/title_widget.dart';
+import 'package:fypmerchant/Components/textTitle_widget.dart';
 import 'package:fypmerchant/Components/inputField_widget.dart';
 import 'package:fypmerchant/Firebase/retrieve_data.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class _LoginState extends State<Login> {
           Positioned(
             top: 90,
             left: -90,
-            child: TitleWidget.titleBlue('SIGN IN'),
+            child: TitleWidget.blueTitle('SIGN IN'),
           ),
 
           Container(
@@ -55,13 +55,13 @@ class _LoginState extends State<Login> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return const AlertDialogWidget(Title: 'Error', content: 'Ensure credential is valid');
+                              return const AlertDialogWidget(title: 'Error', content: 'Ensure credential is valid');
                             },
                           );
                         }
                         else{
                           showDialog(context: context, builder: (BuildContext context){
-                            return const AlertDialogWidget(Title: 'Error', content: 'Unknown error');
+                            return const AlertDialogWidget(title: 'Error', content: 'Unknown error');
                           });
                         }
                       }),
