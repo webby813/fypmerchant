@@ -49,7 +49,7 @@ class _LoginState extends State<Login> {
                       padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 15),
                       child: ButtonWidget.buttonWidget('LOG IN', (){
                         if(username.text.isNotEmpty && password.text.isNotEmpty){
-                          Identify().login(context, username.text, password.text);
+                          Checking().checkCredential(context, username.text, password.text);
                         }
                         else if(username.text.isEmpty || password.text.isEmpty){
                           showDialog(
