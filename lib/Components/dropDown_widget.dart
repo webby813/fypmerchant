@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
+import '../Firebase/delete_data.dart';
+import '../Firebase/update_data.dart';
 
 class CustomDropdown extends StatefulWidget {
   final List<String> items;
@@ -77,32 +79,91 @@ class _CustomDropdownState extends State<CustomDropdown> {
   }
 }
 
-class MenuWidget{
-  void showPopupMenu(BuildContext context, String category){
-    final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+class MenuWidget {
+  void categoryActionMenu(BuildContext context, String category) {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
     final Offset target = overlay.localToGlobal(Offset.zero);
+    TextEditingController newCategoryId = TextEditingController();
 
     showMenu(
       context: context,
       position: RelativeRect.fromLTRB(target.dx, target.dy, target.dx, target.dy),
       items: [
-        PopupMenuItem(
+        const PopupMenuItem(
           value: 'update',
           child: Text('Update'),
         ),
-        PopupMenuItem(
+        const PopupMenuItem(
           value: 'delete',
           child: Text('Delete'),
         ),
       ],
     ).then((value) {
       if (value == 'update') {
-        // Handle update action
-        print('Update $category');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Update $category'),
+              content: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: newCategoryId,
+                      decoration: const InputDecoration(labelText: 'New Category ID'),
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (newCategoryId.text.isNotEmpty) {
+                      UpdateData().updateCategory(context, category, newCategoryId.text);
+                    } else {
+
+                    }
+                  },
+                  child: const Text("Update"),
+                ),
+              ],
+            );
+          },
+        );
       } else if (value == 'delete') {
-        // Handle delete action
-        print('Delete $category');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Deleting $category'),
+              content: Text("Are you sure you want to delete $category ?\nThis category will be temporarily removed"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    DeleteData().deleteCategory(context, category);
+                  },
+                  child: const Text("Delete"),
+                ),
+              ],
+            );
+          },
+        );
       }
     });
   }
 }
+
+

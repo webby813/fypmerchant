@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Components/alertDialog_widget.dart';
 import 'package:fypmerchant/Components/dropDown_widget.dart';
@@ -18,13 +15,12 @@ class ManageStockPage extends StatefulWidget {
 }
 
 class _ManageStockPageState extends State<ManageStockPage> {
-  // Retrieve categories from database
-  /// Assume these are the retrieved values
   final List<String> categories = [];
-  String selectedCategory = ""; // Initially no card selected
+  String selectedCategory = "";
 
   TextEditingController newCategory = TextEditingController();
 
+  @override
   void initState(){
     super.initState();
     RetrieveData().retrieveCategories().then((retrievedCategories) {
@@ -50,7 +46,7 @@ class _ManageStockPageState extends State<ManageStockPage> {
                   return AddUpdateDialog(
                     type: "Add",
                     onPressed: () {
-                      print("add item");
+                      // print("add item");
                     },
                   );
                 },
@@ -87,7 +83,7 @@ class _ManageStockPageState extends State<ManageStockPage> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('New Category'),
+                              title: const Text('New Category'),
                               content: Form(
                                 child: TextFormField(
                                   controller: newCategory,
@@ -97,9 +93,8 @@ class _ManageStockPageState extends State<ManageStockPage> {
                                 TextButton(
                                   onPressed: () {
                                     CreateData().createCategory(context, newCategory.text, newCategory);
-
                                   },
-                                  child: Text("Add"),
+                                  child: const Text("Add"),
                                 ),
                               ],
                             );
@@ -121,9 +116,8 @@ class _ManageStockPageState extends State<ManageStockPage> {
                               setState(() {
                                 selectedCategory = category;
                               });
-
-                              MenuWidget().showPopupMenu(context, selectedCategory);
-                              print('long pressed');
+                              MenuWidget().categoryActionMenu(context, selectedCategory);
+                              // print('long pressed');
                             },
 
                             onTap: () {
