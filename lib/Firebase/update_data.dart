@@ -1,4 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
+
+class UpdateData {
+  Future<void> updateCategory(BuildContext context, String selectedCategory, String newCategoryId) async {
+    FirebaseFirestore dbRef = FirebaseFirestore.instance;
+    final currentDocRef = dbRef.collection('items').doc(selectedCategory);
+    final newDocRef = dbRef.collection('items').doc(newCategoryId);
+
+    try {
+      final oldData = await currentDocRef.get();
+      if (oldData.exists) {
+        Map<String, dynamic> newData = oldData.data()!;
+        newData['categoryID'] = newCategoryId;
+        await newDocRef.set(newData);
+        await currentDocRef.delete();
+        Navigator.of(context).pop();
+      } else {
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      // print('Error updating category: $e');
+    }
+  }
+}
+
+
 
 
 class UpdateUser{
