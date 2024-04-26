@@ -1,8 +1,14 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Components/alertDialog_widget.dart';
+import 'package:fypmerchant/Components/dropDown_widget.dart';
 import 'package:fypmerchant/Components/textTitle_widget.dart';
+import 'package:fypmerchant/Firebase/retrieve_data.dart';
 import '../../../../Color/color.dart';
 import '../../../../Components/inputField_widget.dart';
+import '../../../../Firebase/create_data.dart';
 
 class ManageStockPage extends StatefulWidget {
   const ManageStockPage({Key? key}) : super(key: key);
@@ -14,8 +20,19 @@ class ManageStockPage extends StatefulWidget {
 class _ManageStockPageState extends State<ManageStockPage> {
   // Retrieve categories from database
   /// Assume these are the retrieved values
-  final List<String> categories = ["Hot Coffee", "Cold Drinks", "Pastries"];
+  final List<String> categories = [];
   String selectedCategory = ""; // Initially no card selected
+
+  TextEditingController newCategory = TextEditingController();
+
+  void initState(){
+    super.initState();
+    RetrieveData().retrieveCategories().then((retrievedCategories) {
+      setState(() {
+        categories.addAll(retrievedCategories);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +89,16 @@ class _ManageStockPageState extends State<ManageStockPage> {
                             return AlertDialog(
                               title: Text('New Category'),
                               content: Form(
-                                child: TextFormField(),
+                                child: TextFormField(
+                                  controller: newCategory,
+                                ),
                               ),
                               actions: <Widget>[
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    CreateData().createCategory(context, newCategory.text, newCategory);
+
+                                  },
                                   child: Text("Add"),
                                 ),
                               ],
@@ -95,6 +117,15 @@ class _ManageStockPageState extends State<ManageStockPage> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: GestureDetector(
+                            onLongPress: (){
+                              setState(() {
+                                selectedCategory = category;
+                              });
+
+                              MenuWidget().showPopupMenu(context, selectedCategory);
+                              print('long pressed');
+                            },
+
                             onTap: () {
                               setState(() {
                                 selectedCategory = category;
@@ -283,3 +314,4 @@ class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
     );
   }
 }
+
