@@ -5,6 +5,22 @@ import '../Components/alertDialog_widget.dart';
 import '../SharedPref/pref.dart';
 import '../home.dart';
 
+class RetrieveData {
+  Future<List<String>> retrieveCategories() async {
+    try {
+      CollectionReference collRef = FirebaseFirestore.instance.collection('items');
+      QuerySnapshot snapshot = await collRef.get();
+      List<String> categories = snapshot.docs.map((doc) => doc.id).toList();
+
+      print(categories);
+      return categories;
+    } catch (e) {
+      print('Error retrieving categories: $e');
+      return [];
+    }
+  }
+}
+
 class Checking{
   void checkCredential(context, String username, String password)async{
     final db = FirebaseFirestore.instance;

@@ -76,3 +76,33 @@ class _CustomDropdownState extends State<CustomDropdown> {
     );
   }
 }
+
+class MenuWidget{
+  void showPopupMenu(BuildContext context, String category){
+    final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+    final Offset target = overlay.localToGlobal(Offset.zero);
+
+    showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(target.dx, target.dy, target.dx, target.dy),
+      items: [
+        PopupMenuItem(
+          value: 'update',
+          child: Text('Update'),
+        ),
+        PopupMenuItem(
+          value: 'delete',
+          child: Text('Delete'),
+        ),
+      ],
+    ).then((value) {
+      if (value == 'update') {
+        // Handle update action
+        print('Update $category');
+      } else if (value == 'delete') {
+        // Handle delete action
+        print('Delete $category');
+      }
+    });
+  }
+}
