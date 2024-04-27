@@ -3,7 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 
 class UpdateData {
-  Future<void> updateCategory(BuildContext context, String selectedCategory, String newCategoryId) async {
+  Future<void> updateCategory(BuildContext context, String selectedCategory, String newCategoryId, Function() onCategoryUpdate) async {
     FirebaseFirestore dbRef = FirebaseFirestore.instance;
     final currentDocRef = dbRef.collection('items').doc(selectedCategory);
     final newDocRef = dbRef.collection('items').doc(newCategoryId);
@@ -15,38 +15,15 @@ class UpdateData {
         newData['categoryID'] = newCategoryId;
         await newDocRef.set(newData);
         await currentDocRef.delete();
-        Navigator.of(context).pop();
-      } else {
-        Navigator.of(context).pop();
+        onCategoryUpdate();
+
       }
     } catch (e) {
-      // print('Error updating category: $e');
+      // Handle error
     }
   }
 }
 
-
-
-
-class UpdateUser{
-  Future<void> updateUserInfo(String userid, String type, String newData) async{
-    DatabaseReference ref = FirebaseDatabase.instance.ref('User/$userid');
-    try{
-      ref.update(
-          {
-            type:newData
-          }
-      ).then((value) {
-        // print("Insert Successfully");
-
-      }).catchError((error){
-        // print("Fail to insert");
-      });
-    }catch(error){
-      // print(error);
-    }
-  }
-}
 
 class AcceptOrder{
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();

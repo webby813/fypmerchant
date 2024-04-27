@@ -80,8 +80,13 @@ class _CustomDropdownState extends State<CustomDropdown> {
 }
 
 class MenuWidget {
+  final Function(String) onUpdateCategory;
+  final Function(String) onDeleteCategory;
+
+  MenuWidget({required this.onUpdateCategory, required this.onDeleteCategory});
+
   void categoryActionMenu(BuildContext context, String category) {
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
     final Offset target = overlay.localToGlobal(Offset.zero);
     TextEditingController newCategoryId = TextEditingController();
 
@@ -126,10 +131,9 @@ class MenuWidget {
                 TextButton(
                   onPressed: () {
                     if (newCategoryId.text.isNotEmpty) {
-                      UpdateData().updateCategory(context, category, newCategoryId.text);
-                    } else {
-
+                      onUpdateCategory(newCategoryId.text);
                     }
+                    Navigator.of(context).pop();
                   },
                   child: const Text("Update"),
                 ),
@@ -153,7 +157,8 @@ class MenuWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    DeleteData().deleteCategory(context, category);
+                    onDeleteCategory(category);
+                    Navigator.of(context).pop();
                   },
                   child: const Text("Delete"),
                 ),
@@ -165,5 +170,6 @@ class MenuWidget {
     });
   }
 }
+
 
 
