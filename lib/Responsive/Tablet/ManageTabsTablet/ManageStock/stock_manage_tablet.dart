@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Components/alertDialog_widget.dart';
-import 'package:fypmerchant/Components/dropDown_widget.dart';
+import 'package:fypmerchant/Components/menu_widget.dart';
 import 'package:fypmerchant/Components/textTitle_widget.dart';
 import 'package:fypmerchant/Firebase/retrieve_data.dart';
 import '../../../../Color/color.dart';
 import '../../../../Components/inputField_widget.dart';
 import '../../../../Firebase/create_data.dart';
+import '../../../../Firebase/delete_data.dart';
+import '../../../../Firebase/update_data.dart';
 
 class ManageStockPage extends StatefulWidget {
   const ManageStockPage({Key? key}) : super(key: key);
@@ -92,7 +94,16 @@ class _ManageStockPageState extends State<ManageStockPage> {
                               actions: <Widget>[
                                 TextButton(
                                   onPressed: () {
-                                    CreateData().createCategory(context, newCategory.text, newCategory);
+                                    CreateData().createCategory(context, newCategory.text, newCategory, () {
+                                      setState(() {
+                                        categories.clear();
+                                        RetrieveData().retrieveCategories().then((retrievedCategories) {
+                                          setState(() {
+                                            categories.addAll(retrievedCategories);
+                                          });
+                                        });
+                                      });
+                                    });
                                   },
                                   child: const Text("Add"),
                                 ),
@@ -112,12 +123,42 @@ class _ManageStockPageState extends State<ManageStockPage> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: GestureDetector(
-                            onLongPress: (){
+                            onLongPress: () {
                               setState(() {
                                 selectedCategory = category;
                               });
-                              MenuWidget().categoryActionMenu(context, selectedCategory);
-                              // print('long pressed');
+
+                              MenuWidget(
+                                onUpdateCategory: (newCategoryId) {
+                                  UpdateData().updateCategory(
+                                    context,
+                                    selectedCategory,
+                                    newCategoryId,
+                                        () {
+                                      RetrieveData().retrieveCategories().then((retrievedCategories) {
+                                        setState(() {
+                                          categories.clear();
+                                          categories.addAll(retrievedCategories);
+                                        });
+                                      });
+                                    },
+                                  );
+                                },
+                                onDeleteCategory: (categoryToDelete) {
+                                  DeleteData().deleteCategory(
+                                    context,
+                                    categoryToDelete,
+                                        () {
+                                      RetrieveData().retrieveCategories().then((retrievedCategories) {
+                                        setState(() {
+                                          categories.clear();
+                                          categories.addAll(retrievedCategories);
+                                        });
+                                      });
+                                    },
+                                  );
+                                },
+                              ).categoryActionMenu(context, selectedCategory);
                             },
 
                             onTap: () {
@@ -125,6 +166,7 @@ class _ManageStockPageState extends State<ManageStockPage> {
                                 selectedCategory = category;
                               });
                             },
+
                             child: Card(
                               color: selectedCategory == category
                                   ? CustomColors.deepGreen
@@ -152,6 +194,8 @@ class _ManageStockPageState extends State<ManageStockPage> {
                       },
                     ),
                   ),
+
+
                 ],
               ),
             ),

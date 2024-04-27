@@ -12,7 +12,6 @@ class RetrieveData {
       QuerySnapshot snapshot = await collRef.get();
       List<String> categories = snapshot.docs.map((doc) => doc.id).toList();
 
-      print(categories);
       return categories;
     } catch (e) {
       print('Error retrieving categories: $e');
