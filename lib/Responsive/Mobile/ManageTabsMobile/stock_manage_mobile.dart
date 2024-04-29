@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import '../../../Color/color.dart';
 import '../../../Components/alertDialog_widget.dart';
 import '../../../Components/container_widget.dart';
+import '../../../Components/menu_widget.dart';
 import '../../../Components/textTitle_widget.dart';
+import '../../../Firebase/create_data.dart';
+import '../../../Firebase/delete_data.dart';
+import '../../../Firebase/retrieve_data.dart';
+import '../../../Firebase/update_data.dart';
 
 class ManageStockMobile extends StatefulWidget {
   const ManageStockMobile({Key? key}) : super(key: key);
@@ -12,8 +17,27 @@ class ManageStockMobile extends StatefulWidget {
 }
 
 class _ManageStockMobileState extends State<ManageStockMobile> {
-  List<String> list = <String>["Hot Coffee", "ColdCoffee", "Pastries"];
-  String dropdownValue = "Hot Coffee";
+  final List<String> categories = [];
+  String selectedCategory = "";
+
+  TextEditingController newCategory = TextEditingController();
+
+  void _updateCategories(List<String> retrievedCategories) {
+    setState(() {
+      categories.clear();
+      categories.addAll(retrievedCategories);
+      if (!categories.contains(selectedCategory) && categories.isNotEmpty) {
+        selectedCategory = categories[0];
+      }
+    });
+  }
+
+  void initState() {
+    super.initState();
+    RetrieveData().retrieveCategories().then((retrievedCategories) {
+      _updateCategories(retrievedCategories);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +46,39 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
         centerTitle: true,
         backgroundColor: CustomColors.defaultWhite,
         title: AppBarWidget.bartext("Manage Stock"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              MenuWidget(
+                onUpdateCategory: (newCategoryId) {
+                  UpdateData().updateCategory(
+                    context,
+                    selectedCategory,
+                    newCategoryId,
+                        () {
+                      RetrieveData().retrieveCategories().then((retrievedCategories) {
+                        _updateCategories(retrievedCategories);
+                      });
+                    },
+                  );
+                },
+                onDeleteCategory: (categoryToDelete) {
+                  DeleteData().deleteCategory(
+                    context,
+                    categoryToDelete,
+                        () {
+                      RetrieveData().retrieveCategories().then((retrievedCategories) {
+                        _updateCategories(retrievedCategories);
+                      });
+                    },
+                  );
+                },
+              ).categoryActionMenu(context, selectedCategory);
+            },
+            icon: Icon(Icons.more_horiz),
+          )
+
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -44,20 +101,21 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 33),
+                    padding: EdgeInsets.symmetric(horizontal: 10), // Adjust padding as needed
                     child: DropdownButton<String>(
-                      value: dropdownValue,
-                      icon: const Icon(Icons.arrow_downward),
+                      isExpanded: true, // Allow the dropdown button to expand to fit its parent
+                      value: selectedCategory,
+                      icon: const Icon(Icons.filter_alt),
                       iconSize: 24,
                       elevation: 16,
                       onChanged: (String? value) {
                         if (value != null) {
                           setState(() {
-                            dropdownValue = value;
+                            selectedCategory = value;
                           });
                         }
                       },
-                      items: list.map<DropdownMenuItem<String>>((String value) {
+                      items: categories.map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -66,11 +124,40 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                     ),
                   ),
                 ),
+
                 Expanded(
-                  flex: 0,
                   child: IconButton(
                     icon: const Icon(Icons.add),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('New Category'),
+                            content: Form(
+                              child: TextFormField(
+                                controller: newCategory,
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  CreateData().createCategory(context, newCategory.text, newCategory, () {
+                                    setState(() {
+                                      categories.clear();
+                                      RetrieveData().retrieveCategories().then((retrievedCategories) {
+                                        _updateCategories(retrievedCategories);
+                                      });
+                                    });
+                                  });
+                                },
+                                child: const Text("Add"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                   ),
                 )
               ],
@@ -80,7 +167,7 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
             const StockItemCardOnMobile(name: "name", price: 4.90, description: "description"),
 
             Container(
-              width: 370,
+              width: 360,
               height: 150,
               color: Colors.transparent,
               child: GestureDetector(

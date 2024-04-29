@@ -21,14 +21,21 @@ class _ManageStockPageState extends State<ManageStockPage> {
   String selectedCategory = "";
 
   TextEditingController newCategory = TextEditingController();
+  void _updateCategories(List<String> retrievedCategories) {
+    setState(() {
+      categories.clear();
+      categories.addAll(retrievedCategories);
+      if (!categories.contains(selectedCategory) && categories.isNotEmpty) {
+        selectedCategory = categories[0];
+      }
+    });
+  }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     RetrieveData().retrieveCategories().then((retrievedCategories) {
-      setState(() {
-        categories.addAll(retrievedCategories);
-      });
+      _updateCategories(retrievedCategories);
     });
   }
 
@@ -98,9 +105,7 @@ class _ManageStockPageState extends State<ManageStockPage> {
                                       setState(() {
                                         categories.clear();
                                         RetrieveData().retrieveCategories().then((retrievedCategories) {
-                                          setState(() {
-                                            categories.addAll(retrievedCategories);
-                                          });
+                                          _updateCategories(retrievedCategories);
                                         });
                                       });
                                     });
@@ -136,10 +141,7 @@ class _ManageStockPageState extends State<ManageStockPage> {
                                     newCategoryId,
                                         () {
                                       RetrieveData().retrieveCategories().then((retrievedCategories) {
-                                        setState(() {
-                                          categories.clear();
-                                          categories.addAll(retrievedCategories);
-                                        });
+                                        _updateCategories(retrievedCategories);
                                       });
                                     },
                                   );
@@ -150,10 +152,7 @@ class _ManageStockPageState extends State<ManageStockPage> {
                                     categoryToDelete,
                                         () {
                                       RetrieveData().retrieveCategories().then((retrievedCategories) {
-                                        setState(() {
-                                          categories.clear();
-                                          categories.addAll(retrievedCategories);
-                                        });
+                                        _updateCategories(retrievedCategories);
                                       });
                                     },
                                   );
@@ -228,15 +227,15 @@ class _MainAreaStockManageState extends State<MainAreaStockManage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: CustomColors.defaultWhite,
       body: SingleChildScrollView(
           child: Column(
             children: [
               ///Widget in container_widget.dart, StockItemCard
-              StockItemCardOnTablet(name: "name", price: 4.90, description: "description"),
-              StockItemCardOnTablet(name: "name", price: 4.90, description: "description"),
-              StockItemCardOnTablet(name: "name", price: 4.90, description: "description"),
+              StockItemCardOnTablet(name: "name", price: 4.90, description: "description", category: widget.category,),
+              StockItemCardOnTablet(name: "name", price: 4.90, description: "description", category: widget.category,),
+              StockItemCardOnTablet(name: "name", price: 4.90, description: "description", category: widget.category,),
             ],
           )
       ),
@@ -250,12 +249,14 @@ class StockItemCardOnTablet extends StatefulWidget {
   final String name;
   final double price;
   final String description;
+  final String category;
 
   const StockItemCardOnTablet({
     Key? key,
     required this.name,
     required this.price,
     required this.description,
+    required this.category,
   }) : super(key: key);
 
   @override
@@ -284,7 +285,7 @@ class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
           ),
         ),
         onDismissed: (direction) {
-          // Implement delete functionality here
+          print(widget.category.toString());
         },
         child: Card(
           elevation: 3,
