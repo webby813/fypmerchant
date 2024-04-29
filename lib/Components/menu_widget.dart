@@ -92,7 +92,8 @@ class MenuWidget {
 
     showMenu(
       context: context,
-      position: RelativeRect.fromLTRB(target.dx, target.dy, target.dx, target.dy),
+      position: RelativeRect.fromLTRB(MediaQuery.of(context).size.width, 0, MediaQuery.of(context).size.width, 0),
+
       items: [
         const PopupMenuItem(
           value: 'update',
