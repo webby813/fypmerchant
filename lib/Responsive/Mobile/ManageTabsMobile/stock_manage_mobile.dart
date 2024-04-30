@@ -177,8 +177,11 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                     builder: (BuildContext context) {
                       return AddUpdateDialog(
                         type: "Add",
-                        onPressed: () {
-                          print('Add');
+                        onPressed: (String itemName, String price, String description) {
+                          print(itemName);
+                          print(price);
+                          print(description);
+                          CreateData().createItem(context, selectedCategory, itemName, price, description);
                         },
                       );
                     },
