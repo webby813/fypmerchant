@@ -54,8 +54,11 @@ class _ManageStockPageState extends State<ManageStockPage> {
                 builder: (BuildContext context) {
                   return AddUpdateDialog(
                     type: "Add",
-                    onPressed: () {
-                      // print("add item");
+                    onPressed: (String itemName, String price, String description) {
+                      print(itemName);
+                      print(price);
+                      print(description);
+                      CreateData().createItem(context, selectedCategory, itemName, price, description);
                     },
                   );
                 },
@@ -308,7 +311,7 @@ class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey[200],
+                        color: CustomColors.secondaryWhite,
                       ),
                     ),
                   ),
@@ -318,33 +321,33 @@ class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
                 InputWidget.stockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
 
                 // Change status of product
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 70),
-                  child: SizedBox(
-                    width: 105,
-                    child: DropdownButton<String>(
-                      value: _dropdownValue,
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      isExpanded: true,
-                      items: itemStatus.map((String dropdownValue) {
-                        return DropdownMenuItem(
-                          value: dropdownValue,
-                          child: Text(dropdownValue,
-                            style: const TextStyle(
-                                fontSize: 13
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      hint: const Text("Status"),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _dropdownValue = newValue;
-                        });
-                      },
-                    ),
-                  ),
-                )
+                // Padding(
+                //   padding: const EdgeInsets.only(bottom: 70),
+                //   child: SizedBox(
+                //     width: 105,
+                //     child: DropdownButton<String>(
+                //       value: _dropdownValue,
+                //       icon: const Icon(Icons.keyboard_arrow_down),
+                //       isExpanded: true,
+                //       items: itemStatus.map((String dropdownValue) {
+                //         return DropdownMenuItem(
+                //           value: dropdownValue,
+                //           child: Text(dropdownValue,
+                //             style: const TextStyle(
+                //                 fontSize: 13
+                //             ),
+                //           ),
+                //         );
+                //       }).toList(),
+                //       hint: const Text("Status"),
+                //       onChanged: (String? newValue) {
+                //         setState(() {
+                //           _dropdownValue = newValue;
+                //         });
+                //       },
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),

@@ -40,6 +40,14 @@ class AddUpdateDialog extends StatefulWidget {
 
 class _AddUpdateDialogState extends State<AddUpdateDialog> {
   String? _dropdownValue;
+
+  String? _itemName;
+  String? _price;
+  String? _description;
+
+  void _handlePress(){
+    widget.onPressed(_itemName, _price, _description);
+  }
   @override
   Widget build(BuildContext context) {
     List<String> itemStatus = ['Available', 'Unavailable'];
@@ -70,53 +78,68 @@ class _AddUpdateDialogState extends State<AddUpdateDialog> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 105,
-                      child: DropdownButton<String>(
-                        value: _dropdownValue,
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        isExpanded: true,
-                        items: itemStatus.map((String dropdownValue) {
-                          return DropdownMenuItem(
-                            value: dropdownValue,
-                            child: Text(dropdownValue,
-                              style: const TextStyle(
-                                  fontSize: 13
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        hint: const Text("Status"),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _dropdownValue = newValue;
-                          });
-                        },
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: 105,
+                    //   child: DropdownButton<String>(
+                    //     value: _dropdownValue,
+                    //     icon: const Icon(Icons.keyboard_arrow_down),
+                    //     isExpanded: true,
+                    //     items: itemStatus.map((String dropdownValue) {
+                    //       return DropdownMenuItem(
+                    //         value: dropdownValue,
+                    //         child: Text(dropdownValue,
+                    //           style: const TextStyle(
+                    //               fontSize: 13
+                    //           ),
+                    //         ),
+                    //       );
+                    //     }).toList(),
+                    //     hint: const Text("Status"),
+                    //     onChanged: (String? newValue) {
+                    //       setState(() {
+                    //         _dropdownValue = newValue;
+                    //       });
+                    //     },
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
 
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: "Latte",
+                  hintText: "Item (Americano)",
                   border: InputBorder.none,
                 ),
+                onChanged: (value){
+                  setState(() {
+                    _itemName = value;
+                  });
+                },
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: "4.90",
+                  hintText: "Price (ex. 5.60)",
                   border: InputBorder.none,
                 ),
+                onChanged: (value){
+                  setState(() {
+                    _price = value;
+                  });
+                },
               ),
               SizedBox(
                 height: 140,
                 child: TextFormField(
                   decoration: const InputDecoration(
-                    hintText: "text",
+                    hintText: "Description",
                     border: InputBorder.none,
                   ),
+                  onChanged: (value){
+                    setState(() {
+                      _description = value;
+                    });
+                  },
                 ),
               ),
             ],
@@ -126,7 +149,7 @@ class _AddUpdateDialogState extends State<AddUpdateDialog> {
       actions: [
         ElevatedButton(
             child: Text(widget.type),
-            onPressed: () => widget.onPressed()
+            onPressed: _handlePress,
         ),
       ],
     );

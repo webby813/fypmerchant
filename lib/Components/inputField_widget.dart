@@ -52,7 +52,7 @@ class InputWidget{
       padding: const EdgeInsets.all(10),
       child: Container(
         decoration: BoxDecoration(
-          color: CustomColors.lightGrey,
+          color: CustomColors.secondaryWhite,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(10),
         ),
@@ -79,7 +79,7 @@ class InputWidget{
       padding: const EdgeInsets.all(10),
       child: Container(
         decoration: BoxDecoration(
-          color: CustomColors.lightGrey,
+          color: CustomColors.secondaryWhite,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(10),
         ),
