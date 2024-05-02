@@ -29,10 +29,10 @@ class AlertDialogWidget extends StatelessWidget {
 }
 
 class AddUpdateDialog extends StatefulWidget {
-  final String type;
+  final String action;
   final onPressed;
 
-  const AddUpdateDialog({Key? key, required this.type, required this.onPressed});
+  const AddUpdateDialog({Key? key, required this.action, required this.onPressed});
 
   @override
   State<AddUpdateDialog> createState() => _AddUpdateDialogState();
@@ -148,7 +148,7 @@ class _AddUpdateDialogState extends State<AddUpdateDialog> {
       ),
       actions: [
         ElevatedButton(
-            child: Text(widget.type),
+            child: Text(widget.action),
             onPressed: _handlePress,
         ),
       ],

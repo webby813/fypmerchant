@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Components/alertDialog_widget.dart';
 import 'package:fypmerchant/Components/menu_widget.dart';
@@ -5,6 +6,7 @@ import 'package:fypmerchant/Components/textTitle_widget.dart';
 import 'package:fypmerchant/Firebase/retrieve_data.dart';
 import '../../../../Color/color.dart';
 import '../../../../Components/inputField_widget.dart';
+import '../../../../Components/spinner_widget.dart';
 import '../../../../Firebase/create_data.dart';
 import '../../../../Firebase/delete_data.dart';
 import '../../../../Firebase/update_data.dart';
@@ -37,6 +39,8 @@ class _ManageStockPageState extends State<ManageStockPage> {
     RetrieveData().retrieveCategories().then((retrievedCategories) {
       _updateCategories(retrievedCategories);
     });
+
+    // RetrieveData().retrieveItems();
   }
 
   @override
@@ -53,11 +57,8 @@ class _ManageStockPageState extends State<ManageStockPage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AddUpdateDialog(
-                    type: "Add",
+                    action: "Add",
                     onPressed: (String itemName, String price, String description) {
-                      print(itemName);
-                      print(price);
-                      print(description);
                       CreateData().createItem(context, selectedCategory, itemName, price, description);
                     },
                   );
@@ -233,30 +234,64 @@ class _MainAreaStockManageState extends State<MainAreaStockManage> {
     return Scaffold(
       backgroundColor: CustomColors.defaultWhite,
       body: SingleChildScrollView(
-          child: Column(
-            children: [
-              ///Widget in container_widget.dart, StockItemCard
-              StockItemCardOnTablet(name: "name", price: 4.90, description: "description", category: widget.category,),
-              StockItemCardOnTablet(name: "name", price: 4.90, description: "description", category: widget.category,),
-              StockItemCardOnTablet(name: "name", price: 4.90, description: "description", category: widget.category,),
-            ],
-          )
+        child: Column(
+          children: [
+            if (widget.category.isEmpty)
+              Spinner.loadingSpinner()
+            else
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('items')
+                    .doc(widget.category)
+                    .collection('content')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Spinner.loadingSpinner();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final List<Widget> itemWidgets = [];
+                    final items = snapshot.data?.docs.reversed.toList();
+                    if (items != null) {
+                      for (var item in items) {
+                        itemWidgets.add(
+                          StockItemCardOnTablet(
+                            item_name: item['item_name'],
+                            price: item['price'], // Example price, replace with actual value
+                            description: item['description'],
+                            category: widget.category,
+                          ),
+                        );
+                      }
+                    }
+                    return Column(
+                      children: itemWidgets,
+                    );
+                  }
+                },
+              ),
+
+          ],
+        ),
       ),
     );
   }
 }
 
 
+
+
 ///*****************************  StockItem Card  *****************************///
 class StockItemCardOnTablet extends StatefulWidget {
-  final String name;
-  final double price;
+  final String item_name;
+  final String price;
   final String description;
   final String category;
 
   const StockItemCardOnTablet({
     Key? key,
-    required this.name,
+    required this.item_name,
     required this.price,
     required this.description,
     required this.category,
@@ -288,7 +323,7 @@ class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
           ),
         ),
         onDismissed: (direction) {
-          print(widget.category.toString());
+          print(widget.item_name.toString());
         },
         child: Card(
           elevation: 3,
@@ -318,7 +353,9 @@ class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
                 ),
 
                 // Product Details
-                InputWidget.stockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
+                // InputWidget.stockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
+
+                InputWidget.stockInput(widget.item_name, widget.price, widget.description),
 
                 // Change status of product
                 // Padding(

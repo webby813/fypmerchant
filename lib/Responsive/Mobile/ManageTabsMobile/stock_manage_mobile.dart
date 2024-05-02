@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../Color/color.dart';
 import '../../../Components/alertDialog_widget.dart';
 import '../../../Components/container_widget.dart';
 import '../../../Components/menu_widget.dart';
+import '../../../Components/spinner_widget.dart';
 import '../../../Components/textTitle_widget.dart';
 import '../../../Firebase/create_data.dart';
 import '../../../Firebase/delete_data.dart';
@@ -32,6 +34,7 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
     });
   }
 
+  @override
   void initState() {
     super.initState();
     RetrieveData().retrieveCategories().then((retrievedCategories) {
@@ -75,7 +78,7 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                 },
               ).categoryActionMenu(context, selectedCategory);
             },
-            icon: Icon(Icons.more_horiz),
+            icon: const Icon(Icons.more_horiz),
           )
 
         ],
@@ -101,7 +104,7 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10), // Adjust padding as needed
+                    padding: const EdgeInsets.symmetric(horizontal: 10), // Adjust padding as needed
                     child: DropdownButton<String>(
                       isExpanded: true, // Allow the dropdown button to expand to fit its parent
                       value: selectedCategory,
@@ -162,9 +165,41 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                 )
               ],
             ),
-            const StockItemCardOnMobile(name: "name", price: 4.90, description: "description"),
-            const StockItemCardOnMobile(name: "name", price: 4.90, description: "description"),
-            const StockItemCardOnMobile(name: "name", price: 4.90, description: "description"),
+            if (selectedCategory.isEmpty)
+              Spinner.loadingSpinner()
+            else
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('items')
+                    .doc(selectedCategory)
+                    .collection('content')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Spinner.loadingSpinner();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final List<Widget> itemWidgets = [];
+                    final items = snapshot.data?.docs.reversed.toList();
+                    if (items != null) {
+                      for (var item in items) {
+                        itemWidgets.add(
+                          StockItemCardOnMobile(
+                            item_name: item['item_name'],
+                            price: item['price'], // Example price, replace with actual value
+                            description: item['description'],
+                            category: selectedCategory,
+                          ),
+                        );
+                      }
+                    }
+                    return Column(
+                      children: itemWidgets,
+                    );
+                  }
+                },
+              ),
 
             Container(
               width: 360,
@@ -176,7 +211,7 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                     context: context,
                     builder: (BuildContext context) {
                       return AddUpdateDialog(
-                        type: "Add",
+                        action: "Add",
                         onPressed: (String itemName, String price, String description) {
                           print(itemName);
                           print(price);
@@ -207,14 +242,17 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
 }
 
 class StockItemCardOnMobile extends StatefulWidget {
-  final String name;
-  final double price;
+  final String item_name;
+  final String price;
   final String description;
+  final String category;
+
   const StockItemCardOnMobile({
     Key? key,
-    required this.name,
+    required this.item_name,
     required this.price,
     required this.description,
+    required this.category,
   }) : super(key: key);
 
   @override
@@ -245,10 +283,11 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
             showDialog(
               context: context,
               builder: (context) => AddUpdateDialog(
-                type: "Update",
+                action: "Update",
                 onPressed: (){
-
-                },)
+                  print(widget.category);
+                },
+              )
             );
           },
           child: Card(
@@ -283,12 +322,13 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.name,
+                              widget.item_name,
                               style: const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              widget.price.toStringAsFixed(2),
+                              // widget.price.toStringAsFixed(2),
+                              widget.price,
                             ),
                             const SizedBox(height: 5),
                             Text(

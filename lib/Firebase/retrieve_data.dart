@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Components/alertDialog_widget.dart';
+import '../Components/spinner_widget.dart';
+import '../Responsive/Tablet/ManageTabsTablet/ManageStock/stock_manage_tablet.dart';
 import '../SharedPref/pref.dart';
 import '../home.dart';
 
@@ -18,6 +20,42 @@ class RetrieveData {
       return [];
     }
   }
+
+  static Future<Widget> retrieveItems(String category) async {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('items')
+          .doc(category)
+          .collection('content')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Spinner.loadingSpinner();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          final List<Widget> itemWidgets = [];
+          final items = snapshot.data?.docs.reversed.toList();
+          if (items != null) {
+            for (var item in items) {
+              itemWidgets.add(
+                StockItemCardOnTablet(
+                  item_name: item['item_name'],
+                  price: item['price'], // Example price, replace with actual value
+                  description: item['description'],
+                  category: category,
+                ),
+              );
+            }
+          }
+          return Column(
+            children: itemWidgets,
+          );
+        }
+      },
+    );
+  }
+
 }
 
 class Checking{
