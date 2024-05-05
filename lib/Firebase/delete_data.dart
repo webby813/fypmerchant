@@ -14,5 +14,16 @@ class DeleteData {
       // Handle error
     }
   }
+
+  Future<void> deleteItem(String selectedCategory, String docID)async{
+    try{
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      final dbRef = db.collection('items').doc(selectedCategory).collection('content').doc(docID).delete();
+
+    }catch(e){
+      print(e);
+    }
+  }
+
 }
 

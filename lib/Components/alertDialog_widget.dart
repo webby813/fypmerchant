@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Firebase/delete_data.dart';
 import '../Color/color.dart';
 
 class AlertDialogWidget extends StatelessWidget {
@@ -243,3 +244,46 @@ class _UpdateItemDialogState extends State<UpdateItemDialog> {
     );
   }
 }
+
+class DeleteItemDialog extends StatefulWidget {
+  final selectedCategory;
+  final docID;
+
+  DeleteItemDialog({
+    Key? key,
+    required this.selectedCategory,
+    required this.docID,
+  }) : super(key: key);
+
+  @override
+  State<DeleteItemDialog> createState() => _DeleteItemDialogState();
+}
+
+class _DeleteItemDialogState extends State<DeleteItemDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: CustomColors.secondaryWhite,
+      title: Text("Delete " + widget.docID),
+      content: Text("Are you sure you want to remove " +  widget.docID),
+      actions: [
+        TextButton(
+          child: const Text('Cancel'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+
+        TextButton(
+          child: const Text('Delete'),
+          onPressed: () {
+            print(widget.docID);
+            DeleteData().deleteItem(widget.selectedCategory, widget.docID);
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+}
+
