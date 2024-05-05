@@ -56,8 +56,7 @@ class _ManageStockPageState extends State<ManageStockPage> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AddUpdateDialog(
-                    action: "Add",
+                  return AddItemDialog(
                     onPressed: (String itemName, String price, String description) {
                       CreateData().createItem(context, selectedCategory, itemName, price, description);
                     },
@@ -260,7 +259,7 @@ class _MainAreaStockManageState extends State<MainAreaStockManage> {
                             item_name: item['item_name'],
                             price: item['price'], // Example price, replace with actual value
                             description: item['description'],
-                            category: widget.category,
+                            selectedCategory: widget.category,
                           ),
                         );
                       }
@@ -287,14 +286,14 @@ class StockItemCardOnTablet extends StatefulWidget {
   final String item_name;
   final String price;
   final String description;
-  final String category;
+  final String selectedCategory;
 
   const StockItemCardOnTablet({
     Key? key,
     required this.item_name,
     required this.price,
     required this.description,
-    required this.category,
+    required this.selectedCategory,
   }) : super(key: key);
 
   @override
@@ -302,12 +301,9 @@ class StockItemCardOnTablet extends StatefulWidget {
 }
 
 class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
-  String? _dropdownValue;
 
   @override
   Widget build(BuildContext context) {
-    List<String> itemStatus = ['Available', 'Unavailable'];
-
     return Padding(
       padding: const EdgeInsets.only(left: 10, top: 15),
       child: Dismissible(
@@ -325,70 +321,57 @@ class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
         onDismissed: (direction) {
           print(widget.item_name.toString());
         },
-        child: Card(
-          elevation: 3,
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-            ),
+        child: GestureDetector(
+          onTap: (){
+            showDialog(
+                context: context,
+                builder: (context) => UpdateItemDialog(
+                  docID: widget.item_name,
+                  currentName: widget.item_name,
+                  currentPrice: widget.price,
+                  currentDescription: widget.description,
+                  onPressed: (String itemName, String price, String description){
+                    UpdateData().updateItem(context, widget.selectedCategory, widget.item_name, itemName, price, description);
+                  },
+                )
+            );
+          },
+          child: Card(
+            elevation: 3,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
 
-            child: Row(
-              children: [
-                // Product Photo
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Card(
-                    child: Container(
-                      width: 180,
-                      height: 170,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(12),
-                        color: CustomColors.secondaryWhite,
+              child: Row(
+                children: [
+                  // Product Photo
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Card(
+                      child: Container(
+                        width: 180,
+                        height: 170,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(12),
+                          color: CustomColors.secondaryWhite,
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                // Product Details
-                // InputWidget.stockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
+                  // Product Details
+                  // InputWidget.stockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
 
-                InputWidget.stockInput(widget.item_name, widget.price, widget.description),
-
-                // Change status of product
-                // Padding(
-                //   padding: const EdgeInsets.only(bottom: 70),
-                //   child: SizedBox(
-                //     width: 105,
-                //     child: DropdownButton<String>(
-                //       value: _dropdownValue,
-                //       icon: const Icon(Icons.keyboard_arrow_down),
-                //       isExpanded: true,
-                //       items: itemStatus.map((String dropdownValue) {
-                //         return DropdownMenuItem(
-                //           value: dropdownValue,
-                //           child: Text(dropdownValue,
-                //             style: const TextStyle(
-                //                 fontSize: 13
-                //             ),
-                //           ),
-                //         );
-                //       }).toList(),
-                //       hint: const Text("Status"),
-                //       onChanged: (String? newValue) {
-                //         setState(() {
-                //           _dropdownValue = newValue;
-                //         });
-                //       },
-                //     ),
-                //   ),
-                // )
-              ],
+                  InputWidget.stockInput(widget.item_name, widget.price, widget.description),
+                ],
+              ),
             ),
           ),
-        ),
+        )
       ),
     );
   }

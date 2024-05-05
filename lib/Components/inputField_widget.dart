@@ -65,6 +65,7 @@ class InputWidget{
               decoration: InputDecoration(
                 hintText: text,
                 border: InputBorder.none,
+                enabled: false
               ),
             ),
           ),
@@ -91,6 +92,7 @@ class InputWidget{
               decoration: InputDecoration(
                 hintText: text,
                 border: InputBorder.none,
+                  enabled: false
               ),
             ),
           ),

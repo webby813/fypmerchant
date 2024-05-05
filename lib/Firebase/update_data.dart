@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class UpdateData {
   Future<void> updateCategory(BuildContext context, String selectedCategory, String newCategoryId, Function() onCategoryUpdate) async {
@@ -18,6 +19,58 @@ class UpdateData {
         onCategoryUpdate();
 
       }
+    } catch (e) {
+      // Handle error
+    }
+  }
+
+  Future<void> updateItem(BuildContext context, String selectedCategory, String docID, String newItemName, String newPrice, String newDescription) async {
+    try {
+      FirebaseFirestore dbRef = FirebaseFirestore.instance;
+
+      await dbRef.collection('items')
+          .doc(selectedCategory)
+          .collection('content')
+          .doc(docID)
+          .update({
+        'description': newDescription,
+        'item_name': newItemName,
+        'price': newPrice,
+      });
+
+      if (docID != newItemName) {
+        await updateToNewDocument(selectedCategory, docID, newItemName);
+      }
+
+      Navigator.pop(context);
+    } catch (e) {
+      // Handle error
+    }
+  }
+
+  Future<void> updateToNewDocument(String selectedCategory, String oldDocID, String newDocID) async {
+    try {
+      FirebaseFirestore dbRef = FirebaseFirestore.instance;
+
+      DocumentSnapshot oldDocSnapshot = await dbRef.collection('items')
+          .doc(selectedCategory)
+          .collection('content')
+          .doc(oldDocID)
+          .get();
+      Map<String, dynamic> oldData = oldDocSnapshot.data() as Map<String, dynamic>;
+
+      await dbRef.collection('items')
+          .doc(selectedCategory)
+          .collection('content')
+          .doc(newDocID)
+          .set(oldData);
+
+      await dbRef.collection('items')
+          .doc(selectedCategory)
+          .collection('content')
+          .doc(oldDocID)
+          .delete();
+
     } catch (e) {
       // Handle error
     }

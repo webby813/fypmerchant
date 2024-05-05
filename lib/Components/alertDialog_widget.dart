@@ -28,19 +28,17 @@ class AlertDialogWidget extends StatelessWidget {
   }
 }
 
-class AddUpdateDialog extends StatefulWidget {
-  final String action;
+class AddItemDialog extends StatefulWidget {
   final onPressed;
 
-  const AddUpdateDialog({Key? key, required this.action, required this.onPressed});
+  const AddItemDialog({Key? key,
+    required this.onPressed});
 
   @override
-  State<AddUpdateDialog> createState() => _AddUpdateDialogState();
+  State<AddItemDialog> createState() => _AddItemDialogState();
 }
 
-class _AddUpdateDialogState extends State<AddUpdateDialog> {
-  String? _dropdownValue;
-
+class _AddItemDialogState extends State<AddItemDialog> {
   String? _itemName;
   String? _price;
   String? _description;
@@ -50,7 +48,6 @@ class _AddUpdateDialogState extends State<AddUpdateDialog> {
   }
   @override
   Widget build(BuildContext context) {
-    List<String> itemStatus = ['Available', 'Unavailable'];
     return AlertDialog(
       backgroundColor: CustomColors.defaultWhite,
       scrollable: true,
@@ -78,30 +75,6 @@ class _AddUpdateDialogState extends State<AddUpdateDialog> {
                         ),
                       ),
                     ),
-                    // SizedBox(
-                    //   width: 105,
-                    //   child: DropdownButton<String>(
-                    //     value: _dropdownValue,
-                    //     icon: const Icon(Icons.keyboard_arrow_down),
-                    //     isExpanded: true,
-                    //     items: itemStatus.map((String dropdownValue) {
-                    //       return DropdownMenuItem(
-                    //         value: dropdownValue,
-                    //         child: Text(dropdownValue,
-                    //           style: const TextStyle(
-                    //               fontSize: 13
-                    //           ),
-                    //         ),
-                    //       );
-                    //     }).toList(),
-                    //     hint: const Text("Status"),
-                    //     onChanged: (String? newValue) {
-                    //       setState(() {
-                    //         _dropdownValue = newValue;
-                    //       });
-                    //     },
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -116,6 +89,7 @@ class _AddUpdateDialogState extends State<AddUpdateDialog> {
                     _itemName = value;
                   });
                 },
+                initialValue: _itemName,
               ),
               TextFormField(
                 decoration: const InputDecoration(
@@ -148,8 +122,122 @@ class _AddUpdateDialogState extends State<AddUpdateDialog> {
       ),
       actions: [
         ElevatedButton(
-            child: Text(widget.action),
+            child: Text("Add"),
             onPressed: _handlePress,
+        ),
+      ],
+    );
+  }
+}
+
+class UpdateItemDialog extends StatefulWidget {
+  final onPressed;
+  late String docID;
+  late String currentName;
+  late String currentPrice;
+  late String currentDescription;
+
+  UpdateItemDialog({
+    Key? key,
+    required this.docID,
+    required this.currentName,
+    required this.currentPrice,
+    required this.currentDescription,
+    required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  State<UpdateItemDialog> createState() => _UpdateItemDialogState();
+}
+
+class _UpdateItemDialogState extends State<UpdateItemDialog> {
+
+  void _handlePress() {
+    widget.onPressed(widget.currentName, widget.currentPrice, widget.currentDescription);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      scrollable: true,
+      title: const Text("Product", textAlign: TextAlign.center),
+      content: SizedBox(
+        width: 800,
+        child: Form(
+          child: Column(
+            children: <Widget>[
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Card(
+                        child: Container(
+                          width: 130,
+                          height: 125,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey[200],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: "Item (Americano)",
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    widget.currentName = value;
+                  });
+                },
+                initialValue: widget.currentName,
+              ),
+
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: "Price (ex. 5.60)",
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    widget.currentPrice = value;
+                  });
+                },
+                initialValue: widget.currentPrice,
+              ),
+
+              SizedBox(
+                height: 140,
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: "Description",
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      widget.currentDescription = value;
+                    });
+                  },
+                  initialValue: widget.currentDescription,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          child: Text("Update"),
+          onPressed: _handlePress,
         ),
       ],
     );
