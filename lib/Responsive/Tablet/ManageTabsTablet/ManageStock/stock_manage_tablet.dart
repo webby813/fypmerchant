@@ -278,9 +278,6 @@ class _MainAreaStockManageState extends State<MainAreaStockManage> {
   }
 }
 
-
-
-
 ///*****************************  StockItem Card  *****************************///
 class StockItemCardOnTablet extends StatefulWidget {
   final String item_name;
@@ -307,71 +304,77 @@ class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
     return Padding(
       padding: const EdgeInsets.only(left: 10, top: 15),
       child: Dismissible(
-        key: UniqueKey(),
-        direction: DismissDirection.endToStart,
-        background: Container(
-          color: CustomColors.warningRed,
-          alignment: Alignment.centerRight,
-          padding: const EdgeInsets.only(right: 20.0),
-          child: const Icon(
-            Icons.delete,
-            color: CustomColors.defaultWhite,
+          key: UniqueKey(),
+          direction: DismissDirection.endToStart,
+          background: Container(
+            color: CustomColors.warningRed,
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.only(right: 20.0),
+            child: const Icon(
+              Icons.delete,
+              color: CustomColors.defaultWhite,
+            ),
           ),
-        ),
-        onDismissed: (direction) {
-          print(widget.item_name.toString());
-        },
-        child: GestureDetector(
-          onTap: (){
-            showDialog(
-                context: context,
-                builder: (context) => UpdateItemDialog(
-                  docID: widget.item_name,
-                  currentName: widget.item_name,
-                  currentPrice: widget.price,
-                  currentDescription: widget.description,
-                  onPressed: (String itemName, String price, String description){
-                    UpdateData().updateItem(context, widget.selectedCategory, widget.item_name, itemName, price, description);
-                  },
-                )
+          confirmDismiss: (direction) async{
+            return await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return DeleteItemDialog(selectedCategory: widget.selectedCategory, docID: widget.item_name);
+              },
             );
           },
-          child: Card(
-            elevation: 3,
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-              ),
 
-              child: Row(
-                children: [
-                  // Product Photo
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Card(
-                      child: Container(
-                        width: 180,
-                        height: 170,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(12),
-                          color: CustomColors.secondaryWhite,
+          child: GestureDetector(
+            onTap: (){
+              showDialog(
+                  context: context,
+                  builder: (context) => UpdateItemDialog(
+                    docID: widget.item_name,
+                    currentName: widget.item_name,
+                    currentPrice: widget.price,
+                    currentDescription: widget.description,
+                    onPressed: (String itemName, String price, String description){
+                      UpdateData().updateItem(context, widget.selectedCategory, widget.item_name, itemName, price, description);
+                    },
+                  )
+              );
+            },
+            child: Card(
+              elevation: 3,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+
+                child: Row(
+                  children: [
+                    // Product Photo
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Card(
+                        child: Container(
+                          width: 180,
+                          height: 170,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(12),
+                            color: CustomColors.secondaryWhite,
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-                  // Product Details
-                  // InputWidget.stockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
+                    // Product Details
+                    // InputWidget.stockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
 
-                  InputWidget.stockInput(widget.item_name, widget.price, widget.description),
-                ],
+                    InputWidget.stockInput(widget.item_name, widget.price, widget.description),
+                  ],
+                ),
               ),
             ),
-          ),
-        )
+          )
       ),
     );
   }

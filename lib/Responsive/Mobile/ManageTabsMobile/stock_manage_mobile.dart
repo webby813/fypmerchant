@@ -276,7 +276,14 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
             color: CustomColors.defaultWhite,
           ),
         ),
-        onDismissed: (direction) {},
+        confirmDismiss: (direction) async{
+          return await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DeleteItemDialog(selectedCategory: widget.selectedCategory, docID: widget.item_name);
+            },
+          );
+        },
         child: GestureDetector(
           onTap: () {
             showDialog(
