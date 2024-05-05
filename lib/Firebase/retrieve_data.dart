@@ -43,7 +43,7 @@ class RetrieveData {
                   item_name: item['item_name'],
                   price: item['price'], // Example price, replace with actual value
                   description: item['description'],
-                  category: category,
+                  selectedCategory: category,
                 ),
               );
             }
