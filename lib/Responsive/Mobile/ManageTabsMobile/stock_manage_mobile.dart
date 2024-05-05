@@ -104,9 +104,9 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10), // Adjust padding as needed
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: DropdownButton<String>(
-                      isExpanded: true, // Allow the dropdown button to expand to fit its parent
+                      isExpanded: true,
                       value: selectedCategory,
                       icon: const Icon(Icons.filter_alt),
                       iconSize: 24,
@@ -165,6 +165,37 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                 )
               ],
             ),
+
+            Container(
+              width: 360,
+              height: 150,
+              color: Colors.transparent,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AddItemDialog(
+                        onPressed: (String itemName, String price, String description) {
+                          CreateData().createItem(context, selectedCategory, itemName, price, description);
+                        },
+                      );
+                    },
+                  );
+                },
+                child: DashedBorder(
+                  strokeWidth: 2,
+                  color: Colors.blue,
+                  child: const Center(
+                    child: Text(
+                      'Tap here to add item',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
             if (selectedCategory.isEmpty)
               Spinner.loadingSpinner()
             else
@@ -187,9 +218,9 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                         itemWidgets.add(
                           StockItemCardOnMobile(
                             item_name: item['item_name'],
-                            price: item['price'], // Example price, replace with actual value
+                            price: item['price'],
                             description: item['description'],
-                            category: selectedCategory,
+                            selectedCategory: selectedCategory,
                           ),
                         );
                       }
@@ -201,39 +232,7 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                 },
               ),
 
-            Container(
-              width: 360,
-              height: 150,
-              color: Colors.transparent,
-              child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AddUpdateDialog(
-                        action: "Add",
-                        onPressed: (String itemName, String price, String description) {
-                          print(itemName);
-                          print(price);
-                          print(description);
-                          CreateData().createItem(context, selectedCategory, itemName, price, description);
-                        },
-                      );
-                    },
-                  );
-                },
-                child: DashedBorder(
-                  strokeWidth: 2,
-                  color: Colors.blue,
-                  child: const Center(
-                    child: Text(
-                      'Tap here to add item',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+
           ],
         ),
       ),
@@ -245,14 +244,14 @@ class StockItemCardOnMobile extends StatefulWidget {
   final String item_name;
   final String price;
   final String description;
-  final String category;
+  final String selectedCategory;
 
   const StockItemCardOnMobile({
     Key? key,
     required this.item_name,
     required this.price,
     required this.description,
-    required this.category,
+    required this.selectedCategory,
   }) : super(key: key);
 
   @override
@@ -279,13 +278,16 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
         ),
         onDismissed: (direction) {},
         child: GestureDetector(
-          onLongPress: () {
+          onTap: () {
             showDialog(
               context: context,
-              builder: (context) => AddUpdateDialog(
-                action: "Update",
-                onPressed: (){
-                  print(widget.category);
+              builder: (context) => UpdateItemDialog(
+                docID: widget.item_name,
+                currentName: widget.item_name,
+                currentPrice: widget.price,
+                currentDescription: widget.description,
+                onPressed: (String itemName, String price, String description){
+                  UpdateData().updateItem(context, widget.selectedCategory, widget.item_name, itemName, price, description);
                 },
               )
             );
