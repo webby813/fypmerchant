@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,23 +26,34 @@ class UpdateData {
     }
   }
 
-  Future<void> updateItem(BuildContext context, String selectedCategory, String docID, String newItemName, String newPrice, String newDescription) async {
+  Future<void> updateItem(
+      BuildContext context,
+      String? imagePath,
+      String? newPicture,
+      String selectedCategory,
+      String docID,
+      String newItemName,
+      String newPrice,
+      String newDescription) async {
     try {
+      final storage = FirebaseStorage.instance.ref('Items/$newPicture');
       FirebaseFirestore dbRef = FirebaseFirestore.instance;
+
+      if (imagePath != null) {
+        File imageFile = File(imagePath);
+        await storage.putFile(imageFile);
+      }
 
       await dbRef.collection('items')
           .doc(selectedCategory)
           .collection('content')
           .doc(docID)
           .update({
+        'item_picture': newPicture,
         'description': newDescription,
         'item_name': newItemName,
         'price': newPrice,
       });
-
-      if (docID != newItemName) {
-        await updateToNewDocument(selectedCategory, docID, newItemName);
-      }
 
       Navigator.pop(context);
     } catch (e) {
@@ -48,7 +61,11 @@ class UpdateData {
     }
   }
 
-  Future<void> updateToNewDocument(String selectedCategory, String oldDocID, String newDocID) async {
+  Future<void> updateToNewDocument(
+      String currentPicture,
+      String selectedCategory,
+      String oldDocID,
+      String newDocID) async {
     try {
       FirebaseFirestore dbRef = FirebaseFirestore.instance;
 
@@ -70,7 +87,6 @@ class UpdateData {
           .collection('content')
           .doc(oldDocID)
           .delete();
-
     } catch (e) {
       // Handle error
     }

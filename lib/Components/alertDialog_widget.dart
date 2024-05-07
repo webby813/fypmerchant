@@ -1,6 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Components/spinner_widget.dart';
 import 'package:fypmerchant/Firebase/delete_data.dart';
 import '../Color/color.dart';
+import '../Firebase/create_data.dart';
+import '../Firebase/retrieve_data.dart';
 
 class AlertDialogWidget extends StatelessWidget {
 
@@ -43,16 +47,18 @@ class _AddItemDialogState extends State<AddItemDialog> {
   String? _itemName;
   String? _price;
   String? _description;
+  String? imagePath;
+  String? item_picture;
 
   void _handlePress(){
-    widget.onPressed(_itemName, _price, _description);
+    widget.onPressed(imagePath, item_picture, _itemName, _price, _description);
   }
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: CustomColors.defaultWhite,
       scrollable: true,
-      title: const Text("Product", textAlign: TextAlign.center),
+      title: const Text("Add Product", textAlign: TextAlign.center),
       content: SizedBox(
         width: 800,
         child: Form(
@@ -62,20 +68,41 @@ class _AddItemDialogState extends State<AddItemDialog> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Card(
-                        child: Container(
-                          width: 130,
-                          height: 125,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.grey[200],
+                    GestureDetector(
+                      onTap: () async {
+                        await AddPhoto().selectImageFromGallery((imageData) {
+                          if (imageData != null) {
+                            setState(() {
+                              imagePath = imageData.path;
+                              item_picture = imageData.name;
+                              print(imagePath);
+                              print(item_picture);
+                            });
+                          }
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Card(
+                          child: Container(
+                            width: 130,
+                            height: 125,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey[200],
+                            ),
+                            child: imagePath?.isNotEmpty == true
+                                ? Image.file(
+                              File(imagePath!),
+                              fit: BoxFit.cover,
+                            )
+                                : null,
                           ),
                         ),
                       ),
-                    ),
+                    )
+
                   ],
                 ),
               ),
@@ -133,6 +160,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
 
 class UpdateItemDialog extends StatefulWidget {
   final onPressed;
+  late String currentPicture;
   late String docID;
   late String currentName;
   late String currentPrice;
@@ -140,6 +168,7 @@ class UpdateItemDialog extends StatefulWidget {
 
   UpdateItemDialog({
     Key? key,
+    required this.currentPicture,
     required this.docID,
     required this.currentName,
     required this.currentPrice,
@@ -152,9 +181,18 @@ class UpdateItemDialog extends StatefulWidget {
 }
 
 class _UpdateItemDialogState extends State<UpdateItemDialog> {
+  late Future<String?> _pictureUrlFuture;
+  String? imagePath;
+  String? item_picture;
 
+  @override
+  void initState() {
+    super.initState();
+    _pictureUrlFuture = RetrievePicture().loadItemPicture(widget.currentPicture);
+  }
+  @override
   void _handlePress() {
-    widget.onPressed(widget.currentName, widget.currentPrice, widget.currentDescription);
+    widget.onPressed(imagePath, item_picture, widget.currentName, widget.currentPrice, widget.currentDescription);
   }
 
   @override
@@ -162,31 +200,65 @@ class _UpdateItemDialogState extends State<UpdateItemDialog> {
     return AlertDialog(
       backgroundColor: Colors.white,
       scrollable: true,
-      title: const Text("Product", textAlign: TextAlign.center),
+      title: Text("Update " + widget.docID, textAlign: TextAlign.center),
       content: SizedBox(
         width: 800,
         child: Form(
           child: Column(
             children: <Widget>[
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Card(
-                        child: Container(
-                          width: 130,
-                          height: 125,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.grey[200],
+              GestureDetector(
+                onTap: ()async{
+                  await AddPhoto().selectImageFromGallery((imageData) {
+                    if (imageData != null) {
+                      setState(() {
+                        imagePath = imageData.path;
+                        item_picture = imageData.name;
+                        print(imagePath);
+                        print(item_picture);
+                      });
+                    }
+                  });
+                },
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Card(
+                          child: Container(
+                            width: 130,
+                            height: 125,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey[200],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: FutureBuilder<String?>(
+                                future: _pictureUrlFuture,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return Spinner.loadingSpinner();
+                                  } else if (snapshot.hasError) {
+                                    return const Icon(Icons.error);
+                                  } else if (snapshot.hasData) {
+                                    return Image.network(
+                                      snapshot.data!,
+                                      fit: BoxFit.cover,
+                                    );
+                                  } else {
+                                    return const Icon(Icons.error);
+                                  }
+                                },
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
 

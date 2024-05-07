@@ -39,8 +39,6 @@ class _ManageStockPageState extends State<ManageStockPage> {
     RetrieveData().retrieveCategories().then((retrievedCategories) {
       _updateCategories(retrievedCategories);
     });
-
-    // RetrieveData().retrieveItems();
   }
 
   @override
@@ -57,8 +55,8 @@ class _ManageStockPageState extends State<ManageStockPage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AddItemDialog(
-                    onPressed: (String itemName, String price, String description) {
-                      CreateData().createItem(context, selectedCategory, itemName, price, description);
+                    onPressed: (String imagePath, String imageName, String itemName, String price, String description) {
+                      CreateData().createItem(context, imagePath, imageName, selectedCategory, itemName, price, description);
                     },
                   );
                 },
@@ -256,6 +254,7 @@ class _MainAreaStockManageState extends State<MainAreaStockManage> {
                       for (var item in items) {
                         itemWidgets.add(
                           StockItemCardOnTablet(
+                            item_picture:item['item_picture'],
                             item_name: item['item_name'],
                             price: item['price'], // Example price, replace with actual value
                             description: item['description'],
@@ -280,6 +279,7 @@ class _MainAreaStockManageState extends State<MainAreaStockManage> {
 
 ///*****************************  StockItem Card  *****************************///
 class StockItemCardOnTablet extends StatefulWidget {
+  final String item_picture;
   final String item_name;
   final String price;
   final String description;
@@ -287,6 +287,7 @@ class StockItemCardOnTablet extends StatefulWidget {
 
   const StockItemCardOnTablet({
     Key? key,
+    required this.item_picture,
     required this.item_name,
     required this.price,
     required this.description,
@@ -298,83 +299,107 @@ class StockItemCardOnTablet extends StatefulWidget {
 }
 
 class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
+  late Future<String?> _pictureUrlFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _pictureUrlFuture = RetrievePicture().loadItemPicture(widget.item_picture);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, top: 15),
       child: Dismissible(
-          key: UniqueKey(),
-          direction: DismissDirection.endToStart,
-          background: Container(
-            color: CustomColors.warningRed,
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: 20.0),
-            child: const Icon(
-              Icons.delete,
-              color: CustomColors.defaultWhite,
-            ),
+        key: UniqueKey(),
+        direction: DismissDirection.endToStart,
+        background: Container(
+          color: Colors.red, // Change color to your preference
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: 20.0),
+          child: const Icon(
+            Icons.delete,
+            color: Colors.white, // Change color to your preference
           ),
-          confirmDismiss: (direction) async{
-            return await showDialog(
+        ),
+        confirmDismiss: (direction) async {
+          return await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DeleteItemDialog(selectedCategory: widget.selectedCategory, docID: widget.item_name);
+            },
+          );
+        },
+        child: GestureDetector(
+          onTap: () {
+            showDialog(
               context: context,
-              builder: (BuildContext context) {
-                return DeleteItemDialog(selectedCategory: widget.selectedCategory, docID: widget.item_name);
-              },
+              builder: (context) => UpdateItemDialog(
+                currentPicture: widget.item_picture,
+                docID: widget.item_name,
+                currentName: widget.item_name,
+                currentPrice: widget.price,
+                currentDescription: widget.description,
+                onPressed: (String imagePath, String item_picture, String itemName, String price, String description) {
+                  UpdateData().updateItem(context,imagePath, widget.item_picture, widget.selectedCategory, widget.item_name, itemName, price, description);
+                },
+              ),
             );
           },
-
-          child: GestureDetector(
-            onTap: (){
-              showDialog(
-                  context: context,
-                  builder: (context) => UpdateItemDialog(
-                    docID: widget.item_name,
-                    currentName: widget.item_name,
-                    currentPrice: widget.price,
-                    currentDescription: widget.description,
-                    onPressed: (String itemName, String price, String description){
-                      UpdateData().updateItem(context, widget.selectedCategory, widget.item_name, itemName, price, description);
-                    },
-                  )
-              );
-            },
-            child: Card(
-              elevation: 3,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-
-                child: Row(
-                  children: [
-                    // Product Photo
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Card(
-                        child: Container(
-                          width: 180,
-                          height: 170,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(12),
-                            color: CustomColors.secondaryWhite,
+          child: Card(
+            elevation: 3,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Card(
+                      child: Container(
+                        width: 180,
+                        height: 170,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey[200], // Placeholder color
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: FutureBuilder<String?>(
+                            future: _pictureUrlFuture,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Spinner.loadingSpinner();
+                              } else if (snapshot.hasError) {
+                                return const Icon(Icons.error);
+                              } else if (snapshot.hasData) {
+                                return Image.network(
+                                  snapshot.data!,
+                                  fit: BoxFit.cover,
+                                );
+                              } else {
+                                return const Icon(Icons.error);
+                              }
+                            },
                           ),
                         ),
                       ),
                     ),
+                  ),
 
-                    // Product Details
-                    // InputWidget.stockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
-
-                    InputWidget.stockInput(widget.item_name, widget.price, widget.description),
-                  ],
-                ),
+                  // Product Details
+                  // InputWidget.stockInput(widget.name, widget.price.toStringAsFixed(2), widget.description),
+                  InputWidget.stockInput(widget.item_name, widget.price, widget.description),
+                ],
               ),
             ),
-          )
+          ),
+        ),
       ),
     );
   }

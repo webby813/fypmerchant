@@ -176,8 +176,8 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                     context: context,
                     builder: (BuildContext context) {
                       return AddItemDialog(
-                        onPressed: (String itemName, String price, String description) {
-                          CreateData().createItem(context, selectedCategory, itemName, price, description);
+                        onPressed: (String imagePath, String imageName, String itemName, String price, String description) {
+                          CreateData().createItem(context, imagePath, imageName, selectedCategory, itemName, price, description);
                         },
                       );
                     },
@@ -217,6 +217,7 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                       for (var item in items) {
                         itemWidgets.add(
                           StockItemCardOnMobile(
+                            item_picture: item['item_picture'],
                             item_name: item['item_name'],
                             price: item['price'],
                             description: item['description'],
@@ -241,6 +242,7 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
 }
 
 class StockItemCardOnMobile extends StatefulWidget {
+  final String item_picture;
   final String item_name;
   final String price;
   final String description;
@@ -248,6 +250,7 @@ class StockItemCardOnMobile extends StatefulWidget {
 
   const StockItemCardOnMobile({
     Key? key,
+    required this.item_picture,
     required this.item_name,
     required this.price,
     required this.description,
@@ -259,10 +262,16 @@ class StockItemCardOnMobile extends StatefulWidget {
 }
 
 class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
+  late Future<String?> _pictureUrlFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _pictureUrlFuture = RetrievePicture().loadItemPicture(widget.item_picture);
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Dismissible(
@@ -276,7 +285,7 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
             color: CustomColors.defaultWhite,
           ),
         ),
-        confirmDismiss: (direction) async{
+        confirmDismiss: (direction) async {
           return await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -287,17 +296,17 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
         child: GestureDetector(
           onTap: () {
             showDialog(
-              context: context,
-              builder: (context) => UpdateItemDialog(
-                docID: widget.item_name,
-                currentName: widget.item_name,
-                currentPrice: widget.price,
-                currentDescription: widget.description,
-                onPressed: (String itemName, String price, String description){
-                  UpdateData().updateItem(context, widget.selectedCategory, widget.item_name, itemName, price, description);
-                },
-              )
-            );
+                context: context,
+                builder: (context) => UpdateItemDialog(
+                  currentPicture: widget.item_picture,
+                  docID: widget.item_name,
+                  currentName: widget.item_name,
+                  currentPrice: widget.price,
+                  currentDescription: widget.description,
+                  onPressed: (String? imagePath, String? item_picture, String itemName, String price, String description) {
+                    UpdateData().updateItem(context, imagePath, item_picture, widget.selectedCategory, widget.item_name, itemName, price, description);
+                  },
+                ));
           },
           child: Card(
             elevation: 3,
@@ -320,6 +329,26 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
                           borderRadius: BorderRadius.circular(12),
                           color: Colors.grey[200],
                         ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: FutureBuilder<String?>(
+                            future: _pictureUrlFuture,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Spinner.loadingSpinner();
+                              } else if (snapshot.hasError) {
+                                return Icon(Icons.error);
+                              } else if (snapshot.hasData) {
+                                return Image.network(
+                                  snapshot.data!,
+                                  fit: BoxFit.cover,
+                                );
+                              } else {
+                                return Icon(Icons.error);
+                              }
+                            },
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -336,7 +365,6 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              // widget.price.toStringAsFixed(2),
                               widget.price,
                             ),
                             const SizedBox(height: 5),
@@ -357,3 +385,4 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
     );
   }
 }
+
