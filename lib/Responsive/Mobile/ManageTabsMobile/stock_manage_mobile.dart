@@ -232,8 +232,6 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                   }
                 },
               ),
-
-
           ],
         ),
       ),
@@ -385,4 +383,3 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
     );
   }
 }
-

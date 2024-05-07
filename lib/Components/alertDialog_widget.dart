@@ -236,7 +236,12 @@ class _UpdateItemDialogState extends State<UpdateItemDialog> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: FutureBuilder<String?>(
+                              child: imagePath?.isNotEmpty == true
+                                  ? Image.file(
+                                File(imagePath!),
+                                fit: BoxFit.cover,
+                              )
+                                  : FutureBuilder<String?>(
                                 future: _pictureUrlFuture,
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -358,4 +363,3 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
     );
   }
 }
-
