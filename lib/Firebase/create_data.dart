@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateData {
   Future<void> createCategory(BuildContext context, String newCategory, TextEditingController newCategoryController, Function() onCategoryCreated) async {
@@ -17,14 +20,16 @@ class CreateData {
     }
   }
 
-  Future<void> createItem(BuildContext context, String type, String _itemName, String _price, String _description) async {
+  Future<void> createItem(BuildContext context, String imagePath, String imageName, String type, String _itemName, String _price, String _description) async {
     try {
-      // Reference to the document representing the type
+      final storage = FirebaseStorage.instance.ref('Items/$imageName');
       DocumentReference typeDocRef = FirebaseFirestore.instance.collection("items").doc(type);
 
-      // Add a document under the type document
+      File imageFile = File(imagePath);
+      await storage.putFile(imageFile);
+
       await typeDocRef.collection('content').doc(_itemName).set({
-        'item_picture': "",
+        'item_picture': imageName,
         'item_name': _itemName,
         'price': _price,
         'description': _description,
@@ -35,6 +40,26 @@ class CreateData {
     } catch (e) {
       // Handle error
       print(e);
+    }
+  }
+}
+
+class ImageData {
+  final String path;
+  final String name;
+
+  ImageData(this.path, this.name);
+}
+
+class AddPhoto {
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> selectImageFromGallery(Function(ImageData?) onImageSelected) async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      onImageSelected(ImageData(image.path, image.name));
+    } else {
+      onImageSelected(null);
     }
   }
 
