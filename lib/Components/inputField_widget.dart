@@ -85,14 +85,13 @@ class InputWidget{
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left: 20),
+          padding: const EdgeInsets.all(20),
           child: SizedBox(
             height: 140,
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: text,
-                border: InputBorder.none,
-                  enabled: false
+            child: SingleChildScrollView(
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 16), // 设置文本样式
               ),
             ),
           ),
@@ -100,4 +99,5 @@ class InputWidget{
       ),
     );
   }
+
 }

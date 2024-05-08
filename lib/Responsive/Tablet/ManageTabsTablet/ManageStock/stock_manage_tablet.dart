@@ -46,8 +46,8 @@ class _ManageStockPageState extends State<ManageStockPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: TitleWidget.whiteTitle("Manage Stock"),
-        backgroundColor: CustomColors.primaryColor,
+        backgroundColor: CustomColors.defaultWhite,
+        title: AppBarWidget.bartext("Manage Stock"),
         actions: [
           IconButton(
             onPressed: () {

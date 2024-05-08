@@ -350,29 +350,34 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
                       ),
                     ),
                   ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.item_name,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              widget.price,
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              widget.description,
-                            ),
-                          ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.item_name,
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                widget.price,
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                widget.description,
+                                maxLines: 3, // Limiting to 3 lines
+                                overflow: TextOverflow.ellipsis, // Adding ellipsis for overflow
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
                 ],
               ),

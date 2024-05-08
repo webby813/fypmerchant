@@ -110,7 +110,11 @@ class _AddItemDialogState extends State<AddItemDialog> {
               TextFormField(
                 decoration: const InputDecoration(
                   hintText: "Item (Americano)",
-                  border: InputBorder.none,
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: CustomColors.primaryColor
+                    )
+                  )
                 ),
                 onChanged: (value){
                   setState(() {
@@ -119,10 +123,16 @@ class _AddItemDialogState extends State<AddItemDialog> {
                 },
                 initialValue: _itemName,
               ),
+
               TextFormField(
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   hintText: "Price (ex. 5.60)",
-                  border: InputBorder.none,
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: CustomColors.primaryColor
+                      )
+                  )
                 ),
                 onChanged: (value){
                   setState(() {
@@ -133,9 +143,14 @@ class _AddItemDialogState extends State<AddItemDialog> {
               SizedBox(
                 height: 140,
                 child: TextFormField(
+                  maxLines: null,
                   decoration: const InputDecoration(
                     hintText: "Description",
-                    border: InputBorder.none,
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: CustomColors.primaryColor
+                        )
+                    )
                   ),
                   onChanged: (value){
                     setState(() {
@@ -150,7 +165,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
       ),
       actions: [
         ElevatedButton(
-            child: Text("Add"),
+            child: const Text("Add"),
             onPressed: _handlePress,
         ),
       ],
@@ -270,7 +285,11 @@ class _UpdateItemDialogState extends State<UpdateItemDialog> {
               TextFormField(
                 decoration: const InputDecoration(
                   hintText: "Item (Americano)",
-                  border: InputBorder.none,
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: CustomColors.primaryColor
+                      )
+                  )
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -281,9 +300,14 @@ class _UpdateItemDialogState extends State<UpdateItemDialog> {
               ),
 
               TextFormField(
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   hintText: "Price (ex. 5.60)",
-                  border: InputBorder.none,
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: CustomColors.primaryColor
+                      )
+                  )
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -296,9 +320,14 @@ class _UpdateItemDialogState extends State<UpdateItemDialog> {
               SizedBox(
                 height: 140,
                 child: TextFormField(
+                  maxLines: null,
                   decoration: const InputDecoration(
                     hintText: "Description",
-                    border: InputBorder.none,
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: CustomColors.primaryColor
+                        )
+                    )
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -314,7 +343,7 @@ class _UpdateItemDialogState extends State<UpdateItemDialog> {
       ),
       actions: [
         ElevatedButton(
-          child: Text("Update"),
+          child: const Text("Update"),
           onPressed: _handlePress,
         ),
       ],
