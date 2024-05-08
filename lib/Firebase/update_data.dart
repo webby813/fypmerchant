@@ -34,32 +34,45 @@ class UpdateData {
       String docID,
       String newItemName,
       String newPrice,
-      String newDescription) async {
+      String newDescription,
+      ) async {
     try {
       final storage = FirebaseStorage.instance.ref('Items/$newPicture');
       FirebaseFirestore dbRef = FirebaseFirestore.instance;
 
       if (imagePath != null) {
         File imageFile = File(imagePath);
+        // Upload the new image to Firebase Storage
         await storage.putFile(imageFile);
       }
 
-      await dbRef.collection('items')
-          .doc(selectedCategory)
-          .collection('content')
-          .doc(docID)
-          .update({
-        'item_picture': newPicture,
+      // Create a map to hold the updated item data
+      Map<String, dynamic> updatedData = {
         'description': newDescription,
         'item_name': newItemName,
         'price': newPrice,
-      });
+      };
+
+      // If a new picture is selected, add it to the updated data
+      if (newPicture != null) {
+        updatedData['item_picture'] = newPicture;
+      }
+
+      // Update the item with the new data
+      await dbRef
+          .collection('items')
+          .doc(selectedCategory)
+          .collection('content')
+          .doc(docID)
+          .update(updatedData);
 
       Navigator.pop(context);
     } catch (e) {
       // Handle error
+      print(e.toString());
     }
   }
+
 
   Future<void> updateToNewDocument(
       String currentPicture,
