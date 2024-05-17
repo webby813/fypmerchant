@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Firebase/pending_order.dart';
+import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/receive_order_tablet.dart';
 import '../../../Firebase/history_order.dart';
 import '../../../Firebase/view_order.dart';
 
 class MainArea extends StatelessWidget {
-  final String selectedUsername;
+  final String order_id;
   final int areaType;
 
   const MainArea({
     Key? key,
-    required this.selectedUsername,
+    required this.order_id,
     required this.areaType,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: areaWidget(),
     );
   }
 
   Widget areaWidget() {
+
     switch (areaType) {
       case 1:
-        return MainAreaOrder(selectedUsername: selectedUsername);
+        return MainAreaOrder(order_id: order_id);
       case 2:
-        return MainAreaPending(selectedUsername: selectedUsername);
+        return MainAreaPending(selectedUsername: order_id);
       case 3:
-        return MainAreaHistory(selectedUsername: selectedUsername,); // Placeholder container
+        return MainAreaHistory(selectedUsername: order_id,); // Placeholder container
       default:
         return Container(); // Placeholder container
     }
@@ -35,12 +38,14 @@ class MainArea extends StatelessWidget {
 }
 
 class MainAreaOrder extends StatelessWidget {
-  final String selectedUsername;
-  const MainAreaOrder({Key? key, required this.selectedUsername}) : super(key: key);
+  final String order_id;
+  const MainAreaOrder({Key? key, required this.order_id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ShowOrderPageTablet(username: selectedUsername);
+
+    return ShowOrderPageTablet(order_id: order_id);
+    // return ShowOrderPageTablet(username: selectedUsername);
   }
 }
 

@@ -91,6 +91,15 @@ class _ManageTabletState extends State<ManageTablet> {
                                   });
                                 }
                             ),
+
+                            CustomListTile.tile(
+                                title: "History",
+                                onTap: (){
+                                  setState(() {
+                                  });
+                                }
+                            ),
+
                             CustomListTile.tile(
                                 title: "Manage Stock",
                                 onTap: (){
@@ -109,6 +118,7 @@ class _ManageTabletState extends State<ManageTablet> {
                                   });
                                 }
                             ),
+
                             CustomListTile.tile(
                                 title: "Feedback",
                                 onTap: (){

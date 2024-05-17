@@ -14,22 +14,34 @@ class OrderTablet extends StatefulWidget {
 }
 
 class _OrderTabletState extends State<OrderTablet> {
-  String? selectedUsername;
+  String? order_Id;
   int selectedIndex = 0;
 
-  void setSelectedUsername(String? username) {
+  void setOrderId(String? newOrderId, int areaType) {
     setState(() {
-      selectedUsername = username;
+      order_Id = newOrderId;
+      selectedIndex = areaType;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> tabViews = [
-      ReceiveOrderTablet(onCardTap: setSelectedUsername),
-      PendingOrderTablet(onCardTap: setSelectedUsername),
-      HistoryOrderTablet(onCardTap: setSelectedUsername),
+      ReceiveOrderTablet(
+        onCardTap: (order_Id) {
+          setOrderId(order_Id, 1); // Pass areaType as 1 for MainAreaOrder
+        },
+      ),
+      PendingOrderTablet(
+          onCardTap: (order_Id) {
+            setOrderId(order_Id, 2); // Pass areaType as 2 for PendingOrder
+          }),
+      HistoryOrderTablet(
+          onCardTap: (order_Id) {
+            setOrderId(order_Id, 3); // Pass areaType as 3 for HistoryOrder
+          }),
     ];
+
 
     final List<Tab> tabs = [
       const Tab(
@@ -87,10 +99,10 @@ class _OrderTabletState extends State<OrderTablet> {
           Expanded(
             flex: 12,
             child: Container(
-              child: selectedUsername != null
+              child: order_Id != null
                   ? MainArea(
-                selectedUsername: selectedUsername!,
-                areaType: selectedIndex + 1,
+                order_id: order_Id!,
+                areaType: 1,
               )
                   : Container(),
             ),
