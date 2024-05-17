@@ -69,6 +69,36 @@ class AppBarWidget {
   }
 }
 
+class OrderTitle{
+  static orderTitle(String text, double fontSize, fontWeight){
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 3, 14, 16),
+      child: Text(
+        text,
+        style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight
+        ),
+      ),
+    );
+  }
+}
+
+class GrandTitle{
+  static totalTitle(String text, double fontSize, fontWeight){
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 14, 16),
+      child: Text(
+        text,
+        style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight
+        ),
+      ),
+    );
+  }
+}
+
 
 
 
