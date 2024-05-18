@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Color/color.dart';
 
 class ButtonWidget{
   static Widget buttonWidget(String title, onPressed) {
     return SizedBox(
-      width: 180,
+      width: 170,
       child: ElevatedButton(
         onPressed: () => onPressed(),
         style: ElevatedButton.styleFrom(
@@ -15,6 +16,7 @@ class ButtonWidget{
         child: Text(
           title,
           style: const TextStyle(
+            color: CustomColors.defaultWhite,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
