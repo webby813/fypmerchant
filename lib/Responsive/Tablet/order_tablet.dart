@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/pending_order_tablet.dart';
-import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/mainArea_Order.dart';
-import '../../Color/color.dart';
+import 'package:fypmerchant/Responsive/Tablet/OrderTabsTablet/incoming_order_tablet.dart';
+import '../../../Color/color.dart';
+import '../../Components/container_widget.dart';
 import '../../Components/textTitle_widget.dart';
-import 'OrderTabsTablet/history_order.dart';
-import 'OrderTabsTablet/receive_order_tablet.dart';
+import '../../Firebase/view_order.dart';
 
 class OrderTablet extends StatefulWidget {
   const OrderTablet({Key? key}) : super(key: key);
@@ -14,47 +13,17 @@ class OrderTablet extends StatefulWidget {
 }
 
 class _OrderTabletState extends State<OrderTablet> {
-  String? order_Id;
-  int selectedIndex = 0;
+  String selectedAction = "Incoming";
+  String? selectedOrderId;
 
-  void setOrderId(String? newOrderId, int areaType) {
+  void _selectOrder(String orderId) {
     setState(() {
-      order_Id = newOrderId;
-      selectedIndex = areaType;
+      selectedOrderId = orderId;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> tabViews = [
-      ReceiveOrderTablet(
-        onCardTap: (order_Id) {
-          setOrderId(order_Id, 1); // Pass areaType as 1 for MainAreaOrder
-        },
-      ),
-      PendingOrderTablet(
-          onCardTap: (order_Id) {
-            setOrderId(order_Id, 2); // Pass areaType as 2 for PendingOrder
-          }),
-      HistoryOrderTablet(
-          onCardTap: (order_Id) {
-            setOrderId(order_Id, 3); // Pass areaType as 3 for HistoryOrder
-          }),
-    ];
-
-
-    final List<Tab> tabs = [
-      const Tab(
-        text: 'Order',
-      ),
-      const Tab(
-        text: 'Pending',
-      ),
-      const Tab(
-        text: 'History',
-      ),
-    ];
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -65,46 +34,64 @@ class _OrderTabletState extends State<OrderTablet> {
       body: Row(
         children: [
           Expanded(
-            flex: 6,
+            flex: 1,
             child: Container(
-              color: CustomColors.primaryColor,
-              child: Scaffold(
-                body: SafeArea(
-                  child: DefaultTabController(
-                    length: tabs.length,
-                    initialIndex: selectedIndex,
-                    child: Column(
-                      children: [
-                        TabBar(
-                          tabs: tabs,
-                          labelColor: CustomColors.primaryColor,
-                          onTap: (index) {
-                            setState(() {
-                              selectedIndex = index;
-                            });
-                          },
-                        ),
-                        Expanded(
-                          child: TabBarView(
-                            children: tabViews,
-                          ),
-                        )
-                      ],
-                    ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SelectableAction(
+                    label: "Incoming Order",
+                    isSelected: selectedAction == "Incoming",
+                    onTap: () {
+                      setState(() {
+                        selectedAction = "Incoming";
+                        selectedOrderId = null; // Reset selected order
+                      });
+                    },
                   ),
-                ),
+                  SelectableAction(
+                    label: "Preparing Order",
+                    isSelected: selectedAction == "Preparing",
+                    onTap: () {
+                      setState(() {
+                        selectedAction = "Preparing";
+                        selectedOrderId = null; // Reset selected order
+                      });
+                    },
+                  ),
+                  SelectableAction(
+                    label: "Finished Orders",
+                    isSelected: selectedAction == "Finished",
+                    onTap: () {
+                      setState(() {
+                        selectedAction = "Finished";
+                        selectedOrderId = null; // Reset selected order
+                      });
+                    },
+                  ),
+                ],
               ),
             ),
           ),
           Expanded(
-            flex: 12,
+            flex: 3,
             child: Container(
-              child: order_Id != null
-                  ? MainArea(
-                order_id: order_Id!,
-                areaType: 1,
+              color: CustomColors.secondaryWhite,
+              child: selectedAction == "Incoming"
+                  ? IncomingOrderTablet(
+                onSelectOrder: _selectOrder,
               )
-                  : Container(),
+                  : const Scaffold(),
+            ),
+          ),
+          Expanded(
+            flex: 6,
+            child: Container(
+              color: Colors.grey,
+              child: selectedOrderId != null
+                  ? ShowOrderPageTablet(key: ValueKey(selectedOrderId), order_id: selectedOrderId!)
+                  : const Scaffold(),
             ),
           ),
         ],
@@ -112,4 +99,3 @@ class _OrderTabletState extends State<OrderTablet> {
     );
   }
 }
-

@@ -1,4 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+
+import '../Color/color.dart';
 
 class DashedBorder extends StatelessWidget {
   final double strokeWidth;
@@ -74,5 +78,49 @@ class DashedBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
+  }
+}
+
+class SelectableAction extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const SelectableAction({
+    Key? key,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        height: 110,
+        width: 120,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: CustomColors.lightGrey,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            color: isSelected ? CustomColors.lightGreen : CustomColors.secondaryWhite,
+          ),
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.all(20),
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
