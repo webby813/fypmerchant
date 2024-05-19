@@ -22,6 +22,12 @@ class _OrderTabletState extends State<OrderTablet> {
     });
   }
 
+  void _clearSelectedOrder() {
+    setState(() {
+      selectedOrderId = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +96,11 @@ class _OrderTabletState extends State<OrderTablet> {
             child: Container(
               color: Colors.grey,
               child: selectedOrderId != null
-                  ? ShowOrderPageTablet(key: ValueKey(selectedOrderId), order_id: selectedOrderId!)
+                  ? ShowOrderPageTablet(
+                key: ValueKey(selectedOrderId),
+                order_id: selectedOrderId!,
+                onClearSelectedOrder: _clearSelectedOrder,
+              )
                   : const Scaffold(),
             ),
           ),

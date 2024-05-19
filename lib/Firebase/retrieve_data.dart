@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Components/spinner_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Components/alertDialog_widget.dart';
 import '../SharedPref/pref.dart';
@@ -17,6 +18,25 @@ class RetrieveData {
     } catch (e) {
       print('Error retrieving categories: $e');
       return [];
+    }
+  }
+
+  Future<void> fetchPaidAmount(String orderId, Function(double, String) updateValues) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Orders')
+          .where('order_id', isEqualTo: orderId)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot documentSnapshot = querySnapshot.docs.first;
+        double paidAmount = documentSnapshot['paid_Amount'] ?? 0.0;
+        String paymentMethod = documentSnapshot['payment_method'] ?? Spinner();
+        updateValues(paidAmount, paymentMethod);
+      } else {
+        print('No order found with order_id: $orderId');
+      }
+    } catch (error) {
+      print('Error fetching paid amount: $error');
     }
   }
 }
