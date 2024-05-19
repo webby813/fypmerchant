@@ -5,6 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../Components/alertDialog_widget.dart';
+
 class UpdateData {
   Future<void> updateCategory(BuildContext context, String selectedCategory, String newCategoryId, Function() onCategoryUpdate) async {
     FirebaseFirestore dbRef = FirebaseFirestore.instance;
@@ -107,7 +109,86 @@ class UpdateData {
 }
 
 
-class AcceptOrder{
+class ManageOrder{
+  Future<void> acceptOrder(context, order_id, grandTotal) async {
+    final dbRef = FirebaseFirestore.instance;
+    double currentBlc = 0.0;
+
+    QuerySnapshot orderQuery = await dbRef
+        .collection('Orders')
+        .where('order_id', isEqualTo: order_id)
+        .get();
+
+    QuerySnapshot merchantBlcQuery = await dbRef
+        .collection('merchant')
+        .get();
+
+    if (orderQuery.docs.isNotEmpty && merchantBlcQuery.docs.isNotEmpty) {
+      DocumentSnapshot orderSnapshot = orderQuery.docs.first;
+      DocumentSnapshot balanceSnapshot = merchantBlcQuery.docs.first;
+      currentBlc = balanceSnapshot['balance'];
+      currentBlc += grandTotal;
+
+      await dbRef.collection('Orders')
+          .doc(orderSnapshot.id)
+          .update({'order_Status': 'Preparing'});
+
+      await dbRef.collection('merchant')
+          .doc(balanceSnapshot.id)
+          .update({'balance': currentBlc});
+    } else {
+      print('No order found with order_id: ${order_id}');
+    }
+  }
+
+  Future<void> rejectOrder(context, order_id) async {
+
+    try{
+      final dbRef = FirebaseFirestore.instance;
+      bool paid_Status;
+      String user_Email = "";
+      double paid_Amount = 0.0;
+      double currentBlc = 0.0;
+
+      QuerySnapshot orderQuery = await dbRef.collection('Orders').where('order_id', isEqualTo: order_id).get();
+
+      if(orderQuery.docs.isNotEmpty){
+        DocumentSnapshot orderSnapshot = orderQuery.docs.first;
+        paid_Status = orderSnapshot['paid'];
+        user_Email = orderSnapshot['user_email'];
+        paid_Amount = orderSnapshot['paid_Amount'];
+
+        QuerySnapshot userPath = await dbRef.collection('users').where('email', isEqualTo: user_Email).get();
+        if (userPath.docs.isNotEmpty && paid_Status == true) {
+          DocumentSnapshot userDocument = userPath.docs.first;
+          currentBlc = userDocument['wallet_balance'];
+          currentBlc += paid_Amount;
+
+          await dbRef.collection('users')
+              .doc(userDocument.id)
+              .update({'wallet_balance': currentBlc});
+
+          await dbRef.collection('Orders')
+              .doc(orderSnapshot.id)
+              .update({'order_Status': 'Canceled'});
+
+        } else if(paid_Status == false){
+          await dbRef.collection('Orders')
+              .doc(orderSnapshot.id)
+              .update({'order_Status': 'Canceled'});
+
+        } else {
+          print("error");
+        }
+      } else {
+        print('error');
+      }
+
+    }catch(e){
+      print(e);
+    }
+  }
+
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
   String currentTimeKey = DateTime.now().microsecondsSinceEpoch.toString();
 
@@ -137,7 +218,7 @@ class AcceptOrder{
       await _databaseReference.child("Pending/$username").set(cartData);
       // print("New dataset created successfully");
       remove(username);
-        } catch (error) {
+    } catch (error) {
       // print("Error creating new dataset: $error");
     }
   }
@@ -148,13 +229,17 @@ class AcceptOrder{
   }
 }
 
+
+
+
+
+
 class RejectOrder{
   Future<void> rejectUserOrder(username) async{
-      final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Order/$username');
-      ref.remove();
+    final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Order/$username');
+    ref.remove();
   }
 }
-
 
 class PendingFinish{
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
@@ -164,7 +249,6 @@ class PendingFinish{
     _databaseReference.child("Pending").child(username).get().then((DataSnapshot snapshot) {
       // Check if the snapshot contains data
       if (snapshot.value != null) {
-        // Convert the dynamic value to Map<dynamic, dynamic>
         Map<dynamic, dynamic>? cartData = snapshot.value as Map<dynamic, dynamic>?;
         if (cartData != null) {
           createNewDataset(cartData, username);
@@ -182,13 +266,9 @@ class PendingFinish{
   void createNewDataset(Map<dynamic, dynamic> cartData, username) async {
     String currentTimeKey = DateTime.now().millisecondsSinceEpoch.toString();
     try {
-      // Here, you can create a new dataset in the Firebase Realtime Database
-      // For example, if you want to store it under a new node named "NewCart":
       await _databaseReference.child("History/$username$currentTimeKey").set(cartData);
-      // print("New dataset created successfully");
       remove(username);
-        } catch (error) {
-      // print("Error creating new dataset: $error");
+    } catch (error) {
     }
   }
 

@@ -3,7 +3,7 @@ import 'package:fypmerchant/Components/tabbar_widget.dart';
 import 'package:fypmerchant/Color/color.dart';
 import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/history_order_mobile.dart';
 import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/pending_order_mobile.dart';
-import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/receive_order_mobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/incoming_order_mobile.dart';
 
 import '../../Components/textTitle_widget.dart';
 
@@ -19,14 +19,14 @@ class _OrderMobileState extends State<OrderMobile> {
   Widget build(BuildContext context) {
 
     final List<Widget> tabViews =[
-      const ReceiveOrderMobile(),
+      const IncomingOrderMobile(),
       const PendingOrderMobile(),
       const HistoryOrderMobile(),
     ];
 
     final List<Tab> tabs = [
       const Tab(
-        text: 'Order',
+        text: 'Incoming',
       ),
 
       const Tab(
@@ -34,7 +34,7 @@ class _OrderMobileState extends State<OrderMobile> {
       ),
 
       const Tab(
-        text: 'History',
+        text: 'Finished',
       )
     ];
 
@@ -42,7 +42,7 @@ class _OrderMobileState extends State<OrderMobile> {
       appBar: AppBar(
 
         backgroundColor: CustomColors.defaultWhite,
-        title: AppBarWidget.bartext('Check Orders'),
+        title: AppBarWidget.bartext('Orders'),
         elevation: 0,
       ),
       body: SafeArea(
