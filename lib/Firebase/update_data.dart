@@ -1,11 +1,8 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../Components/alertDialog_widget.dart';
 
 class UpdateData {
   Future<void> updateCategory(BuildContext context, String selectedCategory, String newCategoryId, Function() onCategoryUpdate) async {
@@ -44,23 +41,19 @@ class UpdateData {
 
       if (imagePath != null) {
         File imageFile = File(imagePath);
-        // Upload the new image to Firebase Storage
         await storage.putFile(imageFile);
       }
 
-      // Create a map to hold the updated item data
       Map<String, dynamic> updatedData = {
         'description': newDescription,
         'item_name': newItemName,
         'price': newPrice,
       };
 
-      // If a new picture is selected, add it to the updated data
       if (newPicture != null) {
         updatedData['item_picture'] = newPicture;
       }
 
-      // Update the item with the new data
       await dbRef
           .collection('items')
           .doc(selectedCategory)
@@ -71,10 +64,8 @@ class UpdateData {
       Navigator.pop(context);
     } catch (e) {
       // Handle error
-      print(e.toString());
     }
   }
-
 
   Future<void> updateToNewDocument(
       String currentPicture,
@@ -109,14 +100,15 @@ class UpdateData {
 }
 
 
-class ManageOrder{
-  Future<void> acceptOrder(context, order_id, grandTotal) async {
-    final dbRef = FirebaseFirestore.instance;
+class ManageOrder {
+  final dbRef = FirebaseFirestore.instance;
+
+  Future<void> acceptOrder(context, orderId, grandTotal) async {
     double currentBlc = 0.0;
 
     QuerySnapshot orderQuery = await dbRef
         .collection('Orders')
-        .where('order_id', isEqualTo: order_id)
+        .where('order_id', isEqualTo: orderId)
         .get();
 
     QuerySnapshot merchantBlcQuery = await dbRef
@@ -137,32 +129,32 @@ class ManageOrder{
           .doc(balanceSnapshot.id)
           .update({'balance': currentBlc});
     } else {
-      print('No order found with order_id: ${order_id}');
+      print('No order found with order_id: ${orderId}');
     }
   }
 
-  Future<void> rejectOrder(context, order_id) async {
-
-    try{
-      final dbRef = FirebaseFirestore.instance;
-      bool paid_Status;
-      String user_Email = "";
-      double paid_Amount = 0.0;
+  Future<void> rejectOrder(context, orderId) async {
+    try {
+      bool paidStatus;
+      String userEmail = "";
+      double paidAmount = 0.0;
       double currentBlc = 0.0;
 
-      QuerySnapshot orderQuery = await dbRef.collection('Orders').where('order_id', isEqualTo: order_id).get();
+      QuerySnapshot orderQuery = await dbRef.collection('Orders').where(
+          'order_id', isEqualTo: orderId).get();
 
-      if(orderQuery.docs.isNotEmpty){
+      if (orderQuery.docs.isNotEmpty) {
         DocumentSnapshot orderSnapshot = orderQuery.docs.first;
-        paid_Status = orderSnapshot['paid'];
-        user_Email = orderSnapshot['user_email'];
-        paid_Amount = orderSnapshot['paid_Amount'];
+        paidStatus = orderSnapshot['paid'];
+        userEmail = orderSnapshot['user_email'];
+        paidAmount = orderSnapshot['paidAmount'];
 
-        QuerySnapshot userPath = await dbRef.collection('users').where('email', isEqualTo: user_Email).get();
-        if (userPath.docs.isNotEmpty && paid_Status == true) {
+        QuerySnapshot userPath = await dbRef.collection('users').where(
+            'email', isEqualTo: userEmail).get();
+        if (userPath.docs.isNotEmpty && paidStatus == true) {
           DocumentSnapshot userDocument = userPath.docs.first;
           currentBlc = userDocument['wallet_balance'];
-          currentBlc += paid_Amount;
+          currentBlc += paidAmount;
 
           await dbRef.collection('users')
               .doc(userDocument.id)
@@ -171,110 +163,47 @@ class ManageOrder{
           await dbRef.collection('Orders')
               .doc(orderSnapshot.id)
               .update({'order_Status': 'Canceled'});
-
-        } else if(paid_Status == false){
+        } else if (paidStatus == false) {
           await dbRef.collection('Orders')
               .doc(orderSnapshot.id)
               .update({'order_Status': 'Canceled'});
-
         } else {
-          print("error");
+          // print("error");
         }
       } else {
-        print('error');
+        // print('error');
       }
-
-    }catch(e){
-      print(e);
+    } catch (e) {
+      // print(e);
     }
   }
 
-  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
-  String currentTimeKey = DateTime.now().microsecondsSinceEpoch.toString();
+  Future<void> readyForPickup(context, orderId) async {
+    QuerySnapshot orderQuery = await dbRef.collection('Orders').where(
+        'order_id', isEqualTo: orderId).get();
+    bool paidStatus;
+    double paidAmount;
 
-  Future<void> readCartData(String username) async {
-    _databaseReference.child("Order").child(username).get().then((DataSnapshot snapshot) {
-      // Check if the snapshot contains data
-      if (snapshot.value != null) {
-        // Convert the dynamic value to Map<dynamic, dynamic>
-        Map<dynamic, dynamic>? cartData = snapshot.value as Map<dynamic, dynamic>?;
-        if (cartData != null) {
-          createNewDataset(cartData, username);
-        } else {
-          // print("Invalid data format for Cart data.");
-        }
-      } else {
-        // print("Cart data is empty.");
-      }
-    }).catchError((error) {
-      // print("Error reading cart data: $error");
-    });
-  }
+    if (orderQuery.docs.isNotEmpty) {
+      DocumentSnapshot orderSnapshot = orderQuery.docs.first;
+      paidStatus = orderSnapshot['paid'];
 
-  void createNewDataset(Map<dynamic, dynamic> cartData, username) async {
-    try {
-      // Here, you can create a new dataset in the Firebase Realtime Database
-      // For example, if you want to store it under a new node named "NewCart":
-      await _databaseReference.child("Pending/$username").set(cartData);
-      // print("New dataset created successfully");
-      remove(username);
-    } catch (error) {
-      // print("Error creating new dataset: $error");
+      await dbRef.collection('Orders')
+          .doc(orderSnapshot.id)
+          .update({'order_Status': 'Ready for pickup', 'paid': true});
     }
   }
 
-  void remove(username) async{
-    final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Order/$username');
-    ref.remove();
-  }
-}
+  Future<void> finishOrder(context, orderId) async {
+    QuerySnapshot orderQuery = await dbRef.collection('Orders').where(
+        'order_id', isEqualTo: orderId).get();
 
+    if (orderQuery.docs.isNotEmpty) {
+      DocumentSnapshot orderSnapshot = orderQuery.docs.first;
 
-
-
-
-
-class RejectOrder{
-  Future<void> rejectUserOrder(username) async{
-    final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Order/$username');
-    ref.remove();
-  }
-}
-
-class PendingFinish{
-  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
-  String currentTimeKey = DateTime.now().microsecondsSinceEpoch.toString();
-
-  Future<void> readCartData(String username) async {
-    _databaseReference.child("Pending").child(username).get().then((DataSnapshot snapshot) {
-      // Check if the snapshot contains data
-      if (snapshot.value != null) {
-        Map<dynamic, dynamic>? cartData = snapshot.value as Map<dynamic, dynamic>?;
-        if (cartData != null) {
-          createNewDataset(cartData, username);
-        } else {
-          // print("Invalid data format for Cart data.");
-        }
-      } else {
-        // print("Cart data is empty.");
-      }
-    }).catchError((error) {
-      // print("Error reading cart data: $error");
-    });
-  }
-
-  void createNewDataset(Map<dynamic, dynamic> cartData, username) async {
-    String currentTimeKey = DateTime.now().millisecondsSinceEpoch.toString();
-    try {
-      await _databaseReference.child("History/$username$currentTimeKey").set(cartData);
-      remove(username);
-    } catch (error) {
+      await dbRef.collection('Orders')
+          .doc(orderSnapshot.id)
+          .update({'order_Status': 'Finished'});
     }
   }
-
-  void remove(username) async{
-    final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Pending/$username');
-    ref.remove();
-  }
 }
-

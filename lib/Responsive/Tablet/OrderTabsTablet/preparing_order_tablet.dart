@@ -2,21 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Components/button_widget.dart';
 import 'package:fypmerchant/Components/textTitle_widget.dart';
-import 'package:fypmerchant/Firebase/retrieve_data.dart';
 import 'package:fypmerchant/Firebase/update_data.dart';
-import '../../../Color/color.dart';
+import 'package:fypmerchant/Firebase/view_order.dart';
 import '../../../Components/spinner_widget.dart';
-import '../../../Firebase/view_order.dart';
+import '../../../Firebase/retrieve_data.dart';
 
-class IncomingOrderMobile extends StatefulWidget {
-  const IncomingOrderMobile({Key? key}) : super(key: key);
+class PreparingOrderTablet extends StatefulWidget {
+  final Function(String) onSelectOrder;
+  const PreparingOrderTablet({Key? key, required this.onSelectOrder}) : super(key: key);
 
   @override
-  State<IncomingOrderMobile> createState() => _IncomingOrderMobileState();
+  State<PreparingOrderTablet> createState() => _PreparingOrderTabletState();
 }
 
-class _IncomingOrderMobileState extends State<IncomingOrderMobile> {
+class _PreparingOrderTabletState extends State<PreparingOrderTablet> {
   Stream<QuerySnapshot> stream = const Stream.empty();
+
   String? selectedOrderId;
 
   @override
@@ -27,11 +28,16 @@ class _IncomingOrderMobileState extends State<IncomingOrderMobile> {
 
   Future<void> _initializeStream() async {
     setState(() {
-      stream = FirebaseFirestore.instance.collection('Orders').where("order_Status", isEqualTo: "Incoming").snapshots();
+      stream = FirebaseFirestore.instance.collection('Orders').where("order_Status", isEqualTo: "Preparing").snapshots();
     });
   }
 
-
+  void _selectOrder(String orderId) {
+    setState(() {
+      selectedOrderId = orderId;
+    });
+    widget.onSelectOrder(orderId);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +56,11 @@ class _IncomingOrderMobileState extends State<IncomingOrderMobile> {
               child: Column(
                 children: docs.map((doc) {
                   var orderId = doc['order_id'];
-                  return IncomingOrderCard(orderId: orderId);
+                  return ItemCard(
+                    orderId: orderId,
+                    isSelected: orderId == selectedOrderId,
+                    selectOrder: _selectOrder,
+                  );
                 }).toList(),
               ),
             );
@@ -61,75 +71,21 @@ class _IncomingOrderMobileState extends State<IncomingOrderMobile> {
   }
 }
 
-class IncomingOrderCard extends StatefulWidget {
+class PreparingOrderDetails extends StatefulWidget {
   final String orderId;
-  const IncomingOrderCard({Key? key,required this.orderId});
+  final VoidCallback onClearSelectedOrder;
 
-  @override
-  State<IncomingOrderCard> createState() => _IncomingOrderCardState();
-}
-
-class _IncomingOrderCardState extends State<IncomingOrderCard> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(3),
-      child: GestureDetector(
-        onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ShowOrderPageMobile(orderId: widget.orderId,)));
-        },
-
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-                color: CustomColors.defaultWhite,
-                borderRadius: BorderRadius.circular(10)
-            ),
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints){
-                return Container(
-                  width: constraints.maxWidth,
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  height: 80,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.orderId,
-                      style: const TextStyle(
-                        color: CustomColors.primaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-
-        ),
-      ),
-
-    );
-  }
-}
-
-class ShowOrderPageMobile extends StatefulWidget {
-  final String orderId;
-
-  const ShowOrderPageMobile({
-    super.key,
+  const PreparingOrderDetails({
+    Key? key,
     required this.orderId,
-  });
+    required this.onClearSelectedOrder,
+  }) : super(key: key);
 
   @override
-  State<ShowOrderPageMobile> createState() => _ShowOrderPageMobileState();
+  State<PreparingOrderDetails> createState() => _PreparingOrderDetailsState();
 }
 
-class _ShowOrderPageMobileState extends State<ShowOrderPageMobile> {
+class _PreparingOrderDetailsState extends State<PreparingOrderDetails> {
   Stream<QuerySnapshot> stream = const Stream.empty();
   double grandTotal = 0.0;
   String payment_method = '';
@@ -155,14 +111,10 @@ class _ShowOrderPageMobileState extends State<ShowOrderPageMobile> {
       stream = FirebaseFirestore.instance.collection('Orders').doc(widget.orderId).collection('items').snapshots();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: CustomColors.defaultWhite,
-        title: AppBarWidget.bartext(widget.orderId),
-        elevation: 0,
-      ),
       body: Column(
         children: [
           Expanded(
@@ -205,54 +157,39 @@ class _ShowOrderPageMobileState extends State<ShowOrderPageMobile> {
               ),
             ),
           ),
-
           Expanded(
-              flex: 3,
+            flex: 2,
+            child: Container(
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GrandTitle.totalTitle(
                         'Payment : $payment_method',
-                        15,
+                        18,
                         FontWeight.w600,
                       ),
                       GrandTitle.totalTitle(
                         'Grand total : RM ${grandTotal.toStringAsFixed(2)}',
-                        15,
+                        18,
                         FontWeight.w600,
                       ),
-
-                      SizedBox(
-                        width: 390,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ButtonWidget.buttonWidget(
-                              "Accept",
-                                  () {
-                                ManageOrder().acceptOrder(context, widget.orderId, grandTotal);
-                                Navigator.pop(context);
-                              },
-                            ),
-                            ButtonWidget.buttonWidget(
-                              "Reject",
-                                  () {
-                                ManageOrder().rejectOrder(context, widget.orderId);
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
+                  ///THIS MANAGE ORDER NEED TO REPLACE YAAA
+                  ButtonWidget.buttonWidget(
+                    "Ready for pickup",
+                        () {
+                      ManageOrder().readyForPickup(context, widget.orderId);
+                      widget.onClearSelectedOrder();
+                    },
+                  ),
                 ],
-              )
+              ),
+            ),
           ),
         ],
       ),

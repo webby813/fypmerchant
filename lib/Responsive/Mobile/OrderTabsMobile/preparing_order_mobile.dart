@@ -1,21 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:fypmerchant/Color/color.dart';
 import 'package:fypmerchant/Components/button_widget.dart';
+import 'package:fypmerchant/Components/spinner_widget.dart';
 import 'package:fypmerchant/Components/textTitle_widget.dart';
 import 'package:fypmerchant/Firebase/retrieve_data.dart';
 import 'package:fypmerchant/Firebase/update_data.dart';
-import '../../../Color/color.dart';
-import '../../../Components/spinner_widget.dart';
-import '../../../Firebase/view_order.dart';
+import 'package:flutter/material.dart';
+import 'package:fypmerchant/Firebase/view_order.dart';
 
-class IncomingOrderMobile extends StatefulWidget {
-  const IncomingOrderMobile({Key? key}) : super(key: key);
+
+class PreparingOrderMobile extends StatefulWidget {
+  const PreparingOrderMobile({Key? key}) : super(key: key);
 
   @override
-  State<IncomingOrderMobile> createState() => _IncomingOrderMobileState();
+  State<PreparingOrderMobile> createState() => _PreparingOrderMobileState();
 }
 
-class _IncomingOrderMobileState extends State<IncomingOrderMobile> {
+class _PreparingOrderMobileState extends State<PreparingOrderMobile> {
   Stream<QuerySnapshot> stream = const Stream.empty();
   String? selectedOrderId;
 
@@ -27,11 +28,9 @@ class _IncomingOrderMobileState extends State<IncomingOrderMobile> {
 
   Future<void> _initializeStream() async {
     setState(() {
-      stream = FirebaseFirestore.instance.collection('Orders').where("order_Status", isEqualTo: "Incoming").snapshots();
+      stream = FirebaseFirestore.instance.collection('Orders').where("order_Status", isEqualTo: "Preparing").snapshots();
     });
   }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +49,7 @@ class _IncomingOrderMobileState extends State<IncomingOrderMobile> {
               child: Column(
                 children: docs.map((doc) {
                   var orderId = doc['order_id'];
-                  return IncomingOrderCard(orderId: orderId);
+                  return PreparingOrderCard(orderId: orderId);
                 }).toList(),
               ),
             );
@@ -61,22 +60,23 @@ class _IncomingOrderMobileState extends State<IncomingOrderMobile> {
   }
 }
 
-class IncomingOrderCard extends StatefulWidget {
+class PreparingOrderCard extends StatefulWidget {
   final String orderId;
-  const IncomingOrderCard({Key? key,required this.orderId});
+  const PreparingOrderCard({Key? key,required this.orderId});
 
   @override
-  State<IncomingOrderCard> createState() => _IncomingOrderCardState();
+  State<PreparingOrderCard> createState() => _PreparingOrderCardState();
 }
 
-class _IncomingOrderCardState extends State<IncomingOrderCard> {
+class _PreparingOrderCardState extends State<PreparingOrderCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(3),
       child: GestureDetector(
         onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ShowOrderPageMobile(orderId: widget.orderId,)));
+          print(widget.orderId);
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => PreparingOrderDetailsMobile(orderId: widget.orderId,)));
         },
 
         child: Card(
@@ -117,19 +117,19 @@ class _IncomingOrderCardState extends State<IncomingOrderCard> {
   }
 }
 
-class ShowOrderPageMobile extends StatefulWidget {
+class PreparingOrderDetailsMobile extends StatefulWidget {
   final String orderId;
 
-  const ShowOrderPageMobile({
-    super.key,
+  const PreparingOrderDetailsMobile({
+    Key? key,
     required this.orderId,
-  });
+  }) : super(key: key);
 
   @override
-  State<ShowOrderPageMobile> createState() => _ShowOrderPageMobileState();
+  State<PreparingOrderDetailsMobile> createState() => _PreparingOrderDetailsMobileState();
 }
 
-class _ShowOrderPageMobileState extends State<ShowOrderPageMobile> {
+class _PreparingOrderDetailsMobileState extends State<PreparingOrderDetailsMobile> {
   Stream<QuerySnapshot> stream = const Stream.empty();
   double grandTotal = 0.0;
   String payment_method = '';
@@ -155,6 +155,7 @@ class _ShowOrderPageMobileState extends State<ShowOrderPageMobile> {
       stream = FirebaseFirestore.instance.collection('Orders').doc(widget.orderId).collection('items').snapshots();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,54 +206,46 @@ class _ShowOrderPageMobileState extends State<ShowOrderPageMobile> {
               ),
             ),
           ),
-
           Expanded(
-              flex: 3,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GrandTitle.totalTitle(
-                        'Payment : $payment_method',
-                        15,
-                        FontWeight.w600,
-                      ),
-                      GrandTitle.totalTitle(
-                        'Grand total : RM ${grandTotal.toStringAsFixed(2)}',
-                        15,
-                        FontWeight.w600,
-                      ),
+            flex: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GrandTitle.totalTitle(
+                      'Payment : $payment_method',
+                      15,
+                      FontWeight.w600,
+                    ),
+                    GrandTitle.totalTitle(
+                      'Grand total : RM ${grandTotal.toStringAsFixed(2)}',
+                      15,
+                      FontWeight.w600,
+                    ),
 
-                      SizedBox(
-                        width: 390,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ButtonWidget.buttonWidget(
-                              "Accept",
-                                  () {
-                                ManageOrder().acceptOrder(context, widget.orderId, grandTotal);
-                                Navigator.pop(context);
-                              },
-                            ),
-                            ButtonWidget.buttonWidget(
-                              "Reject",
-                                  () {
-                                ManageOrder().rejectOrder(context, widget.orderId);
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              )
+                    SizedBox(
+                      width: 390,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ButtonWidget.buttonWidget(
+                            "Ready for pickup",
+                                () {
+                              ManageOrder().readyForPickup(context, widget.orderId);
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

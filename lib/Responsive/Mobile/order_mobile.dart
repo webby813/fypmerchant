@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Components/tabbar_widget.dart';
 import 'package:fypmerchant/Color/color.dart';
-import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/history_order_mobile.dart';
-import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/pending_order_mobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/finished_order_mobile.dart';
+import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/preparing_order_mobile.dart';
 import 'package:fypmerchant/Responsive/Mobile/OrderTabsMobile/incoming_order_mobile.dart';
-
 import '../../Components/textTitle_widget.dart';
 
 class OrderMobile extends StatefulWidget {
@@ -20,8 +19,8 @@ class _OrderMobileState extends State<OrderMobile> {
 
     final List<Widget> tabViews =[
       const IncomingOrderMobile(),
-      const PendingOrderMobile(),
-      const HistoryOrderMobile(),
+      const PreparingOrderMobile(),
+      const FinishedOrderMobile(),
     ];
 
     final List<Tab> tabs = [
@@ -30,7 +29,7 @@ class _OrderMobileState extends State<OrderMobile> {
       ),
 
       const Tab(
-        text: 'Pending',
+        text: 'Preparing',
       ),
 
       const Tab(
@@ -40,7 +39,6 @@ class _OrderMobileState extends State<OrderMobile> {
 
     return Scaffold(
       appBar: AppBar(
-
         backgroundColor: CustomColors.defaultWhite,
         title: AppBarWidget.bartext('Orders'),
         elevation: 0,
