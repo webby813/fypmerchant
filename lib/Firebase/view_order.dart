@@ -1,22 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
 import 'package:fypmerchant/Components/button_widget.dart';
 import 'package:fypmerchant/Firebase/retrieve_data.dart';
 import 'package:fypmerchant/Firebase/update_data.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import '../Components/spinner_widget.dart';
 import '../Components/textTitle_widget.dart';
 
 class ShowOrderPageTablet extends StatefulWidget {
-  final String order_id;
-  final VoidCallback onClearSelectedOrder; // Add this callback
+  final String orderId;
+  final VoidCallback onClearSelectedOrder;
 
   const ShowOrderPageTablet({
     Key? key,
-    required this.order_id,
+    required this.orderId,
     required this.onClearSelectedOrder,
   }) : super(key: key);
 
@@ -36,7 +33,7 @@ class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
   }
 
   Future<void> _initializeData() async {
-    RetrieveData().fetchPaidAmount(widget.order_id, (double paidAmount, String paymentMethod) {
+    RetrieveData().fetchPaidAmount(widget.orderId, (double paidAmount, String paymentMethod) {
       setState(() {
         grandTotal = paidAmount;
         payment_method = paymentMethod;
@@ -47,7 +44,7 @@ class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
 
   Future<void> _initializeStream() async {
     setState(() {
-      stream = FirebaseFirestore.instance.collection('Orders').doc(widget.order_id).collection('items').snapshots();
+      stream = FirebaseFirestore.instance.collection('Orders').doc(widget.orderId).collection('items').snapshots();
     });
   }
 
@@ -79,10 +76,10 @@ class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
 
                       orderList.add(
                         OrderItemList(
-                          item_picture: itemPicture,
-                          item_name: itemName,
-                          item_price: itemPrice,
-                          item_quantity: quantity,
+                          itemPicture: itemPicture,
+                          itemName: itemName,
+                          itemPrice: itemPrice,
+                          itemQuantity: quantity,
                         ),
                       );
                     }
@@ -100,42 +97,40 @@ class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
           ///This overflow on right at mobile interface
           Expanded(
             flex: 2,
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GrandTitle.totalTitle(
-                        'Payment : $payment_method',
-                        18,
-                        FontWeight.w600,
-                      ),
-                      GrandTitle.totalTitle(
-                        'Grand total : RM ${grandTotal.toStringAsFixed(2)}',
-                        18,
-                        FontWeight.w600,
-                      ),
-                    ],
-                  ),
-                  ButtonWidget.buttonWidget(
-                    "Accept",
-                        () {
-                      ManageOrder().acceptOrder(context, widget.order_id, grandTotal);
-                      widget.onClearSelectedOrder(); // Clear selected order
-                    },
-                  ),
-                  ButtonWidget.buttonWidget(
-                    "Reject",
-                        () {
-                      ManageOrder().rejectOrder(context, widget.order_id);
-                      widget.onClearSelectedOrder(); // Clear selected order
-                    },
-                  ),
-                ],
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GrandTitle.totalTitle(
+                      'Payment : $payment_method',
+                      18,
+                      FontWeight.w600,
+                    ),
+                    GrandTitle.totalTitle(
+                      'Grand total : RM ${grandTotal.toStringAsFixed(2)}',
+                      18,
+                      FontWeight.w600,
+                    ),
+                  ],
+                ),
+                ButtonWidget.buttonWidget(
+                  "Accept",
+                      () {
+                    ManageOrder().acceptOrder(context, widget.orderId, grandTotal);
+                    widget.onClearSelectedOrder(); // Clear selected order
+                  },
+                ),
+                ButtonWidget.buttonWidget(
+                  "Reject",
+                      () {
+                    ManageOrder().rejectOrder(context, widget.orderId);
+                    widget.onClearSelectedOrder(); // Clear selected order
+                  },
+                ),
+              ],
             ),
           ),
         ],
@@ -144,19 +139,83 @@ class _ShowOrderPageTabletState extends State<ShowOrderPageTablet> {
   }
 }
 
+class ItemCard extends StatefulWidget {
+  final String orderId;
+  final bool isSelected;
+  final Function(String) selectOrder;
+
+  const ItemCard({
+    Key? key,
+    required this.orderId,
+    required this.isSelected,
+    required this.selectOrder,
+  }) : super(key: key);
+
+  @override
+  State<ItemCard> createState() => _ItemCardState();
+}
+
+class _ItemCardState extends State<ItemCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(3),
+      child: GestureDetector(
+        onTap: () {
+          widget.selectOrder(widget.orderId);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(2),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: widget.isSelected ? CustomColors.lightGreen : CustomColors.defaultWhite,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return Container(
+                    width: constraints.maxWidth,
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    height: 80, // Fixed height
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        widget.orderId, // Display the actual order ID
+                        style: TextStyle(
+                          color: widget.isSelected ? CustomColors.defaultWhite : CustomColors.primaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 class OrderItemList extends StatefulWidget {
-  final item_picture;
-  final item_name;
-  final item_price;
-  final item_quantity;
+  final itemPicture;
+  final itemName;
+  final itemPrice;
+  final itemQuantity;
 
   const OrderItemList({
     Key? key,
-    required this.item_picture,
-    required this.item_name,
-    required this.item_price,
-    required this.item_quantity,
+    required this.itemPicture,
+    required this.itemName,
+    required this.itemPrice,
+    required this.itemQuantity,
   });
 
   @override
@@ -169,7 +228,7 @@ class _OrderItemListState extends State<OrderItemList> {
   @override
   void initState() {
     super.initState();
-    _pictureUrlFuture = RetrievePicture().loadItemPicture(widget.item_picture);
+    _pictureUrlFuture = RetrievePicture().loadItemPicture(widget.itemPicture);
   }
 
   @override
@@ -215,166 +274,15 @@ class _OrderItemListState extends State<OrderItemList> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    OrderTitle.orderTitle('Product name : ${widget.item_name}' ?? '', 18, FontWeight.w600),
-                    OrderTitle.orderTitle('RM ${widget.item_price}' ?? '', 16, FontWeight.w600),
-                    OrderTitle.orderTitle('Quantity : ${widget.item_quantity.toString()} ' ?? '', 16, FontWeight.w600),
+                    OrderTitle.orderTitle('Product name : ${widget.itemName}' ?? '', 18, FontWeight.w600),
+                    OrderTitle.orderTitle('RM ${widget.itemPrice}' ?? '', 16, FontWeight.w600),
+                    OrderTitle.orderTitle('Quantity : ${widget.itemQuantity.toString()} ' ?? '', 16, FontWeight.w600),
                   ],
                 ),
               ),
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-
-class ShowOrderPageMobile extends StatefulWidget {
-  final String order_id;
-
-  const ShowOrderPageMobile({
-    super.key,
-    required this.order_id,
-
-  });
-
-  @override
-  State<ShowOrderPageMobile> createState() => _ShowOrderPageMobileState();
-}
-
-class _ShowOrderPageMobileState extends State<ShowOrderPageMobile> {
-  Stream<QuerySnapshot> stream = const Stream.empty();
-  double grandTotal = 0.0;
-  String payment_method = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    RetrieveData().fetchPaidAmount(widget.order_id, (double paidAmount, String paymentMethod) {
-      setState(() {
-        grandTotal = paidAmount;
-        payment_method = paymentMethod;
-      });
-    });
-    _initializeStream();
-  }
-
-  Future<void> _initializeStream() async {
-    setState(() {
-      stream = FirebaseFirestore.instance.collection('Orders').doc(widget.order_id).collection('items').snapshots();
-    });
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: CustomColors.defaultWhite,
-        title: AppBarWidget.bartext(widget.order_id),
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 8,
-            child: SingleChildScrollView(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: stream,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Spinner.loadingSpinner();
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error : ${snapshot.error}'),
-                    );
-                  } else {
-                    final List<Widget> orderList = [];
-                    final docs = snapshot.data?.docs ?? [];
-                    for (var doc in docs) {
-                      var itemPicture = doc['item_picture'];
-                      var itemName = doc['item_name'];
-                      var itemPrice = doc['price'];
-                      var quantity = doc['quantity'];
-
-                      orderList.add(
-                        OrderItemList(
-                          item_picture: itemPicture,
-                          item_name: itemName,
-                          item_price: itemPrice,
-                          item_quantity: quantity,
-                        ),
-                      );
-                    }
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: orderList,
-                      ),
-                    );
-                  }
-                },
-              ),
-            ),
-          ),
-
-
-          Expanded(
-              flex: 2,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GrandTitle.totalTitle(
-                        'Payment : $payment_method',
-                        15,
-                        FontWeight.w600,
-                      ),
-                      GrandTitle.totalTitle(
-                        'Grand total : RM ${grandTotal.toStringAsFixed(2)}',
-                        15,
-                        FontWeight.w600,
-                      ),
-
-                      SizedBox(
-                        width: 390,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ButtonWidget.buttonWidget(
-                              "Accept",
-                                  () {
-                                ManageOrder().acceptOrder(context, widget.order_id, grandTotal);
-                                Navigator.pop(context);
-                                },
-                            ),
-                            ButtonWidget.buttonWidget(
-                              "Reject",
-                                  () {
-                                ManageOrder().rejectOrder(context, widget.order_id);
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-
-
-                ],
-              )
-          ),
-
-
-
-        ],
       ),
     );
   }
