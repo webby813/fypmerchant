@@ -72,8 +72,9 @@ class AppBarWidget {
 class OrderTitle{
   static orderTitle(String text, double fontSize, fontWeight){
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 3, 14, 16),
+      padding: const EdgeInsets.fromLTRB(12, 9.5, 12, 9.5),
       child: Text(
+        maxLines: null,
         text,
         style: TextStyle(
             fontSize: fontSize,

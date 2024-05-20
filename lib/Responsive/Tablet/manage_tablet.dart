@@ -96,6 +96,7 @@ class _ManageTabletState extends State<ManageTablet> {
                                 title: "History",
                                 onTap: (){
                                   setState(() {
+                                    typeNum = 2;
                                   });
                                 }
                             ),
