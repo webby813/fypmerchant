@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Responsive/Cross-platform%20code/ManageTab/support_pages.dart';
+import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/hisotry_page_mobile.dart';
 import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/stock_manage_mobile.dart';
 import 'package:fypmerchant/Responsive/Mobile/ManageTabsMobile/shop_status_mobile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,15 +63,25 @@ class _ManageMobileState extends State<ManageMobile> {
                               title: "Shop Status",
                               onTap: (){
                                 setState(() {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ShopStatusMobile()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ShopStatusMobile()));
                                 });
                               }
                           ),
+
+                          CustomListTile.tile(
+                              title: "History",
+                              onTap: (){
+                                setState(() {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const HistoryPageMobile()));
+                                });
+                              }
+                          ),
+
                           CustomListTile.tile(
                               title: "Manage Stock",
                               onTap: (){
                                 setState(() {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ManageStockMobile()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ManageStockMobile()));
                                 });
                               }
                           ),
@@ -80,7 +91,7 @@ class _ManageMobileState extends State<ManageMobile> {
                               title: "Help Centre",
                               onTap: (){
                                 setState(() {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => HelpCentre()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const HelpCentre()));
                                 });
                               }
                           ),
@@ -88,7 +99,7 @@ class _ManageMobileState extends State<ManageMobile> {
                               title: "Feedback",
                               onTap: (){
                                 setState(() {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => FeedbackPage()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const FeedbackPage()));
                                 });
                               }
                           ),
