@@ -8,7 +8,6 @@ import 'package:fypmerchant/Firebase/update_data.dart';
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Firebase/view_order.dart';
 
-
 class PreparingOrderMobile extends StatefulWidget {
   const PreparingOrderMobile({Key? key}) : super(key: key);
 
