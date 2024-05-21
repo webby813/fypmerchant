@@ -68,24 +68,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  assets:
-    - assets/Coffee/Americano.png
-    - assets/Coffee/ColdBrew.png
-    - assets/Coffee/ColdFoamIcedEspresso.png
-    - assets/Coffee/FrenchPress.png
-    - assets/Coffee/Latte.png
-    - assets/Coffee/MatchaColdFoamIcedAmericano.png
-    - assets/Coffee/Mocha.png
-    - assets/Others/CaremelHotChocolate.png
-    - assets/Others/GreenTeaLatte.png
-    - assets/Others/HazelnutHotChocolate.png
-    - assets/Others/MangoPassionFruit.png
-    - assets/Patries/CranberryScone.png
-    - assets/Patries/Croissant.png
-    - assets/Patries/PandanRibbonCroissant.png
-    - assets/Patries/SnowflakesDonut.png
-    - assets/logo.png
-
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

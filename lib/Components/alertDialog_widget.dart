@@ -383,7 +383,6 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
         TextButton(
           child: const Text('Delete'),
           onPressed: () {
-            print(widget.docID);
             DeleteData().deleteItem(widget.selectedCategory, widget.docID);
             Navigator.of(context).pop();
           },
