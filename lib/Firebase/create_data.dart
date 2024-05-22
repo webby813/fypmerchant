@@ -20,7 +20,7 @@ class CreateData {
     }
   }
 
-  Future<void> createItem(BuildContext context, String imagePath, String imageName, String type, String _itemName, String _price, String _description) async {
+  Future<void> createItem(BuildContext context, String imagePath, String imageName, String type, String itemName, String price, String description) async {
     try {
       final storage = FirebaseStorage.instance.ref('Items/$imageName');
       DocumentReference typeDocRef = FirebaseFirestore.instance.collection("items").doc(type);
@@ -28,11 +28,11 @@ class CreateData {
       File imageFile = File(imagePath);
       await storage.putFile(imageFile);
 
-      await typeDocRef.collection('content').doc(_itemName).set({
+      await typeDocRef.collection('content').doc(itemName).set({
         'item_picture': imageName,
-        'item_name': _itemName,
-        'price': _price,
-        'description': _description,
+        'item_name': itemName,
+        'price': price,
+        'description': description,
         'category': type,
       });
 

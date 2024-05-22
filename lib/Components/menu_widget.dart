@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
-import '../Firebase/delete_data.dart';
-import '../Firebase/update_data.dart';
 
 class CustomDropdown extends StatefulWidget {
   final List<String> items;
@@ -86,7 +84,7 @@ class MenuWidget {
   MenuWidget({required this.onUpdateCategory, required this.onDeleteCategory});
 
   void categoryActionMenu(BuildContext context, String category) {
-    final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
     final Offset target = overlay.localToGlobal(Offset.zero);
     TextEditingController newCategoryId = TextEditingController();
 

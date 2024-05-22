@@ -34,12 +34,12 @@ class SimpleButton{
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
           ),
-          backgroundColor: MaterialStateProperty.all<Color>(
+          backgroundColor: WidgetStateProperty.all<Color>(
             Colors.blue, // Change color as needed
           ),
         ),
@@ -99,12 +99,12 @@ class _ShopStatusButtonState extends State<ShopStatusButton> {
           });
         },
         style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
           ),
-          backgroundColor: MaterialStateProperty.all<Color>(
+          backgroundColor: WidgetStateProperty.all<Color>(
             _getStateColor(_currentShopState),
           ),
         ),

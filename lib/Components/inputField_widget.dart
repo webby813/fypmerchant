@@ -91,7 +91,7 @@ class InputWidget{
             child: SingleChildScrollView(
               child: Text(
                 text,
-                style: TextStyle(fontSize: 16), // 设置文本样式
+                style: const TextStyle(fontSize: 16), // 设置文本样式
               ),
             ),
           ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fypmerchant/Color/color.dart';
 
 class HelpCentre extends StatelessWidget {
   const HelpCentre({Key? key}) : super(key: key);
@@ -88,14 +87,14 @@ class FeedbackPage extends StatelessWidget {
 
                   },
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
                     backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.blue),
-                    fixedSize: MaterialStateProperty.all<Size>(
+                    WidgetStateProperty.all<Color>(Colors.blue),
+                    fixedSize: WidgetStateProperty.all<Size>(
                       const Size(110, 50),
                     ),
                   ),

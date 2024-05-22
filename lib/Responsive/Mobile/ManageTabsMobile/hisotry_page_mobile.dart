@@ -21,7 +21,7 @@ class _HistoryPageMobileState extends State<HistoryPageMobile> {
         title: AppBarWidget.bartext('History'),
         elevation: 0,
       ),
-      body:OrderHistory(),
+      body:const OrderHistory(),
     );
   }
 }

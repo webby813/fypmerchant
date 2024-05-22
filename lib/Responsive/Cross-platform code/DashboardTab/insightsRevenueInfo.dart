@@ -144,7 +144,7 @@ class _AvailableBalanceInfoState extends State<AvailableBalanceInfo> {
                                 ),
                               ),
                               TextSpan(
-                                text: "${balance.toStringAsFixed(2)}",
+                                text: balance.toStringAsFixed(2),
                                 style: const TextStyle(
                                   fontSize: 35,
                                   color: CustomColors.indigo,

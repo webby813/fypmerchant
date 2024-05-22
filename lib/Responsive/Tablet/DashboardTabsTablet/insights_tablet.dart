@@ -30,7 +30,7 @@ class _InsightsTabletState extends State<InsightsTablet> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                       color: CustomColors.defaultWhite,
-                      child: RevenueInfo(),
+                      child: const RevenueInfo(),
                     ),
 
                     Card(
@@ -38,7 +38,7 @@ class _InsightsTabletState extends State<InsightsTablet> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                       color: CustomColors.defaultWhite,
-                      child: InsightsChart(),
+                      child: const InsightsChart(),
                     ),
                   ],
                 ),

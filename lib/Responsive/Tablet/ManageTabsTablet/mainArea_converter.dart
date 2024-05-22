@@ -19,7 +19,7 @@ class MainAreaManage extends StatelessWidget {
       case 1:
         return const ShopStatusManage();
       case 2:
-        return OrderHistory();
+        return const OrderHistory();
       case 3:
         ///Page stored in Cross-platform code
         return const HelpCentre();

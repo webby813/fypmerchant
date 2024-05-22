@@ -341,7 +341,7 @@ class _StockItemCardOnTabletState extends State<StockItemCardOnTablet> {
                 currentName: widget.item_name,
                 currentPrice: widget.price,
                 currentDescription: widget.description,
-                onPressed: (String imagePath, String item_picture, String itemName, String price, String description) {
+                onPressed: (String imagePath, String itemPicture, String itemName, String price, String description) {
                   UpdateData().updateItem(context,imagePath, widget.item_picture, widget.selectedCategory, widget.item_name, itemName, price, description);
                 },
               ),

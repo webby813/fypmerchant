@@ -20,7 +20,7 @@ class _ShopStatusMobileState extends State<ShopStatusMobile> {
         title: AppBarWidget.bartext('Shop Status'),
         elevation: 0,
       ),
-      body: ShopStatusManage(),
+      body: const ShopStatusManage(),
     );
   }
 }

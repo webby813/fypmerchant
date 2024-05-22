@@ -83,10 +83,10 @@ class _InsightsChartState extends State<InsightsChart> {
         ),
         SfCartesianChart(
           primaryXAxis: const CategoryAxis(),
-          primaryYAxis: NumericAxis(
+          primaryYAxis: const NumericAxis(
             title: AxisTitle(
               text: 'Number of Orders',
-              textStyle: const TextStyle(
+              textStyle: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),

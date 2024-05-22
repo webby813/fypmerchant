@@ -165,8 +165,8 @@ class _AddItemDialogState extends State<AddItemDialog> {
       ),
       actions: [
         ElevatedButton(
-            child: const Text("Add"),
             onPressed: _handlePress,
+            child: const Text("Add"),
         ),
       ],
     );
@@ -215,7 +215,7 @@ class _UpdateItemDialogState extends State<UpdateItemDialog> {
     return AlertDialog(
       backgroundColor: Colors.white,
       scrollable: true,
-      title: Text("Update " + widget.docID, textAlign: TextAlign.center),
+      title: Text("Update ${widget.docID}", textAlign: TextAlign.center),
       content: SizedBox(
         width: 800,
         child: Form(
@@ -343,8 +343,8 @@ class _UpdateItemDialogState extends State<UpdateItemDialog> {
       ),
       actions: [
         ElevatedButton(
-          child: const Text("Update"),
           onPressed: _handlePress,
+          child: const Text("Update"),
         ),
       ],
     );
@@ -355,7 +355,7 @@ class DeleteItemDialog extends StatefulWidget {
   final selectedCategory;
   final docID;
 
-  DeleteItemDialog({
+  const DeleteItemDialog({
     Key? key,
     required this.selectedCategory,
     required this.docID,

@@ -183,10 +183,10 @@ class _ManageStockMobileState extends State<ManageStockMobile> {
                     },
                   );
                 },
-                child: DashedBorder(
+                child: const DashedBorder(
                   strokeWidth: 2,
                   color: Colors.blue,
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'Tap here to add item',
                       style: TextStyle(fontSize: 20),
@@ -301,8 +301,8 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
                   currentName: widget.item_name,
                   currentPrice: widget.price,
                   currentDescription: widget.description,
-                  onPressed: (String? imagePath, String? item_picture, String itemName, String price, String description) {
-                    UpdateData().updateItem(context, imagePath, item_picture, widget.selectedCategory, widget.item_name, itemName, price, description);
+                  onPressed: (String? imagePath, String? itemPicture, String itemName, String price, String description) {
+                    UpdateData().updateItem(context, imagePath, itemPicture, widget.selectedCategory, widget.item_name, itemName, price, description);
                   },
                 ));
           },
@@ -335,14 +335,14 @@ class _StockItemCardOnMobileState extends State<StockItemCardOnMobile> {
                               if (snapshot.connectionState == ConnectionState.waiting) {
                                 return Spinner.loadingSpinner();
                               } else if (snapshot.hasError) {
-                                return Icon(Icons.error);
+                                return const Icon(Icons.error);
                               } else if (snapshot.hasData) {
                                 return Image.network(
                                   snapshot.data!,
                                   fit: BoxFit.cover,
                                 );
                               } else {
-                                return Icon(Icons.error);
+                                return const Icon(Icons.error);
                               }
                             },
                           ),

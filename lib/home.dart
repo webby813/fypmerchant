@@ -15,10 +15,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: ResponsiveLayout(
-        mobileScaffold: const MobileScaffold(),
-        tabletScaffold: const TabletScaffold()
+        mobileScaffold: MobileScaffold(),
+        tabletScaffold: TabletScaffold()
       ),
     );
   }

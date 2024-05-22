@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Components/alertDialog_widget.dart';
 import 'package:fypmerchant/Components/numpad.dart';
-import 'package:intl/intl.dart';
 
 class UpdateData {
   Future<void> updateCategory(BuildContext context, String selectedCategory, String newCategoryId, Function() onCategoryUpdate) async {
@@ -178,7 +176,7 @@ class ManageOrder {
           .doc(balanceSnapshot.id)
           .update({'balance': currentBlc});
     } else {
-      print('No order found with order_id: ${orderId}');
+      print('No order found with order_id: $orderId');
     }
   }
 

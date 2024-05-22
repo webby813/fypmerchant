@@ -91,7 +91,7 @@ class _TransactionState extends State<Transaction> {
         break;
       case 'Weekly':
         DateTime monday = now.subtract(Duration(days: now.weekday - 1));
-        DateTime sunday = monday.add(Duration(days: 6));
+        DateTime sunday = monday.add(const Duration(days: 6));
         startTime = DateTime(monday.year, monday.month, monday.day, 0, 0, 0);
         endTime = DateTime(sunday.year, sunday.month, sunday.day, 23, 59, 59);
         break;

@@ -52,8 +52,8 @@ class RetrieveData {
 }
 
 class RetrievePicture {
-  Future<String?> loadItemPicture(String item_picture) async {
-    final storeRef = FirebaseStorage.instance.ref().child('Items/$item_picture');
+  Future<String?> loadItemPicture(String itemPicture) async {
+    final storeRef = FirebaseStorage.instance.ref().child('Items/$itemPicture');
     try {
       final imageUrl = await storeRef.getDownloadURL();
       return imageUrl.toString();

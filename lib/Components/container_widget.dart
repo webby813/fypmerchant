@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -9,7 +8,7 @@ class DashedBorder extends StatelessWidget {
   final Color color;
   final Widget child;
 
-  DashedBorder({
+  const DashedBorder({
     super.key,
     required this.child,
     this.strokeWidth = 1.0,
