@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
-import 'package:fypmerchant/Components/menu_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fypmerchant/Components/menu_widget.dart';
 import 'package:intl/intl.dart';
 
-class Transaction extends StatefulWidget {
-  const Transaction({Key? key}) : super(key: key);
+class Withdraw extends StatefulWidget {
+  const Withdraw({Key? key}) : super(key: key);
 
   @override
-  State<Transaction> createState() => _TransactionState();
+  State<Withdraw> createState() => _WithdrawState();
 }
 
-class _TransactionState extends State<Transaction> {
-  String _selectedOption = 'Today'; // Default selected option
-  List<String> options = ['Today', 'Yesterday', 'Weekly'];
+class _WithdrawState extends State<Withdraw> {
+  String _selectedMonth = '';
+  List<String> recentMonths = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _initializeRecentMonths();
+  }
+
+  void _initializeRecentMonths() {
+    DateTime now = DateTime.now();
+    for (int i = 2; i >= 0; i--) {
+      DateTime month = DateTime(now.year, now.month - i, 1);
+      recentMonths.add(DateFormat('MMMM').format(month));
+    }
+    _selectedMonth = DateFormat('MMMM').format(now);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +41,12 @@ class _TransactionState extends State<Transaction> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: CustomDropdown(
-                  items: options,
-                  selectedItem: _selectedOption,
+                  items: recentMonths,
+                  selectedItem: _selectedMonth,
                   onChanged: (String? newValue) {
                     if (newValue != null) {
                       setState(() {
-                        _selectedOption = newValue;
+                        _selectedMonth = newValue;
                       });
                     }
                   },
@@ -43,28 +57,28 @@ class _TransactionState extends State<Transaction> {
         ),
         Expanded(
           child: StreamBuilder<QuerySnapshot>(
-            stream: _getStream(),
+            stream: _getWithdrawRecordsStream(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const Center(child: Text('No records found for the selected month.'));
               } else {
-                final List<Widget> orderList = [];
+                final List<Widget> withdrawList = [];
                 final docs = snapshot.data?.docs ?? [];
                 for (var doc in docs) {
-                  var orderId = doc['order_id'];
-                  var paidTime = doc['paid_Time'];
-                  var paidAmount = doc['paid_Amount'];
+                  var withdrawAmount = doc['withdraw_Amount'];
+                  var withdrawTime = (doc['withdraw_time'] as Timestamp).toDate();
 
-                  orderList.add(TransactionItems(
-                    orderId: orderId,
-                    paidTime: paidTime,
-                    paidAmount: paidAmount,
+                  withdrawList.add(WithdrawRecord(
+                    withdrawAmount: withdrawAmount,
+                    withdrawTime: withdrawTime,
                   ));
                 }
                 return ListView(
-                  children: orderList,
+                  children: withdrawList,
                 );
               }
             },
@@ -74,50 +88,32 @@ class _TransactionState extends State<Transaction> {
     );
   }
 
-  Stream<QuerySnapshot> _getStream() {
+  Stream<QuerySnapshot> _getWithdrawRecordsStream() {
     DateTime now = DateTime.now();
-    DateTime startTime;
-    DateTime endTime;
+    int selectedMonthIndex = recentMonths.indexOf(_selectedMonth);
 
-    switch (_selectedOption) {
-      case 'Today':
-        startTime = DateTime(now.year, now.month, now.day, 0, 0, 0);
-        endTime = DateTime(now.year, now.month, now.day, 23, 59, 59);
-        break;
-      case 'Yesterday':
-        DateTime yesterday = now.subtract(const Duration(days: 1));
-        startTime = DateTime(yesterday.year, yesterday.month, yesterday.day, 0, 0, 0);
-        endTime = DateTime(yesterday.year, yesterday.month, yesterday.day, 23, 59, 59);
-        break;
-      case 'Weekly':
-        DateTime monday = now.subtract(Duration(days: now.weekday - 1));
-        DateTime sunday = monday.add(Duration(days: 6));
-        startTime = DateTime(monday.year, monday.month, monday.day, 0, 0, 0);
-        endTime = DateTime(sunday.year, sunday.month, sunday.day, 23, 59, 59);
-        break;
-      default:
-        startTime = now;
-        endTime = now;
-    }
+    DateTime selectedDate = DateTime(now.year, now.month - 2 + selectedMonthIndex, 1);
+    DateTime startTime = DateTime(selectedDate.year, selectedDate.month, 1);
+    DateTime endTime = DateTime(selectedDate.year, selectedDate.month + 1, 1).subtract(const Duration(seconds: 1));
 
     return FirebaseFirestore.instance
-        .collection('Orders')
-        .where("paid_Time", isGreaterThanOrEqualTo: Timestamp.fromDate(startTime))
-        .where("paid_Time", isLessThanOrEqualTo: Timestamp.fromDate(endTime))
+        .collection('merchant')
+        .doc('Merchant')
+        .collection('withdrawals')
+        .where("withdraw_time", isGreaterThanOrEqualTo: Timestamp.fromDate(startTime))
+        .where("withdraw_time", isLessThanOrEqualTo: Timestamp.fromDate(endTime))
         .snapshots();
   }
 }
 
-class TransactionItems extends StatelessWidget {
-  final String orderId;
-  final Timestamp paidTime;
-  final double paidAmount;
+class WithdrawRecord extends StatelessWidget {
+  final double withdrawAmount;
+  final DateTime withdrawTime;
 
-  const TransactionItems({
+  const WithdrawRecord({
     Key? key,
-    required this.orderId,
-    required this.paidTime,
-    required this.paidAmount,
+    required this.withdrawAmount,
+    required this.withdrawTime,
   }) : super(key: key);
 
   @override
@@ -135,22 +131,19 @@ class TransactionItems extends StatelessWidget {
                 Expanded(
                   child: ListTile(
                     title: Text(
-                      "Order#$orderId",
+                      DateFormat('dd MMM yyyy at HH:mm:ss').format(withdrawTime),
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    subtitle: Text(
-                      DateFormat('dd MMM yyyy hh:mm a').format(paidTime.toDate()),
-                    ),
                   ),
                 ),
-
                 Container(
                   margin: const EdgeInsets.only(right: 8.0),
                   child: Text(
-                    "RM$paidAmount",
+                    "- RM${withdrawAmount.toStringAsFixed(2)}",
                     style: const TextStyle(
+                      color: CustomColors.warningRed,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -164,4 +157,3 @@ class TransactionItems extends StatelessWidget {
     );
   }
 }
-

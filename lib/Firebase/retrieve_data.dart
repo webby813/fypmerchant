@@ -39,6 +39,16 @@ class RetrieveData {
       print('Error fetching paid amount: $error');
     }
   }
+
+  Stream<double> getWalletBalance() async* {
+    final dbRef = FirebaseFirestore.instance;
+    yield* dbRef
+        .collection('merchant')
+        .doc('Merchant')
+        .snapshots()
+        .map((snapshot) => (snapshot['balance'] ?? 0).toDouble());
+  }
+
 }
 
 class RetrievePicture {

@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Components/alertDialog_widget.dart';
+import 'package:fypmerchant/Components/numpad.dart';
+import 'package:intl/intl.dart';
 
 class UpdateData {
   Future<void> updateCategory(BuildContext context, String selectedCategory, String newCategoryId, Function() onCategoryUpdate) async {
@@ -18,7 +21,6 @@ class UpdateData {
         await newDocRef.set(newData);
         await currentDocRef.delete();
         onCategoryUpdate();
-
       }
     } catch (e) {
       // Handle error
@@ -95,6 +97,53 @@ class UpdateData {
           .delete();
     } catch (e) {
       // Handle error
+    }
+  }
+
+  Future<void> withdrawBalance(BuildContext context) async {
+    final dbRef = FirebaseFirestore.instance;
+    String? input = await showDialog<String>(
+      context: context,
+      builder: (context) => const NumericKeypadDialog(),
+    );
+
+    if (input != null && input.isNotEmpty) {
+      double withdrawAmount = double.parse(input);
+
+      DocumentReference merchantDocRef = dbRef.collection('merchant').doc('Merchant');
+      DocumentSnapshot merchantDoc = await merchantDocRef.get();
+      double currentBalance = merchantDoc['balance'];
+
+      if (withdrawAmount > currentBalance) {
+        // Show error dialog if balance is insufficient
+        showDialog(
+          context: context,
+          builder: (context) => const AlertDialogWidget(
+            title: 'Insufficient Balance',
+            content: 'You do not have enough balance to make this withdrawal.',
+          ),
+        );
+      } else {
+        // Proceed with withdrawal
+        double newBalance = currentBalance - withdrawAmount;
+        DateTime now = DateTime.now();
+        Timestamp timestamp = Timestamp.fromDate(now);
+
+        await merchantDocRef.update({'balance': newBalance});
+        await dbRef.collection('merchant').doc('Merchant').collection('withdrawals').add({
+          'withdraw_Amount': withdrawAmount,
+          'withdraw_time': timestamp,
+        });
+
+        // Show success dialog
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialogWidget(
+            title: 'Transaction Successful',
+            content: 'You have successfully completed a withdrawal of RM $withdrawAmount.',
+          ),
+        );
+      }
     }
   }
 }

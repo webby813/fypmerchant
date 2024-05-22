@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fypmerchant/Color/color.dart';
-import 'package:fypmerchant/Responsive/Cross-platform%20code/DashboardTab/payout_settlement.dart';
-
+import 'package:fypmerchant/Responsive/Cross-platform%20code/DashboardTab/insightsRevenueInfo.dart';
+import 'package:fypmerchant/Responsive/Cross-platform%20code/DashboardTab/payout_withdraw.dart';
 import '../../Cross-platform code/DashboardTab/payout_transaction.dart';
 
 
@@ -13,6 +13,12 @@ class PayoutTablet extends StatefulWidget {
 }
 
 class _PayoutTabletState extends State<PayoutTablet> {
+
+  void initState(){
+    super.initState();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,80 +30,15 @@ class _PayoutTabletState extends State<PayoutTablet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Column(
+              const Column(
                 children: [
                   Padding(
-                      padding: const EdgeInsets.fromLTRB(200, 5, 200, 10),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          color: CustomColors.defaultWhite,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Available Balance",
-                                        style: TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
-
-                                      const SizedBox(height: 16),
-
-                                      Center(
-                                        child: RichText(
-                                          textAlign: TextAlign.center,
-                                          text: const TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: 'RM ',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: CustomColors.defaultBlack,
-                                                  fontSize: 24,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: '23,980.78',
-                                                style: TextStyle(
-                                                  fontSize: 22,
-                                                  color: CustomColors.indigo,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.exit_to_app_outlined),
-                                  iconSize: 35, // Set the size of the icon
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                      )
+                      padding: EdgeInsets.fromLTRB(200, 5, 200, 10),
+                      child: AvailableBalanceInfo()
                   ),
                 ],
               ),
 
-              // Second Container for Transactions and Settlement
               Expanded(
                 child: Container(
                   color: CustomColors.defaultWhite,
@@ -131,14 +72,14 @@ class _PayoutTabletState extends State<PayoutTablet> {
                             Padding(
                               padding: EdgeInsets.only(top: 10,bottom: 5),
                               child: Text(
-                                "Settlement",
+                                "Withdraw Record",
                                 style: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.w400,),
                               ),
                             ),
                             Expanded(
-                              child: Settlement(),
+                              child: Withdraw(),
                             ),
                           ],
                         ),
