@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fypmerchant/Responsive/Cross-platform%20code/DashboardTab/insightsRevenueInfo.dart';
 import '../../../Color/color.dart';
-import '../../Cross-platform code/DashboardTab/payout_settlement.dart';
+import '../../Cross-platform code/DashboardTab/payout_withdraw.dart';
 import '../../Cross-platform code/DashboardTab/payout_transaction.dart';
 
 class PayoutMobile extends StatefulWidget {
@@ -31,58 +32,9 @@ class _PayoutMobileState extends State<PayoutMobile> with SingleTickerProviderSt
                 borderRadius: BorderRadius.circular(14),
               ),
               color: CustomColors.defaultWhite,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Available Balance",
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                          const SizedBox(height: 16),
-                          Center(
-                            child: RichText(
-                              textAlign: TextAlign.center,
-                              text: const TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'RM ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: CustomColors.defaultBlack,
-                                      fontSize: 24,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '23,980.78',
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      color: CustomColors.indigo,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.exit_to_app_outlined),
-                      iconSize: 35,
-                    ),
-                  ],
-                ),
+              child: const Padding(
+                padding: EdgeInsets.all(16),
+                child: AvailableBalanceInfo()
               ),
             ),
           ),
@@ -90,7 +42,7 @@ class _PayoutMobileState extends State<PayoutMobile> with SingleTickerProviderSt
             controller: _tabController,
             tabs: const [
               Tab(text: 'Transaction'),
-              Tab(text: 'Settlement'),
+              Tab(text: 'Withdraw'),
             ],
           ),
           Expanded(
@@ -98,7 +50,7 @@ class _PayoutMobileState extends State<PayoutMobile> with SingleTickerProviderSt
               controller: _tabController,
               children: const [
                 Transaction(),
-                Settlement(),
+                Withdraw(),
               ],
             ),
           ),
