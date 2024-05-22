@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
             return const CircularProgressIndicator();
           } else {
             if (snapshot.data == true) {
-              // User is logged in, navigate to the home screen
+              // User is logged in, navigate to the home screennnnn
               return const Home();
             } else {
               // User is not logged in, navigate to the login screen
